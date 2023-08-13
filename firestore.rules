@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents{
+  	match /users/{userID}/data/submissionData{
+      allow read,write: if request.auth != null &&
+      request.auth.uid == userID;
+    }
+    match /users/{userID}/data/submissionForm {
+      allow write: if request.auth != null &&
+      request.resource.data.userID == request.auth.uid &&
+      request.auth.uid == userID;
+      allow read;
+    }
+    match /users/{userID}/data/settings {
+      allow read, write: if request.auth != null &&
+      request.auth.uid == userID;
+    }
+    match /users/{userID}/data/emailData {
+      allow read, write: if request.auth != null &&
+      request.auth.uid == userID;
+    }
+    match /users/{userID}/data/submissionData/cancelRequests/{cancelID}{
+      allow read, update;
+			allow write: if request.auth != null &&
+      request.auth.uid == userID;
+    }
+    match /users/{userID}/data/submissionData/submittedFileIDs/{fileID}{
+      allow read;
+      allow delete: if request.auth != null && request.auth.uid == userID;
+    }
+    match /users/{userID}/data/submissionData/ipData/ipData{
+      allow read, write: if request.auth != null && request.auth.uid == userID;
+    }
+    match /users/{userID}/data/accountInformation{
+      allow read: if request.auth != null && request.auth.uid == userID;
+    }
+    match /users/{userID}/data/emailCount{
+      allow read: if request.auth != null && request.auth.uid == userID;
+    }
+  }
+}    

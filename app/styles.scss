@@ -1,0 +1,2891 @@
+
+
+@mixin mobile {
+
+  @media screen and (max-width: 480px) {
+    @content;
+  }
+}
+@mixin tablet {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+@mixin laptop {
+  @media screen and (max-width: 1200px) {
+    @content;
+  }
+}
+
+
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900);
+
+html, body, #root,.wrapper {
+  padding:0px;
+  margin:0px;
+
+
+  textarea:focus, input:focus{
+    outline: none;
+    //margin: 0px 0px 0px 5px;
+    //padding: 5px 0px 0px;
+    
+  }  
+}
+
+.formContainer {
+  background-color: rgb(238, 238, 238);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-family: Helvetica, sans-serif;
+  height:100vh;
+  .loginDiv{
+    display: flex;
+    flex-direction: row;
+    height:520px;
+    border-radius: 10px;
+    margin-bottom:100px;
+    .formWrapper {
+      background-color: #ffffff;
+      padding: 20px 60px;
+      margin: 0px 0 0px 0;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .label {
+        color: #444444;
+        font-size: 34px;
+        margin: 10px 0 10px 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        align-items: center;
+        .errorCode{
+          text-align: center;
+          max-width: 260px;
+          border:none;
+          margin: 5px 0 0 10px;
+          cursor: default;
+          font-size: 12px;
+          font-weight: 600;
+          color: rgb(230, 28, 28);
+        }
+        .successCode{
+          font-size:14px;
+          color:rgb(0, 87, 0);
+          font-weight: 500;
+          width:250px;
+          font-family: roboto, system-ui;
+          text-align: center;
+          margin:0;
+        }
+        input {
+          margin-top: 5px;
+          padding: 20px 15px 10px 15px;
+          border: none;
+          width: 250px;
+          border-bottom: 1px solid #a7bcff;
+          &::placeholder {
+            color: rgb(175, 175, 175);
+            font-size: 14px;
+          }
+        }
+        textarea:focus, input:focus{
+          outline: none;
+        }  
+  
+        button {
+          width:250px;
+          margin-top:20px;
+          background-color: #7b96ec;
+          color: white;
+          padding: 8px;
+          font-weight: bold;
+          border: none;
+          border-radius: 3px;
+          cursor: pointer;
+        }
+  
+        label {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: #8da4f1;
+          font-size: 12px;
+          cursor: pointer;
+  
+          img {
+            width: 32px;
+          }
+        }
+        .resetPasswordDiv{
+          display:flex;
+          flex-direction: column;
+          justify-content: end;
+          width:100%;
+          margin:0;
+          padding:0;
+          .resetPassword{
+            color:gray;
+            font-size:12px;
+            text-align: right;
+            position: absolute;
+            z-index: 10;
+            top:90px;
+            left:150px;
+          }
+        }
+        .hideIcon1{
+          position:absolute; 
+          top:90px;
+          left:220px;
+          height:16px;
+          cursor: pointer;
+
+        }
+        .hideIcon2{
+          position:absolute; 
+          top:148px;
+          left:220px;
+          height:16px;
+          cursor: pointer;
+        }
+      }
+
+    }
+    p {
+        color: #5d5b8d;
+        font-size: 12px;
+        margin-top: 10px;
+    }
+      .logo {
+        margin-bottom:20px;
+        text-align: left;
+        color: #1a1c3a;
+        font-weight: bold;
+        font-size: 30px;
+      }
+      .lineBreakDiv{
+        margin: 20px 0 15px 0;
+        height:25px;
+        display:flex;
+        flex-direction: row;
+        font-size:12px;
+        color:rgb(163, 163, 163);
+        width:100%;
+        justify-content: space-between;
+        
+        .lineBreak{
+          width:45%;
+          height:10px;
+          border-bottom:1px solid rgb(192, 192, 192);
+        }
+      }
+      
+      .googleButton{
+        height:40px;
+        margin-top:0px;
+        width:185px;
+        padding:15px 10px;
+        box-shadow: 0 0 3px 0px rgb(129, 129, 129);
+        border-radius: 3px;
+        display:flex;
+        flex-direction: row;
+        justify-content: end;
+        align-items: center;
+        font-weight: 500;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-size: 15px;
+        color:#747474;
+        cursor:pointer;
+        img{
+          height:20px;
+          margin-right:10px;
+        }
+      }
+      .guestButton{
+    
+        @extend .googleButton;
+        margin-top:20px;
+        color:white;
+        background-color: #4e5468;
+        text-align: center;
+        justify-content: center;
+       
+      }
+    }
+    .imagesDiv{
+      width:650px;
+      margin:0px 10px 10px 30px;
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      .image{
+        height: 360px;
+        width:auto;
+      }    
+      
+    }
+}
+  
+
+.dashboard {
+  $backgroundColor: #f3f3f3;
+  background-color: $backgroundColor;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  font-family: roboto;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  .header{
+    background-color: #313131;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    height: 47px;
+    z-index: 3;
+    .logo{
+      display: flex;
+      flex-direction: row;
+      .name{
+        color:white;
+        font-size: 24px;
+        font-weight: 600;
+        margin: 15px 10px;
+        cursor: pointer;
+      }
+    }
+    .guestDiv{
+      margin-right:30px;
+      .guestText{
+        color:white;
+      }
+      .linkText{
+        margin:0 5px;
+        margin-top:5px;
+        color: #5884dd;
+        cursor:pointer;
+        text-shadow: 0 0 3px rgb(56, 58, 75), 0 0 5px rgba(255, 255, 255, 0.5)
+      }
+      .linkText:hover{
+        text-decoration: underline;
+      }
+    }
+    
+
+    .profilebutton{
+      background:none;
+      border:none;
+      margin:0 2%;
+      cursor: pointer;
+      font-size: 16px;
+      color:white;
+
+    }  
+
+    .profileWrapper{
+      align-items: right;
+      position: absolute;
+      z-index: 10;
+      top: 40px;
+      right: 75px;
+      .profileContainer{
+        min-width: 150px;
+        max-width: 250px;
+        background-color: white;
+        border-radius: 8px;
+        border: solid;
+        border-color:#aaaaaa;
+        border-width: 1px;
+        padding:8px;
+        .accountTypeDiv{
+          margin: 10px 0 10px 0;
+          display: flex;
+          flex-direction: row;
+          font-size: 15px;
+          align-items: baseline;
+          .accountLabel{
+            font-weight: bold;
+            background-color: rgb(233, 233, 233);
+            padding:1px 5px;
+            margin-left:5px;
+            border-radius: 5px;
+          }
+          .premiumLabel{
+            @extend .accountLabel;
+            background-color: #ddd6fe;
+            color:#5b21b6;
+          }
+        }
+        .upgradeButton{
+          margin: 0px 0 15px 0;
+          padding: 3px 5px;
+          text-align: center;
+          //background-color: #6d28d9;
+          //box-shadow: 0 0 10px #905ee0;
+          border:1px solid #6d28d9;
+          color:#6d28d9;
+          border-radius: 5px;
+          font-size: 15px;
+          font-weight: 500;
+          cursor:pointer;
+          transition: 100ms;
+        }
+        .upgradeButton:hover{
+          background-color: #6d28d9;
+          box-shadow: 0 0 10px #905ee0;
+          border:1px solid #6d28d9;
+          color:#ffffff;
+        }
+        
+        .profileText{
+          border:none;
+          cursor: default;
+          font-size: 16px;
+          color:rgb(32, 32, 32);
+        }
+        .emailText{
+          margin: 1px 0 2px 0;
+          cursor: default;
+          font-size: 15px;
+          font-weight: 600;
+          color:rgb(54, 54, 54);
+        }
+        .signoutButton{
+          margin-top:5px;
+          font-size: 15px;
+          padding:0px;
+          color:#2e2e2e;
+          background: none;
+          border: none;
+          cursor: pointer;
+    
+        }
+      }
+      
+    }
+    
+  }
+
+  .workspace{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow-y: hidden;
+    .sidebar{
+      width: 225px;
+      padding-bottom: 20px;
+      background-color:rgb(255, 255, 255);
+      display: flex;
+      flex-direction: column;
+      padding-top:20px;
+      box-shadow: 5px 0 20px rgb(226, 226, 226);
+      .navButton{
+        position:relative;
+        display: flex;
+        flex-direction: row;
+        font-size: 18px;
+        color:#000000;
+        margin: 15px 30px 10px 20px;
+        padding: 5px 5px 5px 10px;
+        background: none;
+        cursor: pointer;
+        border-radius: 5px;
+        text-decoration: none;
+      }
+      .navButtonSelected{
+        @extend .navButton;
+        background-color: #ececec;
+      }
+      .bottomNavButton{
+        @extend .navButton;
+        margin-top: auto
+      }
+      .bottomNavButtonSelected{
+        @extend .navButton;
+        margin-top: auto;
+        background-color: #ececec;
+      }
+     
+
+    }
+    .submissions{
+      margin:30px 0;
+      padding-bottom: 60px;
+      height: 100%;
+      overflow-y: auto;
+      display:flex;
+      flex-direction: column;
+      overflow-y: auto;
+      
+      .optionsMenuDiv{
+        position: absolute;
+        z-index: 4;
+        right:35px;
+        top:50px;
+        width: 100%;
+        height:27px;
+        display:flex;
+        flex-direction: row;
+        justify-content: right;
+        .openOptionsMenu{
+          display: flex;
+          align-items: center;
+          border:none;
+          font-size:22px;
+          margin-right:15px;
+        }
+        .openOptionsMenu:hover{
+          cursor: pointer;
+        }
+        .settingsDiv{
+          position: absolute;
+          right:40px;         
+          background-color: white;
+          border-radius: 5px;
+          border:1px solid rgb(121, 121, 121);
+          font-size: 15px;
+          margin:0 10px;
+          display: flex;
+          flex-direction: column;
+          .optionsText{
+            display:flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size:20px;
+            margin:0;
+            padding: 5px 10px 5px 20px;
+            background-color: rgb(228, 228, 228);
+            border-radius:5px 5px 0 0px;
+            box-shadow: 0 3px 5px rgb(155, 155, 155);
+          }
+          .lineBreak{
+            margin:0px 0;
+            border: 0;
+            width:100%;              
+            height: 1px;
+          }
+          .optionDiv{
+            display: flex;
+            flex-direction: column;
+            margin: 10px 20px 10px 10px;
+            .option{
+              display: flex;
+              flex-direction: row;
+              margin:5px 10px;
+              cursor:default;
+              .resetColumns{
+                border:none;
+                border-radius: 5px;
+                color:rgb(255, 10, 10);
+                font-size:15px;
+                margin:5px 0 10px 0;
+                padding:0;
+                cursor:pointer;
+              }
+              input{
+                margin-left:5px;
+              }
+              .checkbox{
+                cursor:pointer;
+              }
+            }
+            .linkText{
+              margin-left:10px;
+              margin-top:5px;
+              color: #3366CC;
+              cursor:pointer
+            }
+            .linkText:hover{
+              text-decoration: underline;
+            }
+          }
+          
+        }
+      } 
+      .submissionBox{
+        width:1630px;
+        margin:20px 0 0px 38px;
+        border:1px solid grey;
+        border-radius: 8px;
+        background-color:white;
+        position: relative;
+        overflow: visible;
+        .headers{
+          display:flex;
+          flex-direction: row;
+          flex-shrink: 0;
+          margin:0;
+          padding:0px 0px 0 0px;
+          height:76px;
+          .formInformationText{
+            margin: 8px 10px;
+            padding: 0;
+            font-size:20px;
+            color:#2e2e2e;
+          }
+          .formQuestionsDiv{
+            width:450px;
+            flex-shrink: 0;
+            .questionsRow{
+              display:flex;
+              flex-direction: row;
+              margin-left:7px;
+              height:29px;
+              padding-top:2px;
+              .topLeftBorder{
+                border-left:1px solid rgb(255, 255, 255);
+              }
+              .questionNamesDiv{
+                display:flex;
+                flex-direction: row;
+                background-color: white;
+                padding:0;
+                margin:0;
+                .questionName{
+                  font-size:18px;
+                  padding:4px 0px 0px 3px;
+                  margin: 0px;
+                  margin-left:-2px;
+                  margin-right:-2px;
+                  white-space: nowrap;  
+                  background-color: rgb(255, 255, 255);
+     
+                }
+                .questionNameHidden{
+                  color:#555555;
+                  font-size:18px;
+                  padding:5px 0px 1px 1px;
+                  margin:0px;
+                  white-space: nowrap; 
+                  position: relative;
+                }
+                .restoreButton{
+                  position: absolute;
+                  top:4px;
+                  border:none;
+                  background-color: rgb(2, 185, 2);
+                  color:white;
+                  font-size: 15px;
+                  border-radius: 3px;
+                  margin-left:5px;
+                  width:65px;
+                }
+                .restoreButton:hover{
+                  cursor: pointer;
+                  background-color: rgb(29, 155, 29);
+                  .restoreNotice {
+                    opacity: 1;
+                    color: red;
+                    background-color: white;
+                    padding:2px;
+                    z-index: 5;
+                    position: absolute;
+                    top:-30px;
+                    left:10px;
+                    border-radius: 3px;
+                    border:1px solid red;
+                    width:330px;
+                    display:flex;
+                  }
+                }
+                .restoreNotice {
+                  opacity: 0;
+                  position: absolute;
+                  top:10px; 
+                  margin-left:-10px;
+                  width:10px;
+                  display:none;
+                }
+                
+                .resizeDiv{
+                  width: 1px;
+                  background-color: rgb(77, 77, 77);
+                  margin-left:1px;
+                  position:absolute;
+                  z-index: 3;
+                }
+                
+                .resizeDiv:hover{
+                  width: 3px;
+                  margin-left:0px;
+                  cursor:col-resize;
+                  background-color: rgb(32, 113, 206);
+                }
+                .resizeDivSelected{
+                  width: 1px;
+                  background-color: rgb(33, 106, 216);
+                  width: 3px;
+                  margin-left:0px;
+                  cursor:col-resize;
+                  position:absolute;
+                  z-index: 3;
+                }
+                .blankDiv{
+                  width: 3px;
+                  position:absolute;
+                  z-index: 6;
+                  margin-left:0px;
+                  background-color:#f0f0f0;
+                }
+                
+              }
+              
+            }
+          }
+
+          .headerSeperator{
+            width: 1px;
+            position: absolute;
+            background-color: rgb(0, 0, 0);
+            margin-left:1px;
+            z-index: 2;
+          }
+          .headerSeperator:hover{
+            width: 3px;
+            margin-left:0px;
+            cursor:col-resize;
+            background-color: rgb(32, 113, 206);
+          }
+          .headerSeperatorSelected{
+            width: 1px;
+            background-color: rgb(33, 106, 216);
+            width: 3px;
+            margin-left:0px;
+            position: absolute;
+            cursor:col-resize;
+            z-index: 3;
+          }
+  
+          .informationHeaderDiv{
+            display:flex;
+            flex-direction: column;
+            border-radius: 5px;
+            flex-shrink: 0;
+            background-color: white;
+            .informationTitlesDiv{
+              display:flex;
+              flex-direction: row;
+              justify-content: left;
+              resize: none;
+              overflow: hidden;
+              margin-top: 3px;
+              .informationHeader{
+                position:relative;
+                display:flex;
+                flex-direction: row;
+                font-size:18px;
+                padding: 3px 0px 0px 5px;
+                margin: 0px;
+                white-space: nowrap; 
+                resize: none;
+                height:26px;
+                overflow: hidden;
+              }
+              .firstInformationHeader{
+                display: inline-block;
+                box-sizing: border-box;
+                font-size:18px;
+                padding:3px 0px 0px 5px;
+                margin-left:5px;
+                white-space: nowrap; 
+                resize: none;
+                overflow: hidden;
+                height:26px;
+              }
+              .actionHeader{
+                font-size:18px;
+                padding:5px 0px 0px 3px;
+                flex-shrink: 0;
+                margin: 0px;
+                position:relative;
+                background-color:white;
+                white-space: nowrap; 
+                resize: none;
+                height:26px;
+                overflow: hidden;
+              }
+              .firstActionHeader{
+                font-size:18px;
+                padding:5px 0px 0px 8px;
+                
+                margin: 0px;
+
+                background-color:white;
+                white-space: nowrap; 
+                resize: none;
+                height:26px;
+                overflow: hidden;
+              }
+              .resizeDiv{
+                width: 1px;
+                background-color: rgb(77, 77, 77);
+                margin-left:1px;
+                z-index: 2;
+                position: absolute;
+              }
+              .resizeDiv:hover{
+                width: 3px;
+                margin-left:0px;
+                cursor:col-resize;
+                background-color: rgb(32, 113, 206);
+              }
+              .resizeDivSelected{
+                width: 1px;
+                background-color: rgb(33, 106, 216);
+                width: 3px;
+                margin-left:0px;
+                cursor:col-resize;
+                position: absolute;
+                z-index: 2;
+              }
+            }
+          } 
+        }
+        .blankSeperator{
+          width:100%;
+          position: absolute;
+          z-index: 4;
+          background-color: $backgroundColor;
+
+        }
+        .responses{
+          display:flex;
+          flex-direction: row;
+          min-height: 20px;
+         
+          .responseNumberDiv{
+           
+            border-right: 1px solid rgb(39, 39, 39);
+            width:25px;
+            padding: 3px 0 -3px 0;
+            text-align: center;
+            height:100%;
+          }
+
+          .responseRowsDiv{
+            min-height: 26px;
+            display:flex;
+            flex-direction: column;
+            width:100%;
+            .responseRowDiv{
+              display:flex;
+              flex-direction: row;
+              margin-left:3px;
+              .questionResponseDiv{
+                display:flex;
+                flex-direction: row;
+                padding-left:1px;
+                padding-top:2px;
+                font-size: 16px;
+                height:30px;
+                .responseCell{
+                  position: relative;
+                  background-color: white; 
+                  padding:4px 0 2px 1px;
+                  white-space: nowrap;
+                  user-select: none;
+                  height:26px;
+
+                  .expanded{
+                    user-select: text;
+                    position:absolute;
+                    z-index: 10;
+                    top:-3px;
+                    margin-left:2px;
+                    min-height:32px;
+                    padding:3px 4px 0px 1px;
+                    background-color: white; 
+                    border:2px solid rgb(90, 138, 240);
+                  }
+                }
+                
+                .responseText{        
+                  font-size:16px;
+                  margin-top:0;
+                  padding-left:2px;
+                  cursor:default;
+                }
+                .firstResponseText{
+                  font-size:16px;
+                  margin:0;
+                  padding-left:4px;
+                  cursor:default;
+                }
+              }
+              .informationResponseDiv{
+                position:absolute;
+                z-index: 1;
+                display:flex;
+                flex-direction: row;
+                margin-left:-10px;
+                
+                .responseCell{
+                  position:relative;
+                  background-color: rgb(255, 255, 255);          
+                  padding:7px 0 2px 1px;
+                  height:30px;
+                  user-select: none;
+                 overflow: hidden;
+                }
+                
+                .absoluteResponseCell{
+                  position:absolute;
+                  background-color: rgb(255, 255, 255);
+                  padding:5px 0 0px 1px;
+                  z-index: 5;
+                  
+                  .statusDiv{
+                    display:flex;
+                    flex-direction: row;
+                    font-size:17px;
+                    margin: -3px 0px -1px 8px;
+                    padding:3px 5px 1px 3px;
+                    font-weight: 500;
+                    border-radius: 3px;
+                    height:26px;
+                    overflow: hidden;
+                    .statusText{
+                      margin-top:-2px;
+                      padding:0;
+                      text-align:center;
+                      width: 100%;
+                      cursor:default
+                    }
+                    
+                    .caret{
+                      margin-top: 2px;
+                      width: 25px;
+                      cursor:pointer;
+                    }
+                    
+                  }
+                  
+                }
+                
+                .responseCellSTLNoBorder{
+            
+                  background-color: rgb(255, 255, 255); 
+                  margin:0px 0 0px 0px;
+                  height: 28px;
+                  z-index: 5;
+                  .stlError{
+                    margin:5px 0  0 9px;
+                    color:rgb(105, 105, 105);
+                    font-weight: 500;
+                    font-size: 14px;
+                    white-space: nowrap;
+                  }
+                }
+                .responseText{
+                  font-size:16px;
+                  margin:0;
+                  margin-left:0px;
+                  padding-left:2px;
+                  white-space: nowrap; 
+                  resize: none;
+                  cursor: default;
+                }
+                .responseTextBlocked{
+                  position: absolute;
+                  font-size:16px;
+                  height:21px;
+                  margin:0;
+                  padding: 0;
+                  margin-left:3px;
+                  padding-left:2px;
+                  white-space: nowrap; 
+                  resize: none;
+                  cursor: default;
+                  background-color: rgb(219, 219, 219);
+                  border-radius: 3px;
+                }
+                .firstResponseText{
+                  font-size:16px;
+                  margin:0;
+                  padding-left:10px;
+                  white-space: nowrap; 
+                  resize: none;
+                  cursor: default;
+                }
+                
+              }
+              .reasonDiv{
+                position: absolute;
+                z-index: 15;
+                margin:26px 0 0 5px;
+                padding:3px 5px;
+                background-color: rgb(255, 255, 255);
+                border: 1px solid rgb(168, 168, 168);
+                border-radius: 5px;
+                font-size: 15px;
+                max-width: 300px;
+                .status{
+                  margin:0 0 5px 0;
+                  padding:3px 5px;
+                  border-radius: 3px;
+                  width: fit-content;
+                  font-weight: 500;
+
+                }
+                .Submitted{
+                  color:#ff0000;
+                  background-color:#ffc6c6;
+                }
+                .Printing{
+                  color:#868000;
+                  background-color:#fffcbc;
+                }
+                .Finished{
+                  color:#09871a;
+                  background-color:#87e994;
+                }
+                .Error{
+                  color:#ff0000;
+                  background-color:#d1d1d1;
+                }
+                .Cancelled{
+                  color:#000000;
+                  background-color:#d1d1d1;
+                }
+                .reasonText{
+                  margin:0 0 0px 0;
+                  color:#4b4b4b;
+                  font-size:14px;
+                  font-weight: 500;
+                }    
+                .reason{
+                  margin:0;
+                  padding:0;
+                  min-height: 18px;
+                }  
+              }
+              .emptyResponseCell{
+                position:absolute;
+                background-color: white;
+                height:30px;
+                z-index: 5;
+               
+                .responseCellSTL{
+                  
+                  position:absolute;
+                  margin:0px 0 -2px -8px;
+                  z-index: 5;
+                  border: 1px solid #5a5a5a;
+                  background-color: white;
+                  top:20px;
+                  left:18px;
+                  border-radius:2px;
+
+                  .loader {
+                    position: absolute;
+                    left: 38px;
+                    top: 40px;
+                    border: 8px solid #f3f3f3;
+                    border-top: 8px solid #3498db;
+                    border-radius: 60%;
+                    width: 70px;
+                    height: 70px;
+                    animation: spin 1s linear infinite;
+                    @keyframes spin {
+                      0% {
+                        transform: rotate(0deg);
+                      }
+                      100% {
+                        transform: rotate(360deg);
+                      }
+                    } 
+                    
+                  }
+                  
+                }
+              }
+              .informationExpandedCell{
+                background-color: white;
+                user-select: text;
+                position:absolute;
+                z-index: 10;
+                margin-left:2px;
+                min-height:32px;
+                padding:3px 4px 0px 1px;
+                background-color: white; 
+                border:2px solid rgb(90, 138, 240);
+              }
+              .actionResponseDiv{
+                overflow:hidden;
+                position:absolute;
+                z-index: 1;
+                display:flex;
+                flex-direction: row;
+                margin-left:-20px;
+                padding-left:3px;
+                .firstResponseCell{
+                  background-color:rgb(255, 255, 255);     
+                  padding:5px 0px 1px 5px;
+                  z-index: 1; 
+                  display:flex;
+                  justify-content: left;
+                  margin-left:-3px;
+                  height:26px;
+                  .actionButton{
+                    border:none;
+                    color:rgb(0, 0, 0);
+                    margin: -3px 0px 0 0px;
+                    padding:0;
+                    height:26px;
+                    border-radius: 3px;
+                    cursor:pointer;
+
+                  }
+                  .buttonText{
+                    position: absolute;
+                    top:3px; 
+                    z-index: 5;
+                    font-size: 18px;
+                    overflow: hidden;
+                  }
+                  .printingStatusButton{
+                    @extend .actionButton;
+                    background-color: #fffcbc;//status background
+                    background-color: #868000;//status text
+                    background-color: #fff700;
+
+                    .buttonText{
+                      margin-left:3px;
+                    }
+                  }
+                  .finishedStatusButton{
+                    @extend .actionButton;
+                    background-color: #87e994;
+                    background-color: #3ce953;
+                  }
+                  .errorStatusButton{
+                    @extend .actionButton;
+                    background-color: #d1d1d1;
+                    background-color: #ffc6c6;
+                    background-color: #ff0000;
+                    background-color: #eb3434;
+                  }
+                  .downloadButton{
+                    @extend .actionButton;
+                    background-color: #6771ff;
+                  }
+                  .printingStatusButton:hover{
+                    background-color: #f1ea19;
+                  }
+                  .finishedStatusButton:hover{
+                    .buttonText{
+                      position: absolute;
+                      top:1px;
+                      z-index: 5;
+                    }
+                    filter: brightness(0.9);
+                  }
+                  .errorStatusButton:hover{
+                    background-color: #e00606;
+                  }
+                  .downloadButton:hover{
+                    background-color: #5c66e9;
+                  }
+
+                }
+                .responseCell{
+                  background-color:rgb(255, 255, 255);     
+                  padding:5px 0 1px 1px;
+                  margin-right:-1px;
+                  border-radius: 7px;
+                  z-index: 1; 
+                  display:flex;
+                  justify-content: left;
+                  overflow: hidden;
+                  height:30px;
+                  .blockIcon{
+                    margin: 0px;
+                    padding:0 2px;
+                    background-color: rgb(255, 255, 255);
+                    color:rgb(255, 0, 0);
+                    cursor:pointer;    
+                    border-radius: 3px; 
+                    white-space: nowrap
+                  }
+                  .blockIcon:hover{
+                    background-color: rgb(233, 233, 233);
+                  }
+                  .deleteCell{
+                    display:flex;
+                    flex-direction: row;
+                    .trashIcon{
+                      margin-left: 2px;
+                      padding:0 2px;
+                      background-color: rgb(255, 255, 255);
+                      color:rgb(255, 0, 0);
+                      cursor:pointer;   
+                      border-radius: 3px; 
+                    }
+                    .trashIcon:hover{
+                      background-color: rgb(233, 233, 233);
+                    }
+                    .expandDeleteIcon{
+                      color:rgb(59, 59, 59);
+                      margin-top:5px;
+                      cursor:pointer;
+                      width:13px !important;
+                      height:13px !important;
+                    }
+                  }
+                  
+      
+                  .actionButton{
+                    border:none;
+                    color:rgb(0, 0, 0);
+                    margin: -3px 3px 0 0px;
+                    height:26px;
+                    border-radius: 3px;
+                    font-size:17px;
+                    position: relative;
+                    cursor:pointer;
+                  } 
+                  .buttonText{
+                    position: absolute;
+                    top:1px;
+                    width: 100%;
+                    font-size:18px;
+                  }
+                  .printingStatusButton{
+                    @extend .actionButton;
+                    background-color: #fffcbc;//status background
+                    background-color: #b6b000;//status text
+                    background-color: #fff700;
+                  }
+                  .finishedStatusButton{
+                    @extend .actionButton;
+                    background-color: #87e994;
+                    background-color: #25c93b;
+                  }
+                  .errorStatusButton{
+                    @extend .actionButton;
+                    background-color: #ffa4a4;
+                    background-color: #d41b1b;
+                    background-color: #f73535;
+                    overflow: hidden;
+                  }
+                  .downloadLink{
+                    position: absolute;
+                    z-index: -1;
+                    bottom:2px;
+                    .downloadButton{ 
+                      @extend .actionButton;
+                      margin-right: 0;
+                      margin-top:1px;
+                      padding-top:-1px;
+                      background-color: #6771ff;
+                      overflow: hidden;
+                    }
+                  }
+                  
+                  .printingStatusButton:hover{
+                    background-color: #f1ea19;
+                  }
+                  .finishedStatusButton:hover{
+                    background-color: #1da02f;
+                  }
+                  .errorStatusButton:hover{
+                    background-color: #ee1818;
+                  }
+                  .downloadButton:hover{
+                    background-color: #5c66e9;
+                  }
+                }
+              }
+              .errorInputDiv{
+                position: absolute;
+                z-index: 10;
+                margin-top:30px;
+                padding:5px;
+                background-color: white;
+                border: 1px solid rgb(168, 168, 168);
+                border-radius: 5px;
+                width:200px;
+                .errorMessage{
+                  font-size:14px;
+                  color:rgb(78, 78, 78);
+                  margin:5px 0;
+                }
+                .errorInput{
+                  font-size: 16px; 
+                  border:1px solid grey;
+                  border-radius: 2px;
+                  width:100%;
+                }
+                .buttonDiv{
+                  display: flex;
+                  flex-direction: row;
+                  .errorButton{
+                    text-align: center;
+                    margin-top:5px;
+                    padding:3px;
+                    cursor: pointer;
+                    color:rgb(255, 0, 0);
+                    font-weight: 500;
+                    border-radius: 2px;
+                    transition: 0.15s;
+                  }
+                  .cancelButton{
+                    margin-left: 5px;
+                    width:50%;
+                    border:1px solid red;
+                    @extend .errorButton;
+                  }
+                  .saveButton{
+                    @extend .errorButton;
+                    width:50%;
+                    background-color: rgb(243, 48, 48);
+                    color:white;
+                  }
+                  .cancelButton:hover{
+                    background-color: #f0f0f0;
+                  }
+                  .saveButton:hover{
+                    background-color: rgb(223, 25, 25);
+                  }
+                }
+                
+              }
+              .deleteFileDiv{
+                position: absolute;
+                z-index: 10;
+                margin-top:30px;
+                padding:3px;
+                background-color: white;
+                color:red;
+                border: 1px solid rgb(168, 168, 168);
+                border-radius: 5px;
+                width:115px;
+                cursor:pointer;
+                box-shadow: 0 0 10px rgb(179, 179, 179);
+                .deleteFileButton:hover{
+                  background-color: rgb(233, 233, 233);
+                  border-radius: 3px;
+                }
+              }
+              .responseCellSTL:after, .responseCellSTL:before {
+                bottom: 100%;
+                left: 10%;
+                border: solid;
+                content: "";
+                height: 0;
+                width: 0;
+                position: absolute;
+                pointer-events: none;
+              }
+              
+              .responseCellSTL:after {
+                border-color: rgba(255, 255, 255, 0);
+                border-bottom-color: #ffffff;
+                border-width: 10px;
+                margin-left: -10px;
+              }
+              .responseCellSTL:before {
+                border-color: rgba(0, 0, 0, 0);
+                border-bottom-color: #000000;
+                border-width: 11px;
+                margin-left: -11px;
+              }
+              .emailSentPopupDiv{
+                display:flex;
+                flex-direction: row;
+                justify-content: center;
+                position: absolute;
+                top:800px;
+                width:1600px;
+                transition-duration:200ms;
+                .emailPopup{
+                  border-radius: 5px;
+                  box-shadow: 0 0px 3px rgba(0, 0, 0, 0.1);
+                  color:white;
+                  font-size: 20px;
+                  margin: 0 20px;
+                  transition: transform 0.1s ease-in;
+                  
+                  position:absolute;
+                }
+                .printingEmailPopup{
+                  @extend .emailPopup;
+                  background-color: #f5ee27;
+                  visibility:hidden;
+                  transform: translate(0px, 50px);
+                  color:black
+                }
+                .printingEmailPopupscaled{
+                  @extend .printingEmailPopup;
+                  padding:5px 10px;
+                  visibility:visible;
+                  transform: translate(0px, 0px);
+                }
+                .finishedEmailPopup{
+                  @extend .emailPopup;
+                  background-color: #23c038;
+                  visibility:hidden;
+                  transform: translate(0px, 50px);
+                }
+                .finishedEmailPopupscaled{
+                  @extend .finishedEmailPopup;
+                  padding:5px 10px;
+                  visibility:visible;
+                  transform: translate(0px, 0px);
+                }
+                .errorEmailPopup{
+                  @extend .emailPopup;
+                  background-color: #eb3434;
+                  visibility:hidden;
+                  transform: translate(0px, 50px);
+                }
+                .errorEmailPopupscaled{
+                  @extend .errorEmailPopup;
+                  padding:5px 10px;
+                  visibility:visible;
+                  transform: translate(0px, 0px);
+                }
+                .errorSendingEmailPopup{
+                  @extend .emailPopup;
+                  background-color: red;
+                  color:black;
+                  font-weight: 500;
+                  visibility:hidden;
+                  transform: translate(0px, 50px);
+                }
+                .errorSendingEmailPopupscaled{
+                  @extend .errorSendingEmailPopup;
+                  padding:5px 10px;
+                  visibility:visible;
+                  transform: translate(0px, 0px);
+                }
+
+              }
+            }
+            .submittedPlaceholder{
+              position: absolute;
+              z-index: 1;
+              top:76px;
+              height: 26px;
+              font-size: 16px;
+              margin:0px 0 0px 20px;
+              padding:4px 0 1px 0;
+              width:1600px;
+              background-color: white;
+              color:#2e2e2e;
+            }
+            
+          }
+        }
+      
+      }
+      
+    }
+    .submissionFormPage{
+      display:flex;
+      flex-direction: column;
+      margin-top:25px;
+      .contentDiv{
+        display:flex;
+        flex-direction: row;
+        margin-top:5px;
+
+        .preview{
+          margin-top:10px;
+          width:780px;
+          height: 90vh;
+          //border-right: 1px solid rgb(146, 146, 146); 
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .previewText{
+            text-align: center;
+            margin:0px 0px 10px 0px;
+            font-size: 24px;
+            font-weight: 600;
+            color:#424242;
+          }
+          
+          .linkDiv{
+          
+            padding:5px 15px 15px 15px;
+            margin:40px 0 0 0;
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 5px 0px rgb(211, 211, 211);
+
+
+            .linkText{
+              margin:5px 0 10px 0;
+              font-size: 20px;
+              color:#1a1a1a;
+            }
+            .link{
+              color:rgb(6,69,173);
+            }
+          }
+          .lineBreak{
+            
+              border: 0;
+              clear:both;
+              display:block;
+              width:100%;              
+              background-color:#555555;
+              height: 1px;
+          
+          }
+          .submissionFormContainerDisplay{
+              margin:0px 0 0 0;
+              overflow-y:scroll;
+              height:675px;
+              width:620px;
+              background-color: white;
+              display:flex;
+              flex-direction: row;
+              border-radius: 5px;
+              box-shadow: 0px 0px 13px 0px rgb(175, 175, 175);
+
+              @extend .submissionFormContainer;
+              
+          }
+          .footer{
+            background-color: white;
+            height:20px;
+            width:583px;    
+            margin:-5px 18px 0 0;
+          }
+        }
+        .highlight{
+          background-color: #dddddd;
+          transition: 15ms;
+        }
+
+        .edit{
+          width:100ch;
+          margin-top:10px;
+          
+          .editText{
+            text-align: center;
+            margin:0px 0px 5px 0px;
+            padding:0;
+            font-size: 24px;
+            font-weight: 600;
+            color:#424242;
+          }
+          .lineBreak{
+            
+            border: 0;
+            clear:both;
+            display:block;
+            width:100%;              
+            background-color:#555555;
+            height: 1px;
+        
+          }
+          .editFormContainer{
+            display:flex;
+            align-items: left;
+            flex-direction: column;
+            margin:0px 20px 0px 20px;
+            padding:0 40px 15px 20px;
+            //background-color: white;
+            border-radius: 10px;
+            .editForm{
+              padding-left:10px;
+              $textInputColor: rgb(34, 34, 34);
+              $questionBackground: #ffffff;  
+              .editHeader{
+                display:flex;
+                flex-direction: column;
+                margin:5px 0 5px 0;
+                padding-left: 5px;
+                background-color: $questionBackground;
+                box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
+                border-radius: 10px;
+              }
+              
+              .requiredInputDiv{
+                
+                font-size:16px;
+                margin:15px 5px 0 20px;
+                padding-bottom: 15px;
+                display: flex;
+                flex-direction: row;
+                width:800px;
+                .deleteButton{
+                  background:white;
+                  color:red;
+                  border-radius: 5px;
+                  font-size:18px;
+                  padding:0 5px;
+                  cursor: pointer;
+                }
+                .deleteButton:hover{
+                  background:rgb(235, 235, 235);
+                  transition: 0.2s;
+                }
+                .checkboxInput{
+                  margin:0px 10px 0px 5px;
+                }
+                .selectVariable{
+                  margin-left:5px;
+                  margin-right:10px;
+                  width:105px; 
+                  border:1px solid rgb(133, 133, 133);
+                  border-radius: 2px;
+                  .variable{
+                    color:black;
+                    position: relative;
+                  }
+                }
+                .none{
+                  color:#696969;
+                }
+              }
+              
+              .formRowUnaligned{
+                margin-bottom:10px;
+                padding: 0px 0 10px;
+                display:flex;
+                align-items: top;
+                background-color: $questionBackground;
+                border-radius: 0 0 10px 10px;
+                .editInputText{
+                  font-size: 18px;
+                  width:100px;
+                  color:$textInputColor;
+                  text-align: right;
+                  margin-right:10px;
+                  
+                }
+                .input{
+                  resize: none;
+                  font-size:16px;
+                  margin: 0px 10px 0px 5px;
+                  padding: 5px 0px 0px;  
+                  flex:1;  
+                  border:1px solid gray;      
+                  border-radius: 2px;
+                }
+
+              }
+              .formRow{
+                margin:0px 0 0 0;
+                padding: 0px 0 10px;
+                display:flex;
+                align-items: center;
+                .editInputText{
+                  margin-right:10px;
+                  font-size: 18px;
+                  width:100px;
+                  color:$textInputColor;
+                  text-align: right;
+                }
+                .input{
+                  font-size:16px;
+                  margin: 2px 10px 0px 5px;
+                  padding: 0px 0px 0px;  
+                  flex:1; 
+                  border:1px solid gray;   
+                  border-radius: 2px;
+                }
+                .optionInput{
+                  border:1px solid gray;   
+                  border-radius: 2px;
+                  width:100px;
+                }
+                .addOptionButton{
+                  margin-left:10px;
+                  border:1px solid rgb(23, 180, 57);
+                  border-radius: 5px;
+                  color:rgb(23, 180, 57);
+                  padding: 0 5px;
+                }
+                
+                .allOptionCardsDiv{
+                  overflow-x:scroll;
+                  overflow-y: hidden;
+                  width:500px;
+                  height:50px;
+                  margin: 2px 0 5px 0;
+                  padding:3px 0;
+                  position: relative;
+                  white-space: nowrap;
+
+                  .optionCardSpan{
+                    border-radius: 5px;
+                    background-color: rgb(223, 223, 223);
+                    padding:3px 25px 3px 10px;
+                    font-size:16px;
+                    margin:8px 10px 8px 0px;
+                    position: relative;
+                    max-height:30px;
+                    white-space: nowrap;
+
+                  .deleteOption{
+                    height:22px;
+                    width: 20px;
+                    color:rgb(61, 61, 61);
+                    border-radius: 5px;
+                    padding-right: 2px;
+                    position: absolute;
+                    top:2px;
+                    right:0px;
+                    cursor: pointer;
+                  }
+                  .deleteOption:hover{
+                    background-color: rgb(201, 201, 201)
+                  }
+                }
+                }
+                
+                
+
+              }
+              .firstFormRow{
+                @extend .formRow;
+                margin-top:5px;
+                padding-top:10px;
+              }
+              .lastFormRowDiv{
+                height: 170px;
+                overflow-y: scroll;  
+                width:830px;
+                background-color: $backgroundColor;
+                margin: 10px 0 0 -10px;
+                padding:0px 10px 10px 10px;
+
+                .lastFormRow{
+                  
+                  @extend .formRow;
+                  padding-bottom: 8px;
+                  position: relative;
+                  display:flex;
+                  flex-direction: column;
+                  align-items: start;
+                  padding-top:10px;
+                  margin-top:20px;
+                  border-radius: 10px;
+                  background-color: white;
+                  border-radius: 10px;
+                  box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
+                  .uploadInformationInput{
+                    border:1px solid gray;
+                    padding: 1px;
+                    width:555px;
+                  }
+                  .editInputText{
+                    width:200px;
+                    text-align: right;
+                    margin-left:10px;
+                  }
+                  .input{
+                    @extend .input;
+                    width:595px;
+                  }
+                  .maxSizeText{
+                    @extend .editInputText;
+                  }
+                  .lock{
+                    color:rgb(219, 21, 37);
+                    height:20px;
+                    width: 20px;
+                    position: absolute;
+                    top:1px;
+                    left:28px;
+                    cursor:pointer
+                  }
+                  
+                }
+              }
+              
+              .questionTextDiv{
+                display:flex;
+                justify-content: left;
+                .questionsText{
+                  padding:0;
+                  margin: 5px 0 0 25px;
+                  font-size:26px;
+                  color:#3d3d3d;
+                }
+              }          
+              .questionsDiv{  
+                margin: 0px 0 0 -10px;
+                border-radius: 5px;
+                height: 375px;
+                overflow-y: scroll; 
+                overflow-x: hidden; 
+                width:830px;
+                //border:1px solid rgb(172, 172, 172);
+                border-radius: 5px;
+                background-color: $backgroundColor;
+                padding:10px 0 10px 10px;
+
+                .questionDiv{
+                  padding:10px 0 0 0;
+                  background-color: $questionBackground;
+                  margin:0 15px 25px 0;
+                  border-radius: 10px;
+                  box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
+                  .deleteButtonDiv{
+                    display:flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    .deleteButton{
+                      font-size:15px;
+                      height:35px;
+                      background:none;
+                      margin: 0px 0 10px 0;
+                    }
+                    .deleteButton:hover{
+                      color:white;
+                      background: rgb(255, 75, 75)
+                    }
+                  }
+                }  
+                .addNewButtonDiv{
+                  display: flex;
+                  align-items: center;
+                  flex-direction: column;
+                  justify-content: center;
+                  margin-top:-8px;
+                  .addNewButton{
+                    color:rgb(23, 180, 57);
+                    padding:5px 10px;
+                    border:1px solid rgb(23, 180, 57);
+                    border-radius: 5px;
+                    font-size:16px;
+                    margin: 0px 0px 0 0;
+                    cursor: pointer;
+                    transition:0.2s;
+                    background-color: white;
+                  }
+                  .addNewButton:hover{
+                    color:rgb(255, 255, 255);
+                    border:1px solid rgb(99, 201, 121);
+                    background:rgb(99, 201, 121);
+                  }
+                }
+              }     
+            }
+            .bottomDiv{
+              position: absolute;
+              margin-left:10px;
+              width:780px;
+              top:865px;
+              display:flex;
+              flex-direction: column;
+              align-items: center;
+              .saveDiv{
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                .saveButton{
+                  color:white;
+                  background:rgb(74, 96, 224);
+                  border:1px solid rgb(146, 146, 146);
+                  border-radius: 5px;
+                  font-size:22px;
+                  margin: -5px 0 0 0;
+                  padding:5px 15px 5px 15px;
+                  cursor: pointer;
+                }
+                .saveButton:hover{
+                  background:rgb(42, 69, 226);
+                  transition: 0.2s;
+                }
+                .saveButton:active{
+                  background:rgb(0, 19, 126);
+                }
+              }
+              
+              .openCloseDiv{
+                
+                width:100%;
+                margin-top:10px;
+                display:flex;
+                flex-direction: row;
+                align-items: start; 
+                text-align: center;
+                color:#5f5f5f;
+                font-weight: 600;
+             
+                .openDiv{
+                  margin-top:2px;
+                  padding-top:5px;
+                  border-top: 1px solid gray;
+                  width:50%;
+                  cursor:pointer;
+                }     
+                .openDivSelected{
+                  @extend .openDiv;
+                  margin-top:0;
+                  border-top: 3px solid rgb(80, 177, 80);
+                }     
+                .closedDiv{
+                  margin-top:2px;
+                  padding-top:5px;
+                  width:50%;
+                  border-top: 1px solid gray;
+                  cursor:pointer;
+                }     
+                .closedDivSelected{
+                  @extend .closedDiv;
+                  margin-top:0;
+                  border-top: 3px solid rgb(255, 0, 0);
+                }    
+              }
+            }
+            
+          }
+
+        }
+
+      }
+
+    }
+    .emails{
+      width:1695px;
+      position: relative;
+      .emailTitleDiv{
+        background-color:#BACCD6;
+        font-size: 20px;
+        padding: 5px 0 5px 5px;
+      }
+      .emailProcessDiv{
+        margin-top:20px;
+        height:200px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        .emailDiv{
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height:100%;
+          .sendEmailDiv{
+            margin-top:15px;
+            font-size:18px;
+            color:#0f0f0f;
+            cursor:default;
+            .sendEmailCheckbox{
+              margin-left:10px;
+              height: 14px;
+              width: 14px;
+              cursor: pointer;
+            }
+            .sendEmailCheckboxHighlighted{
+              @extend .sendEmailCheckbox;
+              filter: brightness(90%);
+
+            }
+          }
+          .emailSelectorDiv{
+            height:110px;
+            width:250px;
+            background-color: white;
+            border-radius: 10px;
+            margin-top:25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size:26px;
+            font-weight: 600;
+            color:#3F3F3F;
+            cursor: pointer;
+            transition:0.2s;
+          }
+          
+          .emailSelectorDivSubmission{
+            @extend .emailSelectorDiv;
+            box-shadow:0 0 15px rgba(#6771ff,0.5);
+            border:3px solid rgba(0,0,0,0);
+          }
+          .emailSelectorDivSubmission:hover{
+            box-shadow:0 0 15px rgba(#6771ff,0.9);
+          }
+          .emailSelectorDivSubmissionSelected{
+            @extend .emailSelectorDivSubmission;
+            border:3px solid #6771ff;
+            box-shadow:0 0 15px rgba(#6771ff,0.9);
+          }
+          
+          .emailSelectorDivPrinting{
+            @extend .emailSelectorDiv;
+            box-shadow:0 0 15px rgba(202, 216, 0, 0.7);
+            border:3px solid rgba(0,0,0,0);
+          }
+          .emailSelectorDivPrinting:hover{
+            box-shadow:0 0 15px rgb(181, 194, 3);
+          }
+          .emailSelectorDivPrintingSelected{
+            @extend .emailSelectorDivPrinting;
+            border:3px solid rgba(202, 216, 0);
+            box-shadow:0 0 15px rgb(181, 194, 3);
+          }
+
+          .emailSelectorDivFinished{
+            @extend .emailSelectorDiv;
+            box-shadow:0 0 15px rgba(#25c93b,0.5);
+            border:3px solid rgba(0,0,0,0);
+          }
+          .emailSelectorDivFinished:hover{
+            box-shadow:0 0 15px rgba(#25c93b,0.9);
+          }
+          .emailSelectorDivFinishedSelected{
+            @extend .emailSelectorDivFinished;
+            border:3px solid #25c93b;
+            box-shadow:0 0 15px rgba(#25c93b,0.9);
+          }
+
+          .emailSelectorDivError{
+            @extend .emailSelectorDiv;
+            box-shadow:0 0 15px rgba(#eb3434,0.5);
+            border:3px solid rgba(0,0,0,0);
+          }
+          .emailSelectorDivError:hover{
+            box-shadow:0 0 15px rgba(#eb3434,0.9);
+          }
+          .emailSelectorDivErrorSelected{
+            @extend .emailSelectorDivError;
+            border:3px solid #eb3434;
+            box-shadow:0 0 15px rgba(#eb3434,0.9);
+          }
+            
+        }
+      }
+      .emailEditContainer{
+        margin-top:30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .emailEditDiv{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          font-size: 24px;
+          color:#292929;
+          padding:15px;
+          background-color: rgb(255, 255, 255);        
+          width: 1200px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgb(194, 194, 194);
+          .informationDiv{
+            font-size:14px;
+            color:black;
+            padding:0px 0px;
+          }
+          .emailTextDiv{
+            width:1000px;
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            font-size:20px;
+            margin:8px;
+            .currentEmail{
+              margin: 0 10px 0 20px;
+              font-size:18px;
+              padding:3px;
+              border-radius: 4px;
+              font-weight: 400;
+            }
+            .accountButtons{
+              margin-right:10px;
+              font-size: 14px;
+            }
+            .accountButtons:hover{
+              text-decoration: underline;
+            }
+            
+            .emailInput{
+              padding:3px;
+              font-size: 18px;
+              margin-left:5px;
+              height: 25px;
+              width: 300px;
+              border:1px solid rgb(167, 167, 167);
+              border-radius: 3px;
+            }
+            .emailInputHighlighted{
+              @extend .emailInput;
+              background-color:#ebebeb;
+              
+            }
+            .bodyEmailInput{
+              @extend .emailInput;
+              padding:3px;
+              margin-left:25px;
+              width: 840px;
+              height:225px;
+              resize: none;
+            }
+            .bodyEmailInputHighlighted{
+              @extend .bodyEmailInput;
+              background-color:#ebebeb;
+            }
+            .variableDiv{
+              margin-left:5px;
+              .variableRow{
+                display:flex;
+                flex-direction: row;
+                margin-bottom:5px;
+                align-items:end;
+                .variableTextDiv{
+                  font-size:16px;
+                  color:rgb(0, 0, 0);
+                  padding:3px 3px 3px 4px;
+                  background-color: white;
+                  border:1px solid rgb(83, 83, 83);
+                  border-radius: 5px;
+                  cursor:default;
+                }
+                .variableInformationDiv{
+                  font-size:16px;
+                  color:rgb(0, 0, 0);
+                  padding:0 0 3px 10px;
+                  cursor:default;
+                }
+              }
+            }
+          }
+        
+          .savedText{
+            margin-top:20px;
+            font-size:14px;
+            color:green;
+            transition:0.3s;
+          }
+          .errorText{
+            margin-top:20px;
+            font-size:14px;
+            color:red;
+            transition:0.3s;
+            
+          }
+          .hidden{
+            opacity: 0;
+            margin-top:20px;
+            font-size:14px;
+            transition:0.3s;
+          }
+        }
+        .saveButton{
+          margin-top:30px;
+          color:white;
+          background:rgb(74, 96, 224);
+          border:1px solid rgb(146, 146, 146);
+          border-radius: 5px;
+          font-size:20px;
+          padding:10px 20px;
+          cursor: pointer;
+          transition: 0.2s;
+        }
+        .saveButton:hover{
+          background:rgb(42, 69, 226);
+          
+        }
+        .saveButton:active{
+          background:rgb(0, 19, 126);
+        }
+      }
+      .darkenDiv{
+        background-color: rgb(0, 0, 0);
+        opacity: 65%;
+        width:100%;
+        height:100%;
+        position: absolute;
+        z-index: 1;
+      }
+      .noEmailDiv{
+        position: absolute;
+        z-index: 2;
+        width:100%;
+        height:80%;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .noEmailTextDiv{
+          padding:10px 60px 20px 60px;
+          border-radius: 10px;
+          background-color: white;
+          border:1px solid black;
+          display:flex;
+          flex-direction: column;
+          align-items: center;
+
+          .noEmailHeader{
+            margin-top:15px;
+            font-size: 40px;
+            color:#353535;  
+            padding:0;  
+          }
+          .noEmailDescription{
+            margin:5px 0px 25px 0px;
+            font-size: 15px;
+            width:470px;
+            text-align: center;
+            color:rgb(82, 82, 82);
+          }
+          .noEmailText{
+            margin:0px 0px 0px 0px;
+            font-size: 17px;
+            width:470px;
+            text-align: left;
+            font-weight: 500;
+            color:rgb(50, 50, 50);
+
+          }
+          .description{
+            margin:5px 0px 20px 0px;
+            font-size: 16px;
+            width:470px;
+            text-align: left;
+            color:rgb(82, 82, 82);
+          }
+          .completeText{
+            margin:0px 5px;
+            font-size: 15px;
+            color:#09871a;
+            font-weight: 500;
+          }
+          .incompleteText{
+            margin:0 5px;
+            font-size: 15px;
+            color:#ff0000;
+            font-weight: 500;
+          }
+          .secondDiv{
+            display: flex;
+            flex-direction: column;
+            width:470px;
+            .buttonDiv{
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              font-size: 18px;
+              font-weight: 500;
+              .authorizeButton{
+                margin-top:0px;
+                font-size: 17px;
+                margin:0 5px;
+                display: flex;
+                flex-direction: row;
+                padding:3px 8px;
+                border: 1px solid rgb(134, 134, 134);
+                border-radius: 5px;
+                font-weight: 500;
+                color:rgb(50, 50, 50);
+                align-items: center;
+              }
+            }
+          }
+        }
+      }
+      .loader {
+        border: 2px solid #e7e7e7;
+        border-top: 2px solid #0089c9;
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;
+        animation: spin 1s linear infinite;
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        } 
+        
+      }
+      .loadingDiv{
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height:840px;
+        font-size:30px;
+        color:#1a1a1a;
+      }
+    }
+    .loadingDiv{
+      width:1695px;
+      height:80vh;
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size:30px;
+
+      .loader {
+        border: 10px solid #f3f3f3;
+        border-top: 10px solid #3498db;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        animation: spin 1s linear infinite;
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        } 
+        
+      }
+    }
+    .titleDiv{
+      width: 1695px;
+      background-color:#BACCD6;
+      margin:0;
+      padding:1px 5px;
+      font-size: 20px;
+      position: absolute;
+      top:47px;
+      z-index: 1;
+      display: flex;
+      flex-direction: row;
+    }
+    .ipManagerDiv{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width:1500px;
+      padding-top:25px;
+      .returnDiv{
+        align-items: start;
+        margin-left:15px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .returnLink{
+          font-size: 20px;
+          color:	#3366CC;
+          cursor: pointer;
+        }
+        .returnLink:hover{
+          text-decoration: underline;
+        }
+      }
+      .ipBoxDiv{
+        margin:40px 0 0 50px;
+        padding:10px;
+        min-width:800px;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgb(190, 190, 190);
+        overflow-y:auto;
+        .headerDiv{
+          display:flex;
+          flex-direction: row;
+          border-bottom: 1px solid rgb(192, 192, 192);
+          .headerText{
+            padding:5px;
+            width:250px;
+            font-size: 20px;
+            color:rgb(61, 61, 61);
+            border-right:1px solid rgb(192, 192, 192)
+          }
+        }  
+  
+        .ipRow{
+          display:flex;
+          flex-direction: row;
+          .ipText{
+            padding:5px;
+            color:#383838;
+            width:250px;
+            border-right:1px solid rgb(192, 192, 192);
+            .blockButton{
+              cursor:pointer;
+              padding:5px 5px;
+              border-radius: 3px;
+            }
+            .blockButton:hover{
+              background-color: #f0f0f0;
+            }
+          }
+        }
+        
+      }
+    }
+    .statisticsDiv{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width:1500px;
+      padding-top:25px;
+      .statisticsBoxDiv{
+        margin:30px 0 0 50px;
+        min-width:800px;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgb(190, 190, 190);
+        position: relative;
+        .optionsText{
+          display:flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: baseline;
+          font-size:20px;
+          margin:0;
+          padding: 5px 10px;
+          background-color: rgb(228, 228, 228);
+          border-radius:5px 5px 0 0px;
+          box-shadow: 0 3px 5px rgb(155, 155, 155);
+          .downloadData{
+            font-size:14px;
+            color:rgb(51, 92, 168);
+            cursor:pointer;
+          }
+          .downloadData:hover{
+            color:blue;
+          }
+        }
+        .title{
+          font-size: 22px;
+          margin-top:25px;
+          margin-left:15px;
+          font-weight: 400;
+          color:rgb(50, 50, 50);
+        }
+        .storageDiv{
+          display: flex;
+          flex-direction: column;
+          .storageUsedDiv{
+            margin: 10px 15px 5px 15px;
+            background-color: #bdbdbd;
+            border-radius: 4px;
+            overflow: hidden;
+            .storageUsedBar{
+              background-color:#0089c9;
+              height:8px;
+              border-radius: 4px 0 0 4px;
+            }           
+          }
+          .storageInformationDiv{
+            display:flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            margin-right:20px;
+            .storageUsedText{
+              margin-left:15px;
+              font-size:15px;
+              color:rgb(50, 50, 50);
+            }
+          }
+          
+        }
+        .statsDiv{
+          display:flex;
+          flex-direction: row;
+          margin-top:5px;
+          margin-left:15px;
+          color:rgb(50, 50, 50);
+
+          .statRow{
+            padding:5px 10px 10px 1px;
+            height:40px;
+          }
+          .firstStatRow{
+            padding:5px 10px 10px 1px;
+            height:40px;
+            margin-bottom: 10px;
+          }
+          .firstStatNameDiv{
+            display:flex;
+            flex-direction: column;
+            width:180px;
+          }
+          .statNameDiv{
+            display:flex;
+            flex-direction: column;
+            width:180px;
+            margin-left:40px;
+          }
+          .statNumDiv{
+            width:35px;
+            display:flex;
+            flex-direction: column;
+          }
+        }
+        .lineBreak{
+          position: absolute;
+          z-index: 5;
+          top:235px;
+          height: 1px;
+          width: 700px;
+          margin-left: 15px;
+        }
+        .selectDiv{
+          display:flex;
+          flex-direction: row;
+          font-size:18px;
+          color:#313131;
+          margin:15px 0 0 10px;
+          .selectInterval{
+            font-size: 16px;
+            border: 1px solid gray;
+            border-radius: 2px;
+            margin:2px 15px 0 5px;
+            height:22px;
+          }
+
+        }
+        .linecolors{
+          background-color: #000000;
+          background-color: #ad0000;
+          background-color: #e4dc00;
+          background-color: #09871a;
+          background-color: #ff0000;
+          background-color: #5a5a5a;
+          .Finished{
+            color:#09871a;
+            background-color:#87e994;
+          }
+          .Error{
+            color:#ff0000;
+            background-color:#d1d1d1;
+          }
+          .Cancelled{
+            color:#000000;
+            background-color:#d1d1d1;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+.cancelSubmissionPage{
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  padding-top:100px;
+  .cancelSubmissionDiv{
+    padding:25px;
+    width:450px;
+    background-color: #e0f7f7;
+    border-radius: 10px;
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    .header{
+      color:#292929;
+      font-size: 38px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .reasonRow{
+      margin:40px 0 0 0;
+      display:flex;
+      flex-direction: row;
+      font-size: 16px;
+      color:#2e2e2e;
+      width:100%;
+      
+      position: relative;
+      .reasonText{
+        text-align: right;
+        padding-right: 10px;
+        font-size: 17px;
+        margin-top: 2px;
+      }
+      .optionalText{
+        top:21px;
+        left: 53px;
+        color:gray;
+        font-size: 14px;
+        position:absolute;
+      }
+      .reasonInput{
+        height:30px;
+        border:1px solid grey;
+        border-radius: 2px;
+        margin:5px 0 0 0px;
+        padding-left:3px;
+      }
+    }
+    .cancelButton{
+      margin-top:20px;
+      padding:5px;
+      font-size:20px;
+      font-weight: 500;
+      background-color:red;
+      color:white;
+      border-radius: 5px;
+      cursor:pointer;
+    }
+    .cancelButton:hover{
+      background-color: rgb(223, 0, 0);
+    }
+    .informationText{
+      text-align: center;
+    }
+    .previewText{
+      margin-top:16px;
+      color:#8d8d8d;   
+    }
+    .viewerDiv{
+      height:250px;
+      width:250px;
+      margin-top:10px;
+      background-color: white;
+      position: relative;
+      box-shadow: 0 0 10px rgba(#000000,0.3);
+      border-radius: 5px;
+    }
+    
+  }
+  
+}
+
+.submissionFormContainer{    
+  margin:0px 0 0px 0;
+  padding:10px;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  font-family: roboto;
+  
+  .submissionFormHeader{
+    width:550px;
+    padding-bottom: 25px;
+    .titleTextDiv{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin:15px 20px 10px 20px;
+      
+      .titleText{
+        margin:0px;
+        font-size:30px;
+        font-weight:bold;
+        text-align: center;
+        color:#33343a;
+      }
+    }
+    .descriptionTextDiv{
+      margin-bottom:20px;
+      .descriptionText{
+        margin:1px;
+        font-size:16px;
+        text-align: left;
+        color:#363636;
+      }
+    }
+    .questionsDiv{
+      background-color: #eaedf0;
+      padding:1px 25px 15px;
+      border-radius:5px;
+      .requiredDiv{
+        display:flex;
+        flex-direction: row;
+        margin:0;
+        justify-content: right;
+        .astericks{
+          margin:15px 0 0 5px;
+          color:rgb(255, 47, 47);
+          font-size: 25px;
+        }
+        .requiredText{
+          margin: 20px 0 0 8px;
+          color:rgb(59, 59, 59);
+          font-size: 15px;
+        }
+      }
+
+      .fileUploadDiv{
+        display:flex;
+        flex-direction: row;
+        margin:0;
+        justify-content: left;
+        .astericks{
+          margin:15px 0 0 5px;
+          color:rgb(255, 47, 47);
+          font-size: 25px;
+        }
+      }
+
+      .questionText{
+        font-size:25px;
+        margin: 15px 0 5px 0;
+        color:#33343a;
+      }
+      .submitButtonDiv{
+        display:flex;
+        flex-direction: column;
+        align-items: stretch;
+        margin:20px;
+        .submitButton{
+          padding:15px;
+          margin:0px;
+          border:none;
+          border-radius: 5px;
+          background-color: #52bab3;
+          font-size:15px;
+          color:#000000
+        }
+        .submitButton:hover{
+          cursor:pointer;
+          background-color:#85cac6;
+        }
+        
+
+      }
+
+      .incompleteFormDiv{
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        .incompleteText{
+          color:red;
+          font-size:16px;
+          padding:0;
+          margin-bottom:10px;
+          text-align: center;
+        }
+      }
+      .submittingFormDiv{
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        .statusText{
+          font-size:16px;
+          padding:0;
+          margin-bottom:10px;
+          text-align: center;
+        }
+        .processingText{
+          text-align:center;
+          width: 100%;
+          color:rgb(41, 41, 41);
+          font-size:15px;
+        }
+        .cancelForm{
+          color:rgb(20, 20, 20);
+          margin-top: 20px;
+          width: 100%;
+          text-align: center;
+          font-size:20px;
+        }
+        .link{
+          color:rgb(6,69,173);
+          font-size:16px;
+          margin-top:5px;
+          text-align: center;
+          word-break: break-word;
+        }
+      }
+
+      .progressBarDiv{
+        width:100%;
+        background-color: #9b9b9b;
+        border-radius: 3px;
+        width:500px;
+        .progressBar{
+          background-color: rgb(255, 0, 0);
+          height: 8px;
+          border-radius: 3px;
+        }
+      }
+      .formLineBreak{
+        border: 0;
+        clear:both;
+        display:block;
+        width:95%;       
+
+        background-color:#cecece;
+        height: 1px;
+      }
+      .questionTitleDiv{
+        display:flex;
+        flex-direction: row;
+        .questionText{
+          font-size:25px;
+          margin: 15px 0 5px 0;
+          color:#33343a;
+        }
+
+  
+        .astericks{
+          margin:15px 0 0 5px;
+          color:rgb(255, 47, 47);
+          font-size: 25px;
+        }
+
+
+        
+        
+      }
+      
+
+      .fileUploadInput{
+      
+        border: none;
+        box-shadow: none;
+        border-bottom: none;
+        font-size:16px;
+        margin:15px 0px 15px 0px;
+      }
+        
+      .questionDescription{
+        margin:0 0 5px 0;
+        font-size: 17px;
+        color:#2e2e2e;
+      }
+      .select{
+        border:1px solid gray;
+        border-radius: 3px;
+        padding:5px 2px;
+        font-size: 17px;
+        margin-bottom:20px;
+      }
+      .submissionInputHighlighted{
+        outline: 0;
+        border: none;
+        padding: 10px 0px 10px 5px;
+        border-radius: .3em;
+        border: 2px solid rgb(255, 100, 100);
+
+        font-size: 1em;
+        color: #222;
+        font-weight: 300;width: 100%;
+       
+        margin-bottom: 1.2em;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.08) inset;
+      }
+      .submissionInputHighlighted:focus{
+        border-color: #ff0000;
+      }
+      .submissionInput{
+        outline: 0;
+        border: none;
+        padding: 10px 0px 10px 5px;
+        border-radius: .3em;
+        border-right: 3px solid rgba(0,0,0,0.2);
+        border-bottom: 3px solid rgba(0,0,0,0.25);
+        font-size: 1em;
+        color: #222;
+        width: 100%;
+        margin-bottom: 1.2em;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.08) inset;
+      }
+      .submissionInput:focus{
+        border-color: #52bab3;
+      }
+
+    }
+  }
+  .submissionForm{
+      width: 500px;
+      background-color:rgb(209, 218, 221);
+      margin: 0px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;  
+  } 
+  .formClosedDiv{
+    margin-top: 0px;
+    background-color: rgb(255, 59, 59);
+    padding:15px 0 10px 0;
+    border-radius: 5px;
+    width:550px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    .formClosedTitle{
+      font-size:30px;
+      font-weight:600;
+      color:#292929;
+      margin-bottom: 10px;
+    }
+    .formClosedDescription{
+      width: 400px;
+      text-align: left;
+      font-size:18px;
+      margin:0;
+      padding:0;
+    }
+  }
+  .overlayDiv{
+    position:absolute;
+    background-color: rgba(255, 255, 255, 0.7);
+    width:550px;
+    height:100%;
+  }
+  .confirmationDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+    background-color: #ff0000;
+    background-color: #cccccc;
+    background-color: #e0f7f7;
+    border-radius: 15px;
+    padding:0;
+    height:300px;
+    width:460px;
+    padding:30px;
+    user-select: text;
+  
+    .successText{
+      font-size:30px;
+      margin:0px
+    }
+    .confirmationText{
+      font-size:18px;
+      margin:10px 0 50px 0;
+      width: 400px;
+      text-align: center;
+    }
+    .linkText{
+      font-size:14px;
+      margin:0px 0 5px 0;
+    }
+    .link{
+      color:rgb(6,69,173);
+      font-size:16px;
+      margin:0;
+      text-align: center;
+      word-break: break-word;
+    }
+  }
+}
+.authorizeButton{
+  font-size: 17px;
+  display: flex;
+  margin-top:10px;
+  flex-direction: row;
+  padding:3px 5px;
+  border: 1px solid rgb(102, 102, 102);
+  border-radius: 5px;
+  font-weight: 500;
+  color:rgb(50, 50, 50);
+  align-items: center;
+}
