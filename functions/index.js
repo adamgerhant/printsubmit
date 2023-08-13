@@ -34,6 +34,8 @@ app.post('/initializeAccountFile',  (request, response)=>{
     const accountInformationDocRef = db.doc("users/"+uid+"/data/accountInformation")
     try {
       await db.runTransaction(async (transaction) => {
+        await transaction.set(db.doc("users/"+user.uid),{created:"true"})
+
         const accountInformationDocSnap = await transaction.get(accountInformationDocRef);
         console.log("accountInformationDocSnap exists: "+accountInformationDocSnap.exists)
         if (!accountInformationDocSnap.exists) {
@@ -42,8 +44,8 @@ app.post('/initializeAccountFile',  (request, response)=>{
           if(decodedToken.firebase.sign_in_provider!="anonymous"){
             await transaction.set(accountInformationDocRef, {
               storageUsed:0,
-              totalStorage:5,
-              dailyMax:20,
+              totalStorage:1,
+              dailyMax:5,
               accountType:"Free"
             })
           }
@@ -403,6 +405,57 @@ app.post('/sendEmail', async (request, response)=>{
   })
   
   
+})
+app.post('/sendContactEmail', async (request, response)=>{
+  const recaptchaToken = request.body.token;
+  console.log(recaptchaToken)
+  if(!recaptchaToken){
+    return response.status(400).send({message: "recaptcha required"})
+  }
+  const secretKey = '6LfYj58nAAAAANOQsutWLUN7d_dXhUHgznMoLRJJ'; // Replace with your actual reCAPTCHA secret key
+  const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
+  const verificationResponse = await fetch(verificationUrl, {
+    method: 'POST'
+  });
+  const verificationData = await verificationResponse.json();
+  console.log(verificationData)
+  if(!verificationData.success){
+    console.log("recaptcha verifation failed")
+    return response.status(400).send({
+      message: 'reCAPTCHA verification failed.'});
+  }
+
+  oauth2Client.setCredentials({
+    refresh_token: "1//04qKUZT7pJynrCgYIARAAGAQSNwF-L9IrqL_rNwZu_Zqq1Wqri1BRevOQZ5SIFaZQ8cNLH5910jHw0LbXQ3ybN1YHqLQH4EoharU",
+  });
+  oauth2Client.getAccessToken().then((accessToken)=>{
+    const emailTransporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        type: "OAuth2",
+        user: "adamgerhant@gmail.com",          
+        clientId: "240473695577-nh51lv5t4tda6n8nvirfmhir1agijhl3.apps.googleusercontent.com",
+        clientSecret: "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",
+        refreshToken: "1//04qKUZT7pJynrCgYIARAAGAQSNwF-L9IrqL_rNwZu_Zqq1Wqri1BRevOQZ5SIFaZQ8cNLH5910jHw0LbXQ3ybN1YHqLQH4EoharU",
+        accessToken: accessToken.token
+      },
+    });     
+    
+    const mailOptions = {
+      from: "adamgerhant@gmail.com",
+      to: "printsubmitcontact@gmail.com",
+      subject: request.body.subject,
+      text: "From: "+request.body.from+"\nName: "+request.body.name+"\n\n"+request.body.text,
+    }                
+    console.log("sending mail")
+    emailTransporter.sendMail(mailOptions).then(()=>{
+      response.status(200).send()
+    }).catch(()=>{
+      response.status(400).send()
+    })
+  })
 })
 app.post('/storageUsed', async(request,response)=>{
   token = request.body.token;
@@ -799,11 +852,13 @@ exports.formSubmit = onObjectFinalized({cpu: 2}, async (event) => {
       }
   }
 });
+/*
 exports.initializeFolder = functions.auth.user().onCreate((user) => {
   console.log(user.uid)
   db = admin.firestore()
   db.doc("users/"+user.uid).set({created:"true"})
 });
+*/
 /*
 exports.fileDeleted = onObjectDeleted({cpu: 2}, async (event) => {
   const filePath = event.data.name
