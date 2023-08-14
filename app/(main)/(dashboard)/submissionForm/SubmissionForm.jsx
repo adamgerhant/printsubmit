@@ -1,8 +1,7 @@
 import React from 'react'
 import { useState, useRef, useEffect, memo} from 'react';
-import { updateDoc, doc, onSnapshot, addDoc, collection, setDoc } from 'firebase/firestore';
+import { doc, onSnapshot} from 'firebase/firestore';
 import { db, storage } from '@/app/firebase';
-import {ref, uploadBytes, uploadBytesResumable, uploadString} from "firebase/storage"
 import Link from 'next/link';
 import { StlViewer } from 'react-stl-viewer';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -325,7 +324,8 @@ const StlDiv = memo(function StlDiv({file, setConvertedDimensions, setStlError})
 })
 
 const SubmissionForm = ({id, submissionFormData, accountInformation}) => {
-
+    console.log("submisison form data: ")
+    console.log(submissionFormData)
     const[submitted,setSubmitted] = useState(false);
     const[highlightIDs, setHighlightIDs] = useState([]);
     const[file, setFile] = useState("");
@@ -595,7 +595,7 @@ const SubmissionForm = ({id, submissionFormData, accountInformation}) => {
                         {uploadStatus=="Processing submission"&&
                             <>
                                 <div className="submittingFormDiv">
-                                    <div className="processingText">You may close this page, processing can take up to 1 minute. The link to the cancel submission form will appear when the file is done processing</div>
+                                    <div className="processingText">Processing can take up to 1 minute. The link to the cancel submission form will appear when your file is done processing</div>
                                 </div>
                                 
                             </>

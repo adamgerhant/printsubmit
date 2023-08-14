@@ -82,6 +82,11 @@ const Questions = ({accountInformation, deleteQuestion, displayArray, onChange, 
             
 
         })
+        const handleKeyPress = (event, id) =>{
+            if (event.key === 'Enter') {
+                addOption(id)
+            } 
+        }
         if(questionObject.display){
             questionNumber++;
         
@@ -112,7 +117,7 @@ const Questions = ({accountInformation, deleteQuestion, displayArray, onChange, 
                     </div>
                     <div className = "formRow">
                         <label className = "editInputText" style={{width:"148px"}}>Add new option:</label>
-                        <input type="text" className="optionInput" value={optionInput} onChange={(e)=>setOptionInput(e.target.value)}></input>
+                        <input type="text" className="optionInput" onKeyDown={(e)=>handleKeyPress(e, questionObject.questionID)}value={optionInput} onChange={(e)=>setOptionInput(e.target.value)} ></input>
                         <button className="addOptionButton" onClick={()=>{addOption(questionObject.questionID)}}>Add option</button>
                     </div>
                 </div>
@@ -169,16 +174,19 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
 
     const deleteQuestion = (id) =>{
         const newObj = {...tempSubmissionFormData}
-        const displayedQuestions = newObj.questions.filter(question=> question.display).length-1;
-        const questionWidth = headerWidth/displayedQuestions;
-        newObj.questions.map((question, index)=>{
-            newObj.questions[index].width = questionWidth;
-            if(question.questionID===id){
-                newObj.questions[index].display = false;
-                newObj.questions[index].variable = "";
-            }   
-        })  
-        setTempSubmissionFormData(newObj);
+        const displayedQuestions = newObj.questions.filter(question=>question.display).length;
+        if(displayedQuestions>1){
+            const questionWidth = headerWidth/(displayedQuestions-1);
+            newObj.questions.map((question, index)=>{
+                newObj.questions[index].width = questionWidth;
+                if(question.questionID===id){
+                    newObj.questions[index].display = false;
+                    newObj.questions[index].variable = "";
+                }   
+            })  
+            setTempSubmissionFormData(newObj);
+        }
+        
     }
    
     const saveData = () => {
@@ -188,7 +196,6 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
         setDoc(doc(db, "users", currentUser.uid, "data", "submissionForm"), {
             ...tempSubmissionFormData
         });    
-        
         setSubmissionFormData(tempSubmissionFormData)
         setHighlighting(true);
         setTimeout(() => {
@@ -355,7 +362,7 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
                                 </span>     
                             </>
                             }
-                            <label className = "editInputText" style={{width:"150px", marginLeft:"10px"}}>Upload units</label>
+                            <label className = "editInputText" style={{width:"80px"}}>Units</label>
 
                                 <select className = "border-[1px] border-gray-400 rounded-sm cursor-pointer" value={tempSubmissionFormData.units} onChange={(e)=>handleUnitChange(e)}>
                                     <option value="in" >in</option>

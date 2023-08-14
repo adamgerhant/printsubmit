@@ -107,10 +107,14 @@ export default function Page() {
                             <a href="/register" className="font-semibold text-blue-600 ml-2  py-1 px-2 rounded-lg hover:bg-gray-600/[0.1]">Create account</a>
                             <a href="/submissions?continue=guest" className="min-w-[170px] font-semibold text-center py-2 ml-3 mr-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md cursor-pointer">Go to Dashboard</a>
                         </div>
-                    </div>  
-                    <div className="p-10 pb-8 shadow-xl border w-[600px] mt-20 self-center rounded-sm">   
+                    </div> 
+                    
+                    <div className="px-10 py-8 shadow-xl border w-[600px] mt-14 self-center rounded-sm">   
+                        <div className="w-[600px] self-center text-4xl font-semibold text-gray-700">   
+                            Contact
+                        </div>
                         <div className="flex flex-col">
-                            <p className="font-semibold mb-1">Your email address</p>
+                            <p className="font-semibold mt-5 mb-1">Your email address</p>
                             <input className={`border border-gray-700 p-1 rounded-sm ${requiredFields[0]?"border-red-500 border-2 m-0":"m-[1px]"}`} onChange={(e)=>setFrom(e.target.value)}/>
                         </div>
                         <div className="mt-5 flex flex-col">

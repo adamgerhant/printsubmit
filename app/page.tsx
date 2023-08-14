@@ -1,9 +1,9 @@
 import Link from "next/link"
-import submission from "../public/cropped.png"
+import submissions from "../public/submissions.png"
 import submissionFocus from "../public/submissionFocus.png"
-import submissionForm from "../public/submissionForm3.png"
+import submissionForm from "../public/submissionForm.png"
 import emails from "../public/emails.png"
-import analytics from "../public/analytics2.png"
+import analytics from "../public/analytics.png"
 import logo from "../public/Logo.svg"
 export default function Page() {
 
@@ -36,21 +36,26 @@ export default function Page() {
 
           </div>
 
-          <div className="flex flex-row mt-32">
+          <div className="flex flex-row mt-32 relative">
             <div className="flex flex-col w-[490px] mt-5">
               <h1 className="text-6xl font-semibold mb-8">3D print file submission and managment</h1>
               <p className="text-xl font-light"> Create a customizable submission form, manage responses, and send automated emails.</p>
               <a href="/submissions?continue=guest" className="w-[200px] font-semibold text-center py-3 mt-10 bg-blue-600 text-white text-xl rounded-md cursor-pointer">Go to Dashboard</a>
             </div>
-            <img src={submission.src} className="w-[900px] shadow-lg ml-4 "/>
+            <img src={submissions.src} className="absolute left-[490px] top-[-10px] w-[1040px] shadow-xl ml-4 "/>
           </div>  
 
-          <div className="w-full mt-[280px]">
+          <div className="w-full mt-[300px]">
             <h2 className="text-4xl font-semibold text-center">Who is this app built for?</h2>
           </div>
-          <div className="w-[900px] self-center mt-4 mb-[200px]">
-            <p className="text-xl text-center">
-            3D printing makerspaces that need to efficiently manage and print client submissions. For example, staff at libraries or universities, teachers, or businesses with custom print requests.
+          <div className="w-[950px] self-center mt-4 mb-[200px]">
+            <p className="text-xl text-center flex flex-col">
+              <span>
+                3D printing makerspaces that need to efficiently manage and print client submissions. 
+              </span>
+              <span>
+                For example, staff at libraries or universities, teachers, or businesses with custom print requests.
+              </span>
             </p>
           </div>
 
@@ -108,7 +113,7 @@ export default function Page() {
           <div className="flex flex-row w-full mt-52">
             <div className="w-[500px] flex flex-col">
               <p className="text-4xl font-semibold mb-4 mt-3">Manage Submissions</p>
-              <p className="text-lg text-gray-600 mb-6">Use the submission form editor to create a public form for users to submit files and information</p>
+              <p className="text-lg text-gray-600 mb-6">View submission form responses, upload information, and perform various actions on each response</p>
               <hr/>
               <span className="rounded py-1 bg-blue-100 mt-6 w-28 text-center">
                 <p className="text-blue-600 font-bold">Features</p>
@@ -117,14 +122,14 @@ export default function Page() {
                 <ul className="list-disc text-lg w-[260px]">
                   <li className="mt-2">Expandable cells</li>
                   <li className="mt-2">View information</li>
-                  <li className="mt-2">Expandable preview</li>
-                  <li className="mt-2">Adjustable column widths</li>
+                  <li className="mt-2">Block/Unblock IPs</li>
+                  <li className="mt-2">Set Error</li>
                 </ul>
                 <ul className="list-disc text-lg">
+                  <li className="mt-2">Adjustable column widths</li>
                   <li className="mt-2">Update print status</li>
-                  <li className="mt-2">Set Error</li>
                   <li className="mt-2">Download file</li>
-                  <li className="mt-2">Delete reponses</li>
+                  <li className="mt-2">Delete responses</li>
                 </ul>
               </div>
             </div>
@@ -138,15 +143,16 @@ export default function Page() {
               <img src={analytics.src} className="shadow-xl shadow-xl ml-40 w-[600px]"/>
             </div>
             <div className="flex flex-col ml-8 w-[500px]">
-              <p className="text-4xl font-semibold mb-4 mt-2">Analytics and options</p>
-              <p className="text-xl text-gray-600 mb-6"></p>
+              <p className="text-4xl font-semibold mb-4 mt-2">Statistics</p>
+              <p className="text-xl text-gray-600 mb-6">In depth statistics to keep track of usage</p>
               <hr/>
               <span className="rounded py-1 bg-blue-100 mt-6 w-28 text-center">
                 <p className="text-blue-600 font-bold">Features</p>
               </span>
               <div className="flex flex-row w-3/4 ml-6 mt-2">
                 <ul className="list-disc grow text-lg">
-                  <li className="mt-2">View responses based on status</li>
+                  <li className="mt-2">Storage used</li>
+                  <li className="mt-2">Number of emails and submissions</li>
                   <li className="mt-2">View line and histogram plots of submission data</li>
                   <li className="mt-2">Modifiable intervals</li>
                   <li className="mt-2">Download all response data</li>

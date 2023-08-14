@@ -29,13 +29,11 @@ app.post('/initializeAccountFile',  (request, response)=>{
   admin.auth().verifyIdToken(request.body.token)
   .then(async (decodedToken) => {
     const uid = decodedToken.uid;
-    console.log(uid)
     const db = admin.firestore();
     const accountInformationDocRef = db.doc("users/"+uid+"/data/accountInformation")
     try {
       await db.runTransaction(async (transaction) => {
-        await transaction.set(db.doc("users/"+user.uid),{created:"true"})
-
+        
         const accountInformationDocSnap = await transaction.get(accountInformationDocRef);
         console.log("accountInformationDocSnap exists: "+accountInformationDocSnap.exists)
         if (!accountInformationDocSnap.exists) {
@@ -57,11 +55,15 @@ app.post('/initializeAccountFile',  (request, response)=>{
               accountType:"Guest"
             })
           }
+
+          transaction.set(db.doc("users/"+uid),{created:"true"})
+
         }
         response.status(200).send()
       })
-    } catch {
+    } catch (err) {
       console.log("first error")
+      console.log(err)
       response.status(400).send();
     }
   }).catch(()=>{
@@ -279,22 +281,20 @@ const sendEmail = (uid, status, recipient, name, errorMessage, cancelID) =>{
     }
     
     var db = admin.firestore();
-    console.log("getting email counts")
-    db.doc("users/"+uid+"/data/accountInformation").get().then((accountInformationDocSnap)=>{
-      console.log("got email counts")
-      const dailyMax = accountInformationDocSnap.data().dailyMax
-      console.log("got daily max")
-      db.doc("users/"+uid+"/data/emailCount").get().then((emailCountDocSnap)=>{
-        console.log("got mailCount")
-        if(emailCountDocSnap.exists){
-          if(emailCountDocSnap.data().dailyTotal>=dailyMax){
-            console.log("maximum emails sent")
-            return resolve({responseStatus:400, message: 'maximum daily emails have already been sent'});
-          }
-          let emailCountData = {...emailCountDocSnap.data()}    
-          db.doc("users/"+uid+"/data/emailData").get().then(docSnap =>{
-            let emailData = docSnap.data()
-            if(emailData.toSend[status]){
+    db.doc("users/"+uid+"/data/emailData").get().then(docSnap =>{
+      let emailData = docSnap.data()
+      if(emailData.toSend[status]){
+        db.doc("users/"+uid+"/data/accountInformation").get().then((accountInformationDocSnap)=>{
+          const dailyMax = accountInformationDocSnap.data().dailyMax
+          db.doc("users/"+uid+"/data/emailCount").get().then((emailCountDocSnap)=>{
+            console.log("got mailCount")
+            if(emailCountDocSnap.exists){     
+              if(emailCountDocSnap.data().dailyTotal>=dailyMax){
+                console.log("maximum emails sent")
+                return resolve({responseStatus:400, message: 'maximum daily emails have already been sent'});
+              }
+              let emailCountData = {...emailCountDocSnap.data()}    
+            
               const refreshToken = emailData.refresh_token;
               const email = emailData.email
               oauth2Client.setCredentials({
@@ -354,28 +354,28 @@ const sendEmail = (uid, status, recipient, name, errorMessage, cancelID) =>{
                 console.log("could not generate access token: "+err)
                 return resolve({responseStatus:400, "message": 'could not generate access token'});
               })
-            }
-            else{
-              console.log("did not send "+status+" email")
-              return resolve({responseStatus:200, "message": "email not sent"})
+            } else {
+              console.log("count doc does not exist.")
+              return resolve({responseStatus:400, "message": 'count doc does not exist'});
             }
           }).catch((err)=>{
-            console.log("error getting email data: "+err);
-            return resolve({responseStatus:400, "message": 'count doc does not exist'});
-          })
-        }
-        else{
-          console.log("count doc does not exist.")
-          return resolve({responseStatus:400, "message": 'count doc does not exist'});
-        }
-      }).catch((err)=>{
-        console.log("error getting email count: "+err)
-        return resolve({responseStatus:400, "message": 'error getting email count'});
-      })
+            console.log("error getting email count: "+err)
+            return resolve({responseStatus:400, "message": 'error getting email count'});
+          })  
+        }).catch((err)=>{
+          console.log("error getting account information: "+err)
+          return resolve({responseStatus:400, "message": 'error getting account information'});
+        })    
+      }
+      else{
+        console.log("did not send "+status+" email")
+        return resolve({responseStatus:200, "message": "email not sent"})
+      }
     }).catch((err)=>{
-      console.log("error getting account information: "+err)
-      return resolve({responseStatus:400, "message": 'error getting account information'});
+      console.log("error getting email data: "+err);
+      return resolve({responseStatus:400, "message": 'count doc does not exist'});
     })
+    
   })
   //console.log("end of function")
   //return({responseStatus:200, "message": 'end of function'});

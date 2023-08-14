@@ -57,7 +57,7 @@ const IPManager = () =>{
   console.log(sortedArr)
   const ipRows = sortedArr.map((row, index)=>{
     return(
-      <div className="ipRow" style={{borderBottom:index==sortedArr.length-1?"none":"1px solid rgb(192, 192, 192)"}}>
+      <div key={index} className="ipRow" style={{borderBottom:index==sortedArr.length-1?"none":"1px solid rgb(192, 192, 192)"}}>
         <div className="ipText">{row[0]=="none"?"unknown":row[0]}</div>
         <div className="ipText">{row[1]}</div>
         <div className="ipText" style={{borderRight:"none"}}>

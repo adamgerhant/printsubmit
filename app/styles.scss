@@ -24,13 +24,14 @@ html, body, #root,.wrapper {
   padding:0px;
   margin:0px;
 
-
   textarea:focus, input:focus{
     outline: none;
     //margin: 0px 0px 0px 5px;
     //padding: 5px 0px 0px;
-    
   }  
+  svg:focus {
+    outline: none;
+  }
 }
 
 .formContainer {
@@ -343,7 +344,7 @@ html, body, #root,.wrapper {
         }
         .upgradeButton:hover{
           background-color: #6d28d9;
-          box-shadow: 0 0 10px #905ee0;
+          box-shadow: 0 0 5px #905ee0;
           border:1px solid #6d28d9;
           color:#ffffff;
         }
@@ -570,6 +571,7 @@ html, body, #root,.wrapper {
                   margin:0px;
                   white-space: nowrap; 
                   position: relative;
+                  background-color: white;
                 }
                 .restoreButton{
                   position: absolute;
@@ -758,13 +760,12 @@ html, body, #root,.wrapper {
           position: absolute;
           z-index: 4;
           background-color: $backgroundColor;
-
         }
         .responses{
           display:flex;
           flex-direction: row;
           min-height: 20px;
-         
+          
           .responseNumberDiv{
            
             border-right: 1px solid rgb(39, 39, 39);
@@ -1054,6 +1055,7 @@ html, body, #root,.wrapper {
                     z-index: 5;
                     font-size: 18px;
                     overflow: hidden;
+                    padding-left:5px;
                   }
                   .printingStatusButton{
                     @extend .actionButton;
@@ -1125,6 +1127,8 @@ html, body, #root,.wrapper {
                   .deleteCell{
                     display:flex;
                     flex-direction: row;
+                    position: relative;
+                    border-radius: 0;
                     .trashIcon{
                       margin-left: 2px;
                       padding:0 2px;
@@ -1132,6 +1136,7 @@ html, body, #root,.wrapper {
                       color:rgb(255, 0, 0);
                       cursor:pointer;   
                       border-radius: 3px; 
+                      z-index: 1;
                     }
                     .trashIcon:hover{
                       background-color: rgb(233, 233, 233);
@@ -1142,6 +1147,15 @@ html, body, #root,.wrapper {
                       cursor:pointer;
                       width:13px !important;
                       height:13px !important;
+                      z-index: 2;
+                    }
+                    .deleteCellOverlay{
+                      z-index: 3;
+                      position: absolute;
+                      top:-5px; 
+                      height:30px;
+                      background-color: rgba(0, 0, 0, 0.1);
+                      border-radius: 0;
                     }
                   }
                   
@@ -1302,77 +1316,7 @@ html, body, #root,.wrapper {
                 border-width: 11px;
                 margin-left: -11px;
               }
-              .emailSentPopupDiv{
-                display:flex;
-                flex-direction: row;
-                justify-content: center;
-                position: absolute;
-                top:800px;
-                width:1600px;
-                transition-duration:200ms;
-                .emailPopup{
-                  border-radius: 5px;
-                  box-shadow: 0 0px 3px rgba(0, 0, 0, 0.1);
-                  color:white;
-                  font-size: 20px;
-                  margin: 0 20px;
-                  transition: transform 0.1s ease-in;
-                  
-                  position:absolute;
-                }
-                .printingEmailPopup{
-                  @extend .emailPopup;
-                  background-color: #f5ee27;
-                  visibility:hidden;
-                  transform: translate(0px, 50px);
-                  color:black
-                }
-                .printingEmailPopupscaled{
-                  @extend .printingEmailPopup;
-                  padding:5px 10px;
-                  visibility:visible;
-                  transform: translate(0px, 0px);
-                }
-                .finishedEmailPopup{
-                  @extend .emailPopup;
-                  background-color: #23c038;
-                  visibility:hidden;
-                  transform: translate(0px, 50px);
-                }
-                .finishedEmailPopupscaled{
-                  @extend .finishedEmailPopup;
-                  padding:5px 10px;
-                  visibility:visible;
-                  transform: translate(0px, 0px);
-                }
-                .errorEmailPopup{
-                  @extend .emailPopup;
-                  background-color: #eb3434;
-                  visibility:hidden;
-                  transform: translate(0px, 50px);
-                }
-                .errorEmailPopupscaled{
-                  @extend .errorEmailPopup;
-                  padding:5px 10px;
-                  visibility:visible;
-                  transform: translate(0px, 0px);
-                }
-                .errorSendingEmailPopup{
-                  @extend .emailPopup;
-                  background-color: red;
-                  color:black;
-                  font-weight: 500;
-                  visibility:hidden;
-                  transform: translate(0px, 50px);
-                }
-                .errorSendingEmailPopupscaled{
-                  @extend .errorSendingEmailPopup;
-                  padding:5px 10px;
-                  visibility:visible;
-                  transform: translate(0px, 0px);
-                }
-
-              }
+              
             }
             .submittedPlaceholder{
               position: absolute;
@@ -1389,9 +1333,79 @@ html, body, #root,.wrapper {
             
           }
         }
-      
       }
-      
+      .emailSentPopupDiv{
+        display:flex;
+        flex-direction: row;
+        justify-content: center;
+        position: absolute;
+        bottom:80px;
+        width:1600px;
+        transition-duration:200ms;
+        z-index: 5;
+        .emailPopup{
+          border-radius: 5px;
+          box-shadow: 0 0px 3px rgba(0, 0, 0, 0.1);
+          color:white;
+          font-size: 20px;
+          margin: 0 20px;
+          transition: transform 0.1s ease-in;
+          
+          position:absolute;
+        }
+        .printingEmailPopup{
+          @extend .emailPopup;
+          background-color: #f5ee27;
+          visibility:hidden;
+          transform: translate(0px, 50px);
+          color:black
+        }
+        .printingEmailPopupscaled{
+          @extend .printingEmailPopup;
+          padding:5px 10px;
+          visibility:visible;
+          transform: translate(0px, 0px);
+        }
+        .finishedEmailPopup{
+          @extend .emailPopup;
+          background-color: #23c038;
+          visibility:hidden;
+          transform: translate(0px, 50px);
+        }
+        .finishedEmailPopupscaled{
+          @extend .finishedEmailPopup;
+          padding:5px 10px;
+          visibility:visible;
+          transform: translate(0px, 0px);
+        }
+        .errorEmailPopup{
+          @extend .emailPopup;
+          background-color: #eb3434;
+          visibility:hidden;
+          transform: translate(0px, 50px);
+        }
+        .errorEmailPopupscaled{
+          @extend .errorEmailPopup;
+          padding:5px 10px;
+          visibility:visible;
+          transform: translate(0px, 0px);
+        }
+        .errorSendingEmailPopup{
+          @extend .emailPopup;
+          background-color: red;
+          color:rgb(31, 31, 31);
+          font-weight: 500;
+          visibility:hidden;
+          transform: translate(0px, 50px);
+        }
+        .errorSendingEmailPopupscaled{
+          @extend .errorSendingEmailPopup;
+          padding:5px 10px;
+          visibility:visible;
+          transform: translate(0px, 0px);
+        }
+
+      }
     }
     .submissionFormPage{
       display:flex;
@@ -2136,21 +2150,21 @@ html, body, #root,.wrapper {
 
           .noEmailHeader{
             margin-top:15px;
-            font-size: 40px;
+            font-size: 38px;
             color:#353535;  
             padding:0;  
           }
           .noEmailDescription{
             margin:5px 0px 25px 0px;
             font-size: 15px;
-            width:470px;
+            width:480px;
             text-align: center;
             color:rgb(82, 82, 82);
           }
           .noEmailText{
             margin:0px 0px 0px 0px;
             font-size: 17px;
-            width:470px;
+            width:480px;
             text-align: left;
             font-weight: 500;
             color:rgb(50, 50, 50);
@@ -2159,7 +2173,7 @@ html, body, #root,.wrapper {
           .description{
             margin:5px 0px 20px 0px;
             font-size: 16px;
-            width:470px;
+            width:480px;
             text-align: left;
             color:rgb(82, 82, 82);
           }
@@ -2390,11 +2404,13 @@ html, body, #root,.wrapper {
             flex-direction: row;
             justify-content: flex-start;
             margin-right:20px;
+            position:relative;
             .storageUsedText{
               margin-left:15px;
               font-size:15px;
               color:rgb(50, 50, 50);
             }
+            
           }
           
         }
@@ -2431,12 +2447,35 @@ html, body, #root,.wrapper {
             flex-direction: column;
           }
         }
+        .upgradeButton{
+          position: absolute;
+          left: 155px;
+          top:-52px;
+          margin: 0px 0 15px 0;
+          padding: 1px 3px;
+          text-align: center;
+          //background-color: #6d28d9;
+          //box-shadow: 0 0 10px #905ee0;
+          border:1px solid #6d28d9;
+          color:#6d28d9;
+          border-radius: 5px;
+          font-size: 14px;
+          font-weight: 500;
+          cursor:pointer;
+          transition: 100ms;
+        }
+        .upgradeButton:hover{
+          background-color: #6d28d9;
+          box-shadow: 0 0 3px #905ee0;
+          border:1px solid #6d28d9;
+          color:#ffffff;
+        }
         .lineBreak{
           position: absolute;
           z-index: 5;
           top:235px;
           height: 1px;
-          width: 700px;
+          width: 705px;
           margin-left: 15px;
         }
         .selectDiv{

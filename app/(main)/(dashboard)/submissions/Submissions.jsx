@@ -591,7 +591,7 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
         if(rendered){
             indexedData.push({inputData:{...response.inputData, index}})
             //console.log(response)
-            if(cancelRequests[response.inputData.cancelID][0]){
+            if(cancelRequests.hasOwnProperty(response.inputData.cancelID)&&cancelRequests[response.inputData.cancelID][0]){
                 errorRenderedNum++;
             }
             else{
@@ -617,7 +617,8 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
     heights.push(printingRenderedNum*31);
     heights.push(finishedRenderedNum*31);
     heights.push(errorRenderedNum*31);
-    
+    console.log(heights)
+
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, setOptionsMenuOpen);
 
@@ -754,8 +755,29 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
             return(<div key={index} className="blankSeperator" style={{ top:totalHeight-gapHeight, height:gapHeight}}/>)
         }
     })
+
+    const [sentPopup, setSentPopup] = useState({type:"", message:""});
+    useEffect(()=>{
+        console.log("sent popup: ")
+        console.log(sentPopup)
+        if(sentPopup.type){
+            console.log("setting close timeout")
+            setTimeout(()=>{
+                setSentPopup({type:"", message:""})
+            },5000)
+        }
+    },[sentPopup])
+
+    const [deleteLock, setDeleteLock] = useState(false);
+    useEffect(()=>{
+        if(deleteLock){
+            setTimeout(()=>{
+                setDeleteLock(false)
+            },500)
+        }
+    })
     return (
-        <div>
+    <>
         <div className='titleDiv'>Submissions</div> 
 
         <div className='submissionBox'>
@@ -838,7 +860,7 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
             </div>
             {(!seperateResponses||(seperateResponses&&firstData.length>0)||indexedData.length==0)&&
             <Responses
-            allData={indexedData}
+            allData={data.data}
             data={seperateResponses?firstData:indexedData}
             setData={setData}
             questionData={questionData}
@@ -852,13 +874,16 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
             IPData={IPData}
             setIPData={setIPData}
             accountInformation={accountInformation}
+            setSentPopup={setSentPopup}
+            setDeleteLock={setDeleteLock}
+            deleteLock={deleteLock}
             />
             }
         </div>
         {printingArr.length!=0&&seperateResponses&&
         <div className='submissionBox'>
             <Responses
-            allData={indexedData}
+            allData={data.data}
             data={printingArr}
             setData={setData}
             questionData={questionData}
@@ -872,13 +897,16 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
             IPData={IPData}
             setIPData={setIPData}
             accountInformation={accountInformation}
+            setSentPopup={setSentPopup}
+            deleteLock={deleteLock}
+            setDeleteLock={setDeleteLock}
             />
         </div>
         }
         {finishedArr.length!=0&&seperateResponses&&
         <div className='submissionBox'>
             <Responses
-            allData={indexedData}
+            allData={data.data}
             data={finishedArr}
             setData={setData}
             questionData={questionData}
@@ -892,13 +920,16 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
             IPData={IPData}
             setIPData={setIPData}
             accountInformation={accountInformation}
+            setSentPopup={setSentPopup}
+            deleteLock={deleteLock}
+            setDeleteLock={setDeleteLock}
             />
         </div>
         }
         {errorArr.length!=0&&seperateResponses&&
         <div className='submissionBox'>
             <Responses
-            allData={indexedData}
+            allData={data.data}
             data={errorArr}
             setData={setData}
             questionData={questionData}
@@ -912,40 +943,58 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
             IPData={IPData}
             setIPData={setIPData}
             accountInformation={accountInformation}
+            setSentPopup={setSentPopup}
+            deleteLock={deleteLock}
+            setDeleteLock={setDeleteLock}
             />
         </div>
         }
         <div className='optionsMenuDiv'>
-                    <div className="openOptionsMenu" onClick={()=>setOptionsMenuOpen(!optionsMenuOpen)}>
-                        <BsThreeDots className='dots'/>
-                    </div> 
-                    {optionsMenuOpen &&
-                        <div className="settingsDiv" ref={wrapperRef}>
-                            <p className='optionsText'>Options</p>
-                            <hr className='lineBreak'/>
-                            <div className="optionDiv">
-                                <div className="option">
-                                    Show responses from deleted questions
-                                    <input type="checkbox" defaultChecked={showDeleted} onChange={showDeletedChange} className="checkbox"/>
-                                </div>
-                                <div className="option">
-                                    Display responses based on status
-                                    <input type="checkbox" defaultChecked={seperateResponses} onChange={()=>updateSeperateResponses()} className="checkbox"/>
-                                </div>
-                                <div className="option">
-                                    Delete oldest files when storage is full
-                                    <input type="checkbox" defaultChecked={submissionFormData.deleteOldFiles} onChange={()=>toggleDeleteOldFiles()} className="checkbox"/>
-                                </div>
-                               
-                                <div className="option">
-                                <p className="resetColumns" onClick={()=>resetColumns()}>Reset Column Widths</p>
-                                </div>
-                               
-                            </div>
+            <div className="openOptionsMenu" onClick={()=>setOptionsMenuOpen(!optionsMenuOpen)}>
+                <BsThreeDots className='dots'/>
+            </div> 
+            {optionsMenuOpen &&
+                <div className="settingsDiv" ref={wrapperRef}>
+                    <p className='optionsText'>Options</p>
+                    <hr className='lineBreak'/>
+                    <div className="optionDiv">
+                        <div className="option">
+                            Show responses from deleted questions
+                            <input type="checkbox" defaultChecked={showDeleted} onChange={showDeletedChange} className="checkbox"/>
                         </div>
-                    } 
-            </div>
+                        <div className="option">
+                            Display responses based on status
+                            <input type="checkbox" defaultChecked={seperateResponses} onChange={()=>updateSeperateResponses()} className="checkbox"/>
+                        </div>
+                        <div className="option">
+                            Delete oldest files when storage is full
+                            <input type="checkbox" defaultChecked={submissionFormData.deleteOldFiles} onChange={()=>toggleDeleteOldFiles()} className="checkbox"/>
+                        </div>
+                        
+                        <div className="option">
+                        <p className="resetColumns" onClick={()=>resetColumns()}>Reset Column Widths</p>
+                        </div>
+                        
+                    </div>
+                </div>
+            } 
         </div>
+
+        <div className="emailSentPopupDiv">
+            <span className={`printingEmailPopup${sentPopup.type==="printing" ? 'scaled' : ''}`}>
+                {sentPopup.message}
+            </span>
+            <span className={`finishedEmailPopup${sentPopup.type==="finished" ? 'scaled' : ''}`}>
+                {sentPopup.message}
+            </span>
+            <span className={`errorEmailPopup${sentPopup.type==="error" ? 'scaled' : ''}`}>
+                {sentPopup.message}
+            </span>
+            <span className={`errorSendingEmailPopup${sentPopup.type==="errorSending" ? 'scaled' : ''}`}>
+                {sentPopup.message}
+            </span>
+        </div>
+    </>
        
     
     )

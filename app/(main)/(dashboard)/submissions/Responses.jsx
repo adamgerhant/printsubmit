@@ -38,7 +38,6 @@ const AllInformation = ({url, setUrl, informationWidths, headerWidths, date, fil
                     getDownloadURL(pathReference).then((fileUrl)=>{
                         //const imageBlob = response.blob();
                         //const imageUrl = URL.createObjectURL(imageBlob);
-                        console.log("file url: "+fileUrl)
                         setImageURL(fileUrl)
                         setRender(true);
                     })
@@ -48,7 +47,7 @@ const AllInformation = ({url, setUrl, informationWidths, headerWidths, date, fil
             
         }
 
-    },[])
+    },[fileDeleted])
     
     useEffect(()=>{
         if(cellLeave&&previewLeave){
@@ -283,22 +282,11 @@ const InformationCell = ({text, units, dimensions, informationWidths, index, set
         </div>
     )
 }
-const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidths, actionWidths, fileName, fileID, cancelID, IPData, IP, blocked, setIPData, fileDeleted, questionData, response, accountInformation}) =>{
+const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidths, actionWidths, fileName, fileID, cancelID, IPData, IP, blocked, setIPData, fileDeleted, questionData, response, accountInformation, setSentPopup, deleteLock, setDeleteLock}) =>{
     const {currentUser} = useAuthContext();
     const[displayErrorInput, setDisplayErrorInput]=useState(false);
     const[errorInput, setErrorInput] = useState("")
-    const [sentPopup, setSentPopup] = useState({type:"", message:""});
     
-    useEffect(()=>{
-        console.log("sent popup: ")
-        console.log(sentPopup)
-        if(sentPopup.type){
-            console.log("setting close timeout")
-            setTimeout(()=>{
-                setSentPopup({type:"", message:""})
-            },5000)
-        }
-    },[sentPopup])
     
     let buttonStatus="";
    
@@ -313,8 +301,7 @@ const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidth
     }
     const getRecipient = () =>{
         const foundQuestion = questionData.find(question=>question.variable=="email")
-        console.log(foundQuestion)
-        console.log(response)
+
         
         if(foundQuestion){
             return response.inputData[foundQuestion.questionID]
@@ -386,7 +373,6 @@ const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidth
                                             message: "Error sending email"
                                         })
                                     }
-                                    updatedStatus.toLowerCase()
                                     console.log("sent error email to: "+recipient)
                                     console.log("response: ")
                                     console.log(response)
@@ -396,6 +382,12 @@ const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidth
                                 });
                             })
                         }
+                    }
+                    else{
+                        setSentPopup({
+                            type:"errorSending", 
+                            message: "Error sending email: Invalid recipient"
+                        })
                     }    
                 })   
             }catch (e) {
@@ -404,7 +396,6 @@ const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidth
         }
         setDisplayErrorInput(false);
     }
-
     const setPrintStatus = () =>{
 
         let updatedStatus = "";
@@ -536,67 +527,67 @@ const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidth
             })
         }
     }
-    const deleteEntry = ()=>{
-        const docRef = doc(db, "users", currentUser.uid, "data", "submissionData");
-        try{
-            console.log("sending to server")
-            runTransaction(db, async (transaction) => {
-                const doc = await transaction.get(docRef);
-                if (!doc.exists()) {
-                    throw "Document does not exist!";
-                }
-            
-                const data = doc.data().data;
+    const deleteEntry = async ()=>{
+        if(!deleteLock){
+            setDeleteLock(true)
+            const docRef = doc(db, "users", currentUser.uid, "data", "submissionData");
+            try{
+                console.log("sending to server")
+                await runTransaction(db, async (transaction) => {
+                    const doc = await transaction.get(docRef);
+                    if (!doc.exists()) {
+                        throw "Document does not exist!";
+                    }
                 
-                let newArr
-                if(data.length==1){
-                    newArr = []
-                }
-                else{
-                    newArr = [...data]
-                    newArr.splice(index, 1);
-                }
-                setData({data: newArr});
-                transaction.update(docRef, { data: newArr});
-                
-                return newArr;
-                
-            });
-            
-        }catch (e) {
-            console.error(e);
-        }
-        const fileIDRef = doc(db, "users", currentUser.uid, "data", "submissionData", "submittedFileIDs",fileID);
-        const cancelIDRef = doc(db, "users", currentUser.uid, "data", "submissionData", "cancelRequests",cancelID);
-        
-        deleteDoc(cancelIDRef)
-        deleteDoc(fileIDRef)
+                    const data = doc.data().data;
+                    
+                    let newArr
+                    if(data.length==1){
+                        newArr = []
+                    }
+                    else{
+                        newArr = [...data]
+                        newArr.splice(index, 1);
+                    }
+                    await transaction.update(docRef, { data: newArr});   
+                    setData({data: newArr});             
+                });
 
-        const storage = getStorage();
-    
-        const inputDataReference = ref(storage, "users/"+currentUser.uid+"/"+fileID+"/inputData.json");
-        const ipReference = ref(storage, "users/"+currentUser.uid+"/"+fileID+"/ip.json");
-        const thumbnailReference = ref(storage, "users/"+currentUser.uid+"/"+fileID+"/thumbnail.png");
+                
+            }catch (e) {
+                console.error(e);
+            }
+            const fileIDRef = doc(db, "users", currentUser.uid, "data", "submissionData", "submittedFileIDs",fileID);
+            const cancelIDRef = doc(db, "users", currentUser.uid, "data", "submissionData", "cancelRequests",cancelID);
+            
+            //deleteDoc(cancelIDRef)
+            //deleteDoc(fileIDRef)
+
+            const storage = getStorage();
         
-        if(!allData[index].inputData.fileDeleted){
-            const pathReference = ref(storage, "users/"+currentUser.uid+"/"+fileID+"/"+fileName);
-            deleteObject(pathReference).then(()=>{
-                deleteObject(thumbnailReference).then(()=>{
-                    deleteObject(inputDataReference).then(()=>{
-                        deleteObject(ipReference).then(()=>{
-                            getStorageUsed()
+            const inputDataReference = ref(storage, "users/"+currentUser.uid+"/"+fileID+"/inputData.json");
+            const ipReference = ref(storage, "users/"+currentUser.uid+"/"+fileID+"/ip.json");
+            const thumbnailReference = ref(storage, "users/"+currentUser.uid+"/"+fileID+"/thumbnail.png");
+            
+            if(!allData[index].inputData.fileDeleted){
+                const pathReference = ref(storage, "users/"+currentUser.uid+"/"+fileID+"/"+fileName);
+                deleteObject(pathReference).then(()=>{
+                    deleteObject(thumbnailReference).then(()=>{
+                        deleteObject(inputDataReference).then(()=>{
+                            deleteObject(ipReference).then(()=>{
+                                getStorageUsed()
+                            })
                         })
                     })
                 })
-            })
-        }else{
-            deleteObject(ipReference).then(()=>{
-                deleteObject(inputDataReference).then(()=>{
-                    getStorageUsed()
+            }else{
+                deleteObject(ipReference).then(()=>{
+                    deleteObject(inputDataReference).then(()=>{
+                        getStorageUsed()
+                    })
                 })
-            })
+            }
         }
-
       
        
 
@@ -641,7 +632,24 @@ const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidth
         }
         setDisplayDeleteFile(false)
     }
-    
+    const handleDownload = async () =>{
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            
+            const renamedBlob = new Blob([blob], { type: blob.type });
+            const renamedUrl = URL.createObjectURL(renamedBlob);
+        
+            const link = document.createElement('a');
+            link.href = renamedUrl;
+            link.download = fileName; // Set the desired file name
+            link.click();
+        
+            URL.revokeObjectURL(renamedUrl);
+          } catch (error) {
+            console.error('Error downloading and renaming file:', error);
+          }
+    }
     const[displayDeleteFile, setDisplayDeleteFile] = useState(false)
 
     function useOutsideAlerter(ref) {
@@ -663,23 +671,9 @@ const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidth
     const expandDeleteRef = useRef(null)
     useOutsideAlerter(expandDeleteRef)
 
-    
     return( 
     <>
-    <div className="emailSentPopupDiv">
-        <span className={`printingEmailPopup${sentPopup.type==="printing" ? 'scaled' : ''}`}>
-            {sentPopup.message}
-        </span>
-        <span className={`finishedEmailPopup${sentPopup.type==="finished" ? 'scaled' : ''}`}>
-            {sentPopup.message}
-        </span>
-        <span className={`errorEmailPopup${sentPopup.type==="error" ? 'scaled' : ''}`}>
-            {sentPopup.message}
-        </span>
-        <span className={`errorSendingEmailPopup${sentPopup.type==="errorSending" ? 'scaled' : ''}`}>
-            {sentPopup.message}
-        </span>
-    </div>
+    
     <div className="actionResponseDiv" style={{left:headerWidths[0]+headerWidths[1]+20}}>
         <div className="firstResponseCell"style={{width: actionWidths[0]}}>
             {
@@ -698,7 +692,7 @@ const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidth
         </div>
         <div className="responseCell"style={{width: actionWidths[2]}}>
             {!fileDeleted&&
-            <a href={url} download="filename.stl" className="downloadLink">            
+            <a onClick={()=>handleDownload()} className="downloadLink">            
                 <button className="downloadButton" style={{width: actionWidths[2]-6}}><div className="buttonText">Download</div></button>
             </a>    
             }
@@ -717,9 +711,12 @@ const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidth
                 {!displayDeleteFile?<AiFillCaretDown className="expandDeleteIcon" onClick={()=>setDisplayDeleteFile(true)}/>:<AiFillCaretUp className="expandDeleteIcon"/>}
                 </>
             }
+            {deleteLock&&
+                <div className="deleteCellOverlay" style={{width: actionWidths[4]}}/>
+            }
             </div>
-           
         </div>
+       
         
     </div>
     {displayErrorInput&&
@@ -792,7 +789,7 @@ const ResponseCell = ({question, index, questionValue})=>{
 }
     
 
-const ResponseRow = ({allData, fileData, setData, questionData, response, rowIndex, index, firstSubmissionDiv, actionWidths, headerWidths, showDeleted, informationWidths, cancelRequests, IPData, setIPData, accountInformation }) =>{
+const ResponseRow = ({allData, fileData, setData, questionData, response, rowIndex, index, firstSubmissionDiv, actionWidths, headerWidths, showDeleted, informationWidths, cancelRequests, IPData, setIPData, accountInformation, setSentPopup, deleteLock, setDeleteLock }) =>{
     const allQuestionResponses = questionData.map((question)=>{
         
         let questionValue="";
@@ -869,11 +866,12 @@ const ResponseRow = ({allData, fileData, setData, questionData, response, rowInd
             </div>}
 
             <AllInformation url={url} setUrl={setUrl} informationWidths={informationWidths} headerWidths={headerWidths} date={date} fileName={response.inputData.fileName} fileID={response.inputData.fileID} rowIndex={rowIndex} firstSubmissionDiv={firstSubmissionDiv} status={status} reason={reason} lastStatus={lastStatus} dimensions={response.inputData.dimensions} units={response.inputData.units} ip={response.inputData.ip} IPData={IPData} blocked={blocked} fileSize={response.inputData.fileSize} fileDeleted={response.inputData.fileDeleted} accountInformation={accountInformation}/>
-            <AllActions allData={allData} url={url} setData={setData} status={status}  rowIndex={rowIndex} index={index} fileName={response.inputData.fileName} fileID={response.inputData.fileID} headerWidths={headerWidths} actionWidths={actionWidths} cancelID={response.inputData.cancelID} IP={response.inputData.ip} blocked={blocked} setIPData={setIPData} IPData={IPData} fileDeleted={response.inputData.fileDeleted} questionData={questionData} response={response} accountInformation={accountInformation}/>
+            <AllActions allData={allData} url={url} setData={setData} status={status}  rowIndex={rowIndex} index={index} fileName={response.inputData.fileName} fileID={response.inputData.fileID} headerWidths={headerWidths} actionWidths={actionWidths} cancelID={response.inputData.cancelID} IP={response.inputData.ip} blocked={blocked} setIPData={setIPData} IPData={IPData} fileDeleted={response.inputData.fileDeleted} questionData={questionData} response={response} accountInformation={accountInformation} setSentPopup={setSentPopup} deleteLock={deleteLock} setDeleteLock={setDeleteLock}/>
     </div>)
 }
 
-const Responses = (({allData, data, setData, questionData, headerWidths, informationWidths, actionWidths, showDeleted, cancelRequests, firstSubmissionDiv, IPData, setIPData,accountInformation }) =>{
+const Responses = (({allData, data, setData, questionData, headerWidths, informationWidths, actionWidths, showDeleted, cancelRequests, firstSubmissionDiv, IPData, setIPData,accountInformation, setSentPopup, deleteLock, setDeleteLock }) =>{
+   
     const responses = data.slice(0).reverse().map((response, index)=>{
         
         let renderResponseRow = showDeleted;
@@ -889,7 +887,7 @@ const Responses = (({allData, data, setData, questionData, headerWidths, informa
         
         if(renderResponseRow){
             return(  
-                <ResponseRow key={index} allData={allData} fileData={data} setData={setData} questionData={questionData} response={response} firstSubmissionDiv={firstSubmissionDiv} rowIndex={index} index={response.inputData.index}  actionWidths={actionWidths} headerWidths={headerWidths} showDeleted={showDeleted} informationWidths={informationWidths} cancelRequests={cancelRequests} IPData={IPData} setIPData={setIPData} accountInformation={accountInformation} />       
+                <ResponseRow key={index} allData={allData} fileData={data} setData={setData} questionData={questionData} response={response} firstSubmissionDiv={firstSubmissionDiv} rowIndex={index} index={response.inputData.index}  actionWidths={actionWidths} headerWidths={headerWidths} showDeleted={showDeleted} informationWidths={informationWidths} cancelRequests={cancelRequests} IPData={IPData} setIPData={setIPData} accountInformation={accountInformation} setSentPopup={setSentPopup} deleteLock={deleteLock} setDeleteLock={setDeleteLock}/>       
              )
         }
         

@@ -40,6 +40,8 @@ const Statistics = () =>{
     printingArr=uncancelledArr.filter(response=>response.inputData.status=="Printing")
     finishedArr=uncancelledArr.filter(response=>response.inputData.status=="Finished")
     errorArr=uncancelledArr.filter(response=>response.inputData.status=="Error").concat(cancelledArr)
+    const totalSubmitted = firstData.length
+    const totalPrinting = printingArr.length
     const totalSubmissions = indexedData.length
     const totalFinished = finishedArr.length
     const totalError = uncancelledArr.filter(response=>response.inputData.status=="Error").length
@@ -197,7 +199,7 @@ const Statistics = () =>{
     
     const bytesStored = niceBytes(storageUsed)
     const totalStorageBytes = niceBytes(totalStorage)
-    const percentUsed = (storageUsed/(5*1000*1000*1000) * 100).toFixed(3)+"%"
+    const percentUsed = (storageUsed/(totalStorage) * 100).toFixed(3)+"%"
     console.log(percentUsed)
     return(
         <div className="statisticsDiv">
@@ -223,6 +225,11 @@ const Statistics = () =>{
                         <span className="storageUsedText">
                             {bytesStored} / {totalStorageBytes}
                         </span>
+                        {accountInformation.accountType!="Premium"&&
+                            <a href="/pricing" target="_blank" className="upgradeButton">
+                                Upgrade
+                            </a>
+                        }
                         
                     </div>
                     
@@ -244,6 +251,11 @@ const Statistics = () =>{
                         <div className="firstStatRow">
                             {accountInformation.dailyMax}
                         </div>
+                        {accountInformation.accountType!="Premium"&&
+                            <a href="/pricing" style={{top:"163px", left:"200px"}} target="_blank" className="upgradeButton">
+                            Upgrade
+                        </a>
+                        }
                         
                         <div className="statRow">
                             {emailCount.total}
@@ -304,7 +316,7 @@ const Statistics = () =>{
                             Total Submissions 
                         </div>                        
                         <div className="statRow">
-                            Error 
+                            Submitted
                         </div>
                     </div>
                     <div className="statNumDiv">
@@ -313,7 +325,7 @@ const Statistics = () =>{
                         </div>
                         
                         <div className="statRow">
-                            {totalError} 
+                            {totalSubmitted}
                         </div>
                         
                     </div>
@@ -322,12 +334,28 @@ const Statistics = () =>{
                             Finished 
                         </div>
                         <div className="statRow">
-                            Cancelled 
+                            Printing 
                         </div>
                     </div>
                     <div className="statNumDiv">
                         <div className="statRow">
                             {totalFinished} 
+                        </div>
+                        <div className="statRow">
+                            {totalPrinting}
+                        </div>
+                    </div>
+                    <div className="statNameDiv" >         
+                        <div className="statRow">
+                            Cancelled 
+                        </div>
+                        <div className="statRow">
+                            Error
+                        </div>
+                    </div>
+                    <div className="statNumDiv">
+                        <div className="statRow">
+                            {totalError}
                         </div>
                         <div className="statRow">
                             {totalCancelled} 

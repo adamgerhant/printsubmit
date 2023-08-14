@@ -76,7 +76,7 @@ const EmailPage = () =>{
               <p className="noEmailHeader">Email setup incomplete</p> 
               <p className="noEmailDescription">To enable email functionality, the following steps must be completed</p>
               <p className="noEmailText">1. <span className={hasEmail?"completeText":"incompleteText"} style={{marginRight:"8px"}}>{hasEmail?"complete":"incomplete"}</span>Set the variable of a question to email.</p>
-              <p className="description">The user input for this question will be the address to which emails are sent </p>
+              <p className="description">The response to this question will be the address emails are sent to</p>
               <div className="secondDiv">
                 <div className="buttonDiv">2. <span className={emailData.email?"completeText":"incompleteText"} style={{marginLeft:"10px"}}>{emailData.email?" complete":" incomplete"}</span>
                 <button className="authorizeButton" onClick={()=>{setLoading(true);googleoauth()}}><img style={{width:"20px", marginRight:"5px", marginBottom:"1px"}}src={'/g-logo.png'} alt="Google logo"/> 
@@ -86,7 +86,7 @@ const EmailPage = () =>{
                   <div className='loader'/>
                 }
                 </div>
-                <p className="description">This is the account where emails will be sent from. This account can be any Google account</p>
+                <p className="description">This is the account emails will be sent from. This account can be any Google account</p>
               </div> 
             </div>
             

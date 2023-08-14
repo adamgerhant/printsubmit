@@ -121,6 +121,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                 })
             }
             if(!emailData){
+                console.log("getting email data")
                 getDoc(emailsRef).then((docSnap)=>{
                     if (docSnap.exists()) {   
                     setEmailData(docSnap.data())                
@@ -146,6 +147,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                 })
             }
             if(!IPData){
+                console.log("getting IP data")
                 getDoc(IPRef).then(docSnap=>{
                     if (docSnap.exists()) {   
                         setIPData(docSnap.data())                
@@ -199,6 +201,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                 })
             }
             if(!emailCount){
+                console.log("getting email counts")
                 getDoc(emailCountRef).then(docSnap=>{
                     if (docSnap.exists()) {   
                         setEmailCount(docSnap.data())                
