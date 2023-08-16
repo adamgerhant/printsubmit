@@ -778,7 +778,39 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
     })
     return (
     <>
-        <div className='titleDiv'>Submissions</div> 
+        <div className='titleDiv'>
+            Submissions
+            <div className='optionsMenuDiv'>
+            <div className="openOptionsMenu" onClick={()=>setOptionsMenuOpen(!optionsMenuOpen)}>
+                <BsThreeDots className='dots'/>
+            </div> 
+            {optionsMenuOpen &&
+                <div className="settingsDiv" ref={wrapperRef}>
+                    <p className='optionsText'>Options</p>
+                    <hr className='lineBreak'/>
+                    <div className="optionDiv">
+                        <div className="option">
+                            Show responses from deleted questions
+                            <input type="checkbox" defaultChecked={showDeleted} onChange={showDeletedChange} className="checkbox"/>
+                        </div>
+                        <div className="option">
+                            Display responses based on status
+                            <input type="checkbox" defaultChecked={seperateResponses} onChange={()=>updateSeperateResponses()} className="checkbox"/>
+                        </div>
+                        <div className="option">
+                            Delete oldest files when storage is full
+                            <input type="checkbox" defaultChecked={submissionFormData.deleteOldFiles} onChange={()=>toggleDeleteOldFiles()} className="checkbox"/>
+                        </div>
+                        
+                        <div className="option">
+                        <p className="resetColumns" onClick={()=>resetColumns()}>Reset Column Widths</p>
+                        </div>
+                        
+                    </div>
+                </div>
+            } 
+        </div>
+        </div> 
 
         <div className='submissionBox'>
             <div className="headers" style={(seperateResponses&&firstData.length==0&&indexedData.length>0)?{}:{borderBottom: "1px solid black"}}>
@@ -949,36 +981,7 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
             />
         </div>
         }
-        <div className='optionsMenuDiv'>
-            <div className="openOptionsMenu" onClick={()=>setOptionsMenuOpen(!optionsMenuOpen)}>
-                <BsThreeDots className='dots'/>
-            </div> 
-            {optionsMenuOpen &&
-                <div className="settingsDiv" ref={wrapperRef}>
-                    <p className='optionsText'>Options</p>
-                    <hr className='lineBreak'/>
-                    <div className="optionDiv">
-                        <div className="option">
-                            Show responses from deleted questions
-                            <input type="checkbox" defaultChecked={showDeleted} onChange={showDeletedChange} className="checkbox"/>
-                        </div>
-                        <div className="option">
-                            Display responses based on status
-                            <input type="checkbox" defaultChecked={seperateResponses} onChange={()=>updateSeperateResponses()} className="checkbox"/>
-                        </div>
-                        <div className="option">
-                            Delete oldest files when storage is full
-                            <input type="checkbox" defaultChecked={submissionFormData.deleteOldFiles} onChange={()=>toggleDeleteOldFiles()} className="checkbox"/>
-                        </div>
-                        
-                        <div className="option">
-                        <p className="resetColumns" onClick={()=>resetColumns()}>Reset Column Widths</p>
-                        </div>
-                        
-                    </div>
-                </div>
-            } 
-        </div>
+        
 
         <div className="emailSentPopupDiv">
             <span className={`printingEmailPopup${sentPopup.type==="printing" ? 'scaled' : ''}`}>

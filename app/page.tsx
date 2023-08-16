@@ -5,12 +5,14 @@ import submissionForm from "../public/submissionForm.png"
 import emails from "../public/emails.png"
 import analytics from "../public/analytics.png"
 import logo from "../public/Logo.svg"
+import IPManager from "../public/IPmanager2.png"
+
 export default function Page() {
 
   return (
     <>
       <div className="flex w-full justify-center">
-        <div className="flex flex-col w-full max-w-[1400px] ">
+        <div className="flex flex-col w-full max-w-[1400px]">
           <div className="bg-white h-[65px] max-w-[1400px] flex flex-row justify-between items-center">
             <div className="flex flex-row">
               <a href="/" className="font-bold text-[25px] py-1 whitespace-nowrap flex flex-row
@@ -123,12 +125,12 @@ export default function Page() {
                   <li className="mt-2">Expandable cells</li>
                   <li className="mt-2">View information</li>
                   <li className="mt-2">Block/Unblock IPs</li>
-                  <li className="mt-2">Set Error</li>
+                  <li className="mt-2">Download file</li>
                 </ul>
                 <ul className="list-disc text-lg">
                   <li className="mt-2">Adjustable column widths</li>
                   <li className="mt-2">Update print status</li>
-                  <li className="mt-2">Download file</li>
+                  <li className="mt-2">Set Error</li>
                   <li className="mt-2">Delete responses</li>
                 </ul>
               </div>
@@ -161,7 +163,19 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="mt-[300px] self-center">footer</div>
+          <div className="flex flex-row w-full mt-52">
+            <div className="w-[500px] flex flex-col">
+              <p className="text-4xl font-semibold mb-4 mt-3">IP Management</p>
+              <p className="text-lg text-gray-600 mb-6">View number of submissions from each IP and block/unblock if necessary</p>
+            </div>
+            <div>            
+              <img src={IPManager.src} className="shadow-xl self-end ml-[40px] w-[700px]"/>
+            </div>
+          </div>
+
+          <div className="mt-[300px] border-b broder-gray-700"></div>
+            <a href="/privacy" className="self-center mt-[100px] mb-[100px] text-gray-600 ">Privacy policy</a>
+
         </div>
 
         

@@ -72,7 +72,7 @@ export default function Page() {
                             </div>
                             <div className="flex flex-row">
                                 <RxCross2 className="h-[22px] w-[22px] text-red-600 mr-1"/>
-                                File dimensions
+                                Model dimensions
                             </div>
                             <div className="flex flex-row">
                                 <RxCross2 className="h-[22px] w-[22px] text-red-600 mt-[1px] mr-1"/>
@@ -129,11 +129,11 @@ export default function Page() {
                         </div>
                         <div className="mt-6 text-gray-700 flex flex-row">
                             <BiCheck className="h-[22px] w-[22px] text-green-600 mr-1"/>
-                            25 GB uploaded file storage
+                            10 GB uploaded file storage
                         </div>
                         <div className="mt-3 text-gray-700 flex flex-row">
                             <BiCheck className="h-[22px] w-[22px] text-green-600 mr-1"/>
-                            50 Emails per day
+                            25 Emails per day
                         </div>
                         <div className="mt-3 ml-2 font-semibold text-gray-700 flex flex-row">
                             Full submission form editor
@@ -163,7 +163,7 @@ export default function Page() {
                             </div>
                             <div className="flex flex-row">
                                 <BiCheck className="h-[22px] w-[22px] text-green-600 mr-1"/>
-                                File dimensions
+                                Model dimensions
                             </div>
                             <div className="flex flex-row">
                                 <BiCheck className="h-[22px] w-[22px] text-green-600 mr-1"/>

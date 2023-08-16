@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+'use client'
+import React, { useContext, useState } from 'react'
 import {signOut} from "firebase/auth"
 import { useAuthContext } from '../layout';
 import { UserContext } from '@/@types/user';
@@ -6,18 +7,19 @@ import { useRouter } from 'next/navigation';
 import auth from '@/app/firebase';
 
 
-const Profile = ({resetData,  accountInformation}:any, ) => {
+const Profile = ({resetData,  accountInformation, setConfirmDeleteAccount}:any, ) => {
   const {currentUser} = useAuthContext() as UserContext;
   const router = useRouter();
+
   const signOutFunction = () =>{
     signOut(auth).then(()=>{
       resetData();
     })
   }
-
-
+  
   return (
-      <div className='profileContainer'>
+    <>
+    <div className='profileContainer'>
         <p className='profileText'>Signed in as</p>
         <p className='emailText'>{currentUser.email}</p>
         <hr/>
@@ -37,15 +39,21 @@ const Profile = ({resetData,  accountInformation}:any, ) => {
           }
          
         </div>
-        {accountInformation.accountType=="Free"&&
+        {accountInformation&&accountInformation.accountType=="Free"&&
           <a href="pricing" target="_blank">
             <button className="upgradeButton">Upgrade to Premium</button>
           </a>
         }
         <hr/>
-        <button className="signoutButton" onClick={()=>{signOutFunction()}}>Sign out</button>
+        <div className='flex flex-row justify-between'>
+          <button className="signoutButton" onClick={()=>{signOutFunction()}}>Sign out</button>
+          <button className="deleteAccountButton" onClick={()=>{setConfirmDeleteAccount(true)}}>Delete account</button>
+
+        </div>
       </div>   
-  
+      
+    </>
+      
   )
 }
 

@@ -370,8 +370,29 @@ html, body, #root,.wrapper {
           background: none;
           border: none;
           cursor: pointer;
-    
+          padding:2px 4px;
+          border-radius: 3px;
         }
+        .signoutButton:hover{
+          background-color: rgb(231, 231, 231);
+          
+
+        }
+        .deleteAccountButton{
+          margin-top:5px;
+          font-size: 15px;
+          padding:0px;
+          color:#ff0000;
+          background: none;
+          border: none;
+          cursor: pointer;
+          border-radius: 3px;
+          padding:2px 4px;
+        }
+        .deleteAccountButton:hover{
+          background-color: rgb(231, 231, 231);
+        }
+
       }
       
     }
@@ -383,6 +404,8 @@ html, body, #root,.wrapper {
     display: flex;
     flex-direction: row;
     overflow-y: hidden;
+    position:relative;
+    z-index: 1;
     .sidebar{
       width: 225px;
       padding-bottom: 20px;
@@ -429,92 +452,7 @@ html, body, #root,.wrapper {
       flex-direction: column;
       overflow-y: auto;
       
-      .optionsMenuDiv{
-        position: absolute;
-        z-index: 4;
-        right:35px;
-        top:50px;
-        width: 100%;
-        height:27px;
-        display:flex;
-        flex-direction: row;
-        justify-content: right;
-        .openOptionsMenu{
-          display: flex;
-          align-items: center;
-          border:none;
-          font-size:22px;
-          margin-right:15px;
-        }
-        .openOptionsMenu:hover{
-          cursor: pointer;
-        }
-        .settingsDiv{
-          position: absolute;
-          right:40px;         
-          background-color: white;
-          border-radius: 5px;
-          border:1px solid rgb(121, 121, 121);
-          font-size: 15px;
-          margin:0 10px;
-          display: flex;
-          flex-direction: column;
-          .optionsText{
-            display:flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: baseline;
-            font-size:20px;
-            margin:0;
-            padding: 5px 10px 5px 20px;
-            background-color: rgb(228, 228, 228);
-            border-radius:5px 5px 0 0px;
-            box-shadow: 0 3px 5px rgb(155, 155, 155);
-          }
-          .lineBreak{
-            margin:0px 0;
-            border: 0;
-            width:100%;              
-            height: 1px;
-          }
-          .optionDiv{
-            display: flex;
-            flex-direction: column;
-            margin: 10px 20px 10px 10px;
-            .option{
-              display: flex;
-              flex-direction: row;
-              margin:5px 10px;
-              cursor:default;
-              .resetColumns{
-                border:none;
-                border-radius: 5px;
-                color:rgb(255, 10, 10);
-                font-size:15px;
-                margin:5px 0 10px 0;
-                padding:0;
-                cursor:pointer;
-              }
-              input{
-                margin-left:5px;
-              }
-              .checkbox{
-                cursor:pointer;
-              }
-            }
-            .linkText{
-              margin-left:10px;
-              margin-top:5px;
-              color: #3366CC;
-              cursor:pointer
-            }
-            .linkText:hover{
-              text-decoration: underline;
-            }
-          }
-          
-        }
-      } 
+      
       .submissionBox{
         width:1630px;
         margin:20px 0 0px 38px;
@@ -1803,7 +1741,7 @@ html, body, #root,.wrapper {
               position: absolute;
               margin-left:10px;
               width:780px;
-              top:865px;
+              top:815px;
               display:flex;
               flex-direction: column;
               align-items: center;
@@ -2277,10 +2215,97 @@ html, body, #root,.wrapper {
       padding:1px 5px;
       font-size: 20px;
       position: absolute;
-      top:47px;
-      z-index: 1;
+      top:0px;
+      z-index:5;
       display: flex;
       flex-direction: row;
+      .optionsMenuDiv{
+        position: absolute;
+        z-index: 4;
+        right:35px;
+        top:5px;
+        width: 100%;
+        height:27px;
+        display:flex;
+        flex-direction: row;
+        justify-content: right;
+        .openOptionsMenu{
+          display: flex;
+          align-items: center;
+          border:none;
+          font-size:22px;
+          margin-right:15px;
+          
+        }
+        .openOptionsMenu:hover{
+          cursor: pointer;
+        }
+        .settingsDiv{
+          position: absolute;
+          right:40px;         
+          background-color: white;
+          border-radius: 5px;
+          border:1px solid rgb(121, 121, 121);
+          font-size: 15px;
+          margin:0 10px;
+          display: flex;
+          flex-direction: column;
+          .optionsText{
+            display:flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size:20px;
+            margin:0;
+            padding: 5px 10px 5px 20px;
+            background-color: rgb(228, 228, 228);
+            border-radius:5px 5px 0 0px;
+            box-shadow: 0 3px 5px rgb(155, 155, 155);
+          }
+          .lineBreak{
+            margin:0px 0;
+            border: 0;
+            width:100%;              
+            height: 1px;
+          }
+          .optionDiv{
+            display: flex;
+            flex-direction: column;
+            margin: 10px 20px 10px 10px;
+            .option{
+              display: flex;
+              flex-direction: row;
+              margin:5px 10px;
+              cursor:default;
+              .resetColumns{
+                border:none;
+                border-radius: 5px;
+                color:rgb(255, 10, 10);
+                font-size:15px;
+                margin:5px 0 10px 0;
+                padding:0;
+                cursor:pointer;
+              }
+              input{
+                margin-left:5px;
+              }
+              .checkbox{
+                cursor:pointer;
+              }
+            }
+            .linkText{
+              margin-left:10px;
+              margin-top:5px;
+              color: #3366CC;
+              cursor:pointer
+            }
+            .linkText:hover{
+              text-decoration: underline;
+            }
+          }
+          
+        }
+      } 
     }
     .ipManagerDiv{
       display: flex;

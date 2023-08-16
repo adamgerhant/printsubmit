@@ -532,7 +532,7 @@ const SubmissionForm = ({id, submissionFormData, accountInformation}) => {
                         
                         <p className="mt-2 text-gray-700"> File size: {fileSizeDisplay}</p>
                     }
-                    {dimensions&&<p className="mt-1 text-gray-700">dimensions: 
+                    {dimensions&&<p className="mt-1 text-gray-700">Dimensions: 
                         {" "+dimensions.height} {submissionFormData.units} x 
                         {" "+dimensions.width} {submissionFormData.units} x 
                         {" "+dimensions.length} {submissionFormData.units}</p>}
@@ -614,8 +614,10 @@ const SubmissionForm = ({id, submissionFormData, accountInformation}) => {
                         </div>
                         }
                 </div>         
-                </div>      
+                </div>   
             </div>
+            
+            
             </>       
         )
     }
