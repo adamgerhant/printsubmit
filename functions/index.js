@@ -22,7 +22,7 @@ const oauth2Client = new google.auth.OAuth2(
   "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",
   "https://us-central1-print-submit.cloudfunctions.net/api/oAuthCallback"
 );
-app.use(cors({origin: 'https://printsubmit-git-preview-adamgerhant.vercel.app'}));
+app.use(cors({origin: ["http://localhost:3000",'https://printsubmit-git-preview-adamgerhant.vercel.app']}));
 
 app.post('/initializeAccountFile',  (request, response)=>{
   console.log("initalizingAccountFile")
