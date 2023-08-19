@@ -18,7 +18,7 @@
 }
 
 
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900);
+//@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900);
 
 html, body, #root,.wrapper {
   padding:0px;
@@ -1349,15 +1349,15 @@ html, body, #root,.wrapper {
       display:flex;
       flex-direction: column;
       margin-top:25px;
+      flex:1;
       .contentDiv{
         display:flex;
         flex-direction: row;
         margin-top:5px;
-
         .preview{
           margin-top:10px;
-          width:780px;
           height: 90vh;
+          width:47%;
           //border-right: 1px solid rgb(146, 146, 146); 
           display: flex;
           flex-direction: column;
@@ -1429,9 +1429,9 @@ html, body, #root,.wrapper {
         }
 
         .edit{
-          width:100ch;
+          width:53%;
           margin-top:10px;
-          
+          flex:1;
           .editText{
             text-align: center;
             margin:0px 0px 5px 0px;
@@ -1454,7 +1454,7 @@ html, body, #root,.wrapper {
             display:flex;
             align-items: left;
             flex-direction: column;
-            margin:0px 20px 0px 20px;
+            margin:0px 20px 0px 0px;
             padding:0 40px 15px 20px;
             //background-color: white;
             border-radius: 10px;
@@ -1479,7 +1479,7 @@ html, body, #root,.wrapper {
                 padding-bottom: 15px;
                 display: flex;
                 flex-direction: row;
-                width:800px;
+                
                 .deleteButton{
                   background:white;
                   color:red;
@@ -1487,6 +1487,7 @@ html, body, #root,.wrapper {
                   font-size:18px;
                   padding:0 5px;
                   cursor: pointer;
+                  margin-left:auto;
                 }
                 .deleteButton:hover{
                   background:rgb(235, 235, 235);
@@ -1690,7 +1691,7 @@ html, body, #root,.wrapper {
                 padding:10px 0 10px 10px;
 
                 .questionDiv{
-                  padding:10px 0 0 0;
+                  padding:10px 0 0 10px;
                   background-color: $questionBackground;
                   margin:0 15px 25px 0;
                   border-radius: 10px;

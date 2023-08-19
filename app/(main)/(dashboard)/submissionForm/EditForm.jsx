@@ -107,7 +107,7 @@ const Questions = ({accountInformation, deleteQuestion, displayArray, onChange, 
                     {accountInformation.accountType!="Premium"&&
                     <>
                         <Tooltip id="dropdownTooltip" />
-                        <div className='left-[10px] top-[-5px] w-[768px] h-[110px] bg-gray-500/[0.2] rounded-lg absolute cursor-pointer' data-tooltip-id="dropdownTooltip" data-tooltip-content="Premium feature" place="top" effect="solid"/>
+                        <div className='left-[0px] top-[-5px] w-[768px] h-[110px] bg-gray-500/[0.2] rounded-lg absolute cursor-pointer' data-tooltip-id="dropdownTooltip" data-tooltip-content="Premium feature" place="top" effect="solid"/>
                     </>
                         
                     }
@@ -147,7 +147,7 @@ const Questions = ({accountInformation, deleteQuestion, displayArray, onChange, 
                        
                     </div>
                     
-                    <button className="deleteButton" style={{marginLeft:questionObject.type=="dropdown"?"140px":"160px"}} onClick={()=>deleteQuestion(questionObject.questionID)}>Delete question</button>
+                    <button className="deleteButton" /*style={{marginLeft:questionObject.type=="dropdown"?"140px":"160px"}}*/ onClick={()=>deleteQuestion(questionObject.questionID)}>Delete question</button>
                     
                 </div>
             </div> 
