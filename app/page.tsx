@@ -5,7 +5,7 @@ import submissionForm from "../public/submissionForm.png"
 import emails from "../public/emails.png"
 import analytics from "../public/analytics.png"
 import logo from "../public/Logo.svg"
-import IPManager from "../public/IPmanager2.png"
+import IPManager from "../public/IPManager2.png"
 
 export default function Page() {
 
