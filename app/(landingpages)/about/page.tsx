@@ -63,7 +63,7 @@ export default function Page() {
                     uses a server side submission process.
                     </p>
                     <img className="w-[600px] self-center mt-4"src={serverSubmission.src}/>
-                    <p className="text-gray-800 mt-2 text-lg"> The basic process beind this is to first verify the request, then send a temporary storage key to the user which can be used to upload files.
+                    <p className="text-gray-800 mt-2 text-lg"> The basic process behind this is to first verify the request, then send a temporary storage key to the user which can be used to upload files.
                     This allows for the database and storage and be locked, which provides security against attacks and malicious users.
                     </p>
                     <div className="self-center w-[630px] mt-8">
