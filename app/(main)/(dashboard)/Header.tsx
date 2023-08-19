@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { getAuth, deleteUser } from "firebase/auth";
 
 const Header = () => {
-  const {resetData, accountInformation} = useFirebaseContext() as FirebaseContext;
+  const {resetAllData, accountInformation} = useFirebaseContext() as FirebaseContext;
   const {currentUser} = useAuthContext() as UserContext;
   const [confirmDeleteAccount, setConfirmDeleteAccount] = useState(false);
 
@@ -21,9 +21,7 @@ const Header = () => {
 
     const handleClickOutside = (event:any) => {
       let clickedOutside = true
-      console.log("path: ")
       event.composedPath().map((element: { className: any; })=>{
-        console.log(element.className);
         if(element.className=="profileWrapper"){
           clickedOutside = false;
         }
@@ -47,7 +45,7 @@ const Header = () => {
   const router = useRouter();
   const signOutFunction = () =>{
     signOut(auth).then(()=>{
-      resetData();
+      resetAllData();
       router.push("/register?redirect=false")
     })
   }
@@ -81,7 +79,7 @@ const Header = () => {
           Profile
       </button>
       <div className="profileWrapper">
-        {isOpen && <Profile resetData={resetData} accountInformation={accountInformation} setConfirmDeleteAccount={setConfirmDeleteAccount}/>}
+        {isOpen && <Profile resetData={resetAllData} accountInformation={accountInformation} setConfirmDeleteAccount={setConfirmDeleteAccount}/>}
       </div>
     </div>
     {confirmDeleteAccount&&

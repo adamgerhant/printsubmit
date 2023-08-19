@@ -56,4 +56,5 @@ export type FirebaseContext = {
     setIPData : Dispatch<SetStateAction<DocumentData | null>>;
     resetStatisticsData: Dispatch<SetStateAction<DocumentData | null>>;
     resetData: ()=>void;
+    resetAllData: ()=>void;
 }

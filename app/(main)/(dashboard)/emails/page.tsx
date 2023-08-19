@@ -5,7 +5,7 @@ import { FirebaseContext } from "@/@types/user";
 import Emails from "./Emails"
 import { getAuth } from "firebase/auth";
 const EmailPage = () =>{
-    const {emailData, setEmailData, submissionFormData} = useFirebaseContext() as FirebaseContext;
+    const {emailData, setEmailData, submissionFormData, accountInformation} = useFirebaseContext() as FirebaseContext;
     const [loading, setLoading] = useState(false);
     if(emailData&&submissionFormData){
       const auth = getAuth();
@@ -88,6 +88,10 @@ const EmailPage = () =>{
                 </div>
                 <p className="description">This is the account emails will be sent from. This account can be any Google account</p>
               </div> 
+              {accountInformation&&accountInformation.accountType=="Guest"&&
+              <div className='guestNotice'>
+                Note: Emails cannot be sent from a guest account
+              </div>}
             </div>
             
           </div>

@@ -30,12 +30,12 @@ app.post('/initializeAccountFile',  (request, response)=>{
   .then(async (decodedToken) => {
     const uid = decodedToken.uid;
     const db = admin.firestore();
+    console.log("provider: "+decodedToken.firebase.sign_in_provider)
     const accountInformationDocRef = db.doc("users/"+uid+"/data/accountInformation")
     try {
       await db.runTransaction(async (transaction) => {
         
         const accountInformationDocSnap = await transaction.get(accountInformationDocRef);
-        console.log("accountInformationDocSnap exists: "+accountInformationDocSnap.exists)
         if (!accountInformationDocSnap.exists) {
           
           console.log("setting data")
@@ -57,9 +57,13 @@ app.post('/initializeAccountFile',  (request, response)=>{
           }
 
           transaction.set(db.doc("users/"+uid),{created:"true"})
-
         }
-        response.status(200).send()
+        if(decodedToken.firebase.sign_in_provider!="anonymous"){
+          response.status(200).send({accountType:"Free"})
+        }
+        else{
+          response.status(200).send({accountType:"Guest"})
+        }
       })
     } catch (err) {
       console.log("first error")
@@ -491,8 +495,8 @@ app.post('/uploadURL', async (request, response)=>{
   if(request.body.password){
     return response.status(200).send(); 
   }
-  const db = admin.firestore() 
   const clientIP = request.headers['x-forwarded-for'] || request.socket.remoteAddress || request.headers['fastly-client-ip'] || "none";
+  const db = admin.firestore() 
   const IPDocRef = db.doc("users/"+request.body.id+"/data/submissionData/ipData/ipData")
   const submissionFormDocRef = db.doc("users/"+request.body.id+"/data/submissionForm")
   const accountInformationDocRef = db.doc("users/"+request.body.id+"/data/accountInformation")
@@ -507,6 +511,11 @@ app.post('/uploadURL', async (request, response)=>{
 
     const recaptchaToken = request.body.recaptchaToken;
     console.log(recaptchaToken)
+    if(submissionFormData.captchaEnabled&&!recaptchaToken){
+      return response.status(400).send({
+        message: 'Error uploading\nno reCAPTCHA token.'
+      });
+    }
     if(recaptchaToken&&accountInformation.accountType=="Premium"){
       const secretKey = '6LfYj58nAAAAANOQsutWLUN7d_dXhUHgznMoLRJJ'; // Replace with your actual reCAPTCHA secret key
       const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
@@ -518,7 +527,8 @@ app.post('/uploadURL', async (request, response)=>{
       if(!verificationData.success){
         console.log("recaptcha verifation failed")
         return response.status(400).send({
-          message: 'Error uploading\nreCAPTCHA verification failed.'});
+          message: 'Error uploading\nreCAPTCHA verification failed.'
+        });
       }
     }
     else if(recaptchaToken){
@@ -696,160 +706,159 @@ exports.formSubmit = onObjectFinalized({cpu: 2}, async (event) => {
   if (pathSegment.length >= 3) {
     const fileID = pathSegment[2];
     const userID = pathSegment[1];
-      db = admin.firestore()
-      const fileIDRef = db.doc("users/"+userID+"/data/submissionData/submittedFileIDs/"+fileID)
-      try {
-        await db.runTransaction(async (transaction) => {
-          const fileIDDocSnap = await transaction.get(fileIDRef)
-          if(fileIDDocSnap.exists){
-            console.log("transaction field value: "+fileIDDocSnap.data().filesInFolder)
-            transaction.update(fileIDRef, {
-              filesInFolder: admin.firestore.FieldValue.increment(1)
-            })
-          }else{
-            console.log("setting files in folder")
-            transaction.set(fileIDRef, {
-              filesInFolder: 1
-            })
-          }
-        })
+    db = admin.firestore()
+    const fileIDRef = db.doc("users/"+userID+"/data/submissionData/submittedFileIDs/"+fileID)
+    try {
+      const filesInFolder = await db.runTransaction(async (transaction) => {
+        const fileIDDocSnap = await transaction.get(fileIDRef)
+        if(fileIDDocSnap.exists){
+          const currentFiles = fileIDDocSnap.data().filesInFolder
+          console.log("transaction value: "+currentFiles)
 
-        fileIDRef.get().then(async fileIDDocSnap=>{
-          const filesInFolder = fileIDDocSnap.data().filesInFolder
-          console.log("files in folder: "+filesInFolder);
-          if(filesInFolder==4){
-            
-            const fileIDPath = pathSegment.slice(0, 3).join('/');
-            const storage = new Storage({
-              projectId: "print-submit",
-              keyFilename:"serviceAccountKey.json"
-            });
-            const bucketName = 'print-submit.appspot.com';
-            // List files in the specified folder
-            const [files] = await storage.bucket(bucketName).getFiles({ prefix: fileIDPath });
-            const ipFileName = fileIDPath+"/ip.json"
-            const inputDataFileName = fileIDPath+"/inputData.json"
-            const bucket = storage.bucket(bucketName);
-            const ipFile = bucket.file(ipFileName);
-            const inputDataFile = bucket.file(inputDataFileName);
-    
-            const ipFileFileContent = await ipFile.download();
-            const inputDataFileContent = await inputDataFile.download();
-            console.log("file content:"+ipFileFileContent)
-            const ipData = JSON.parse(ipFileFileContent.toString());
-            let inputData = JSON.parse(inputDataFileContent.toString());
-    
-            const fileName = fileIDPath+"/"+inputData.fileName;
-            const thumbnailName = fileIDPath+"/thumbnail.png";
-    
-            const [fileMetadata] = await bucket.file(fileName).getMetadata();
-            inputData.modelSize = parseInt(fileMetadata.size, 10);
-    
-            const [thumbnailMetadata] = await bucket.file(thumbnailName).getMetadata();
-            inputData.thumbnailSize = thumbnailMetadata.size
-    
-            inputData.fileDeleted = false;
-            
-            let totalSize = 0;
-            
-            for (const file of files) {
-              const [metadata] = await file.getMetadata();
-              totalSize += parseInt(metadata.size, 10);
-            }
-            inputData.fileSize = totalSize;
-    
-            const newDate = new Date(inputData.date)
-    
-            inputData.fileID = fileID;
-            inputData.date = newDate.toUTCString()
-            inputData.ip = ipData.ip
-    
-            db = admin.firestore();
-    
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let cancelID = '';
-            for (let i = 0; i < 20; i++) {
-              cancelID += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-    
-            const fileIDRef = db.doc("users/"+userID+"/data/submissionData/submittedFileIDs/"+fileID)
-            const cancelRequestsRef = db.doc("users/"+userID+"/data/submissionData/cancelRequests/"+cancelID)
-            const submissionDataRef = db.doc("users/"+userID+"/data/submissionData")
-            const ipRef = db.doc("users/"+userID+"/data/submissionData/ipData/ipData")
-            const accountInformationDocRef = db.doc("users/"+userID+"/data/accountInformation")
-            //const folderRef = db.doc(`users/${pathSegment[1]}/folderCounts/${pathSegment[2]}`);
-    
-            console.log("running transaction")
-            try {
-              await db.runTransaction(async (transaction) => {
-               // const fileIDSnap = await transaction.get(fileIDRef);
-                //if (!fileIDSnap.exists) {
-                  //const ipSnap = await transaction.get(ipRef)
-    
-                  transaction.set(cancelRequestsRef, {
-                    cancelled: false,
-                    reason: "",
-                    date: newDate.getTime(),
-                    fileID: fileID,
-                    fileName: inputData.fileName,
-                  });
-            
-                  inputData.cancelID = cancelID;
-                  console.log("inputData sent: ");
-                  console.log(inputData);
-            
-                  transaction.update(submissionDataRef, {
-                    data: admin.firestore.FieldValue.arrayUnion({ inputData }),
-                  });
-                  console.log("setting file id ref to complete")
-                  transaction.set(fileIDRef, {
-                    transferred: "complete",
-                    cancelID: cancelID
-                  })
-                  transaction.update(accountInformationDocRef,{
-                    storageUsed: admin.firestore.FieldValue.increment(inputData.fileSize)
-                  })
-                  //await transaction.set(folderRef,{fileCount:4})  
-                  transaction.set(ipRef,{
-                    [ipData.ip.replace(/\./g, '%2E')]:{blocked:false}
-                  }, { merge: true })  
-                //}
+          transaction.update(fileIDRef, {
+            filesInFolder: currentFiles+1
+          })
+          return currentFiles+1;
+        }else{
+          console.log("setting files in folder")
+          transaction.set(fileIDRef, {
+            filesInFolder: 1
+          })
+          return 1;
+        }
+      })
+
+      console.log("files in folder: "+filesInFolder);
+      if(filesInFolder==4){
+        
+        const fileIDPath = pathSegment.slice(0, 3).join('/');
+        const storage = new Storage({
+          projectId: "print-submit",
+          keyFilename:"serviceAccountKey.json"
+        });
+        const bucketName = 'print-submit.appspot.com';
+        // List files in the specified folder
+        const [files] = await storage.bucket(bucketName).getFiles({ prefix: fileIDPath });
+        const ipFileName = fileIDPath+"/ip.json"
+        const inputDataFileName = fileIDPath+"/inputData.json"
+        const bucket = storage.bucket(bucketName);
+        const ipFile = bucket.file(ipFileName);
+        const inputDataFile = bucket.file(inputDataFileName);
+
+        const ipFileFileContent = await ipFile.download();
+        const inputDataFileContent = await inputDataFile.download();
+        console.log("file content:"+ipFileFileContent)
+        const ipData = JSON.parse(ipFileFileContent.toString());
+        let inputData = JSON.parse(inputDataFileContent.toString());
+
+        const fileName = fileIDPath+"/"+inputData.fileName;
+        const thumbnailName = fileIDPath+"/thumbnail.png";
+
+        const [fileMetadata] = await bucket.file(fileName).getMetadata();
+        inputData.modelSize = parseInt(fileMetadata.size, 10);
+
+        const [thumbnailMetadata] = await bucket.file(thumbnailName).getMetadata();
+        inputData.thumbnailSize = thumbnailMetadata.size
+
+        inputData.fileDeleted = false;
+        
+        let totalSize = 0;
+        
+        for (const file of files) {
+          const [metadata] = await file.getMetadata();
+          totalSize += parseInt(metadata.size, 10);
+        }
+        inputData.fileSize = totalSize;
+
+        const newDate = new Date(inputData.date)
+
+        inputData.fileID = fileID;
+        inputData.date = newDate.toUTCString()
+        inputData.ip = ipData.ip
+
+        db = admin.firestore();
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let cancelID = '';
+        for (let i = 0; i < 20; i++) {
+          cancelID += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+
+        const fileIDRef = db.doc("users/"+userID+"/data/submissionData/submittedFileIDs/"+fileID)
+        const cancelRequestsRef = db.doc("users/"+userID+"/data/submissionData/cancelRequests/"+cancelID)
+        const submissionDataRef = db.doc("users/"+userID+"/data/submissionData")
+        const ipRef = db.doc("users/"+userID+"/data/submissionData/ipData/ipData")
+        const accountInformationDocRef = db.doc("users/"+userID+"/data/accountInformation")
+        //const folderRef = db.doc(`users/${pathSegment[1]}/folderCounts/${pathSegment[2]}`);
+
+        console.log("running transaction")
+        try {
+          await db.runTransaction(async (transaction) => {
+            // const fileIDSnap = await transaction.get(fileIDRef);
+            //if (!fileIDSnap.exists) {
+              //const ipSnap = await transaction.get(ipRef)
+
+              transaction.set(cancelRequestsRef, {
+                cancelled: false,
+                reason: "",
+                date: newDate.getTime(),
+                fileID: fileID,
+                fileName: inputData.fileName,
               });
-              let name=""
-              if(ipData.hasOwnProperty("nameID")){
-                const nameID = ipData.nameID;
-                if(inputData.hasOwnProperty(nameID)){
-                  name=inputData[nameID]
-                }
-              }
-              if(ipData.hasOwnProperty("emailID")){
-                const emailID = ipData.emailID;
-                if(inputData.hasOwnProperty(emailID)){
-                  const emailInput = inputData[emailID]
-                  console.log("emailInput: "+emailInput)
-                  console.log("name: "+name)
-    
-                  sendEmail(userID, "submitted", emailInput, name, "", cancelID);
-                }
-              }
-            } catch (err) {
-              console.error("Transaction failed:", err);
-              try {
-                await fileIDRef.set({
-                  transferred: "error",
-                  errorMessage: err.toString(),
-                });
-              } catch (setErr) {
-                console.error("Failed to set fileIDRef:", setErr);
-              }
-            } 
+        
+              inputData.cancelID = cancelID;
+              console.log("inputData sent: ");
+              console.log(inputData);
+        
+              transaction.update(submissionDataRef, {
+                data: admin.firestore.FieldValue.arrayUnion({ inputData }),
+              });
+              console.log("setting file id ref to complete")
+              transaction.set(fileIDRef, {
+                transferred: "complete",
+                cancelID: cancelID
+              })
+              transaction.update(accountInformationDocRef,{
+                storageUsed: admin.firestore.FieldValue.increment(inputData.fileSize)
+              })
+              //await transaction.set(folderRef,{fileCount:4})  
+              transaction.set(ipRef,{
+                [ipData.ip.replace(/\./g, '%2E')]:{blocked:false}
+              }, { merge: true })  
+            //}
+          });
+          let name=""
+          if(ipData.hasOwnProperty("nameID")){
+            const nameID = ipData.nameID;
+            if(inputData.hasOwnProperty(nameID)){
+              name=inputData[nameID]
+            }
           }
-        }).catch(()=>{
-          console.log("error getting files in folder")
-        })
-      } catch(err) {
-        console.error("files in folder transaction error: ", err);
+          if(ipData.hasOwnProperty("emailID")){
+            const emailID = ipData.emailID;
+            if(inputData.hasOwnProperty(emailID)){
+              const emailInput = inputData[emailID]
+              console.log("emailInput: "+emailInput)
+              console.log("name: "+name)
+
+              sendEmail(userID, "submitted", emailInput, name, "", cancelID);
+            }
+          }
+        } catch (err) {
+          console.error("Transaction failed:", err);
+          try {
+            await fileIDRef.set({
+              transferred: "error",
+              errorMessage: err.toString(),
+            });
+          } catch (setErr) {
+            console.error("Failed to set fileIDRef:", setErr);
+          }
+        } 
       }
+    } catch(err) {
+      console.error("files in folder transaction error: ", err);
+    }
   }
 });
 /*

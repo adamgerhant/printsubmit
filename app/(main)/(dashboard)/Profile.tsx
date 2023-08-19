@@ -34,7 +34,7 @@ const Profile = ({resetData,  accountInformation, setConfirmDeleteAccount}:any, 
           }
          {!accountInformation&&
           <>
-            <p>Getting account type:</p>
+            <p>Getting account type</p>
           </> 
           }
          

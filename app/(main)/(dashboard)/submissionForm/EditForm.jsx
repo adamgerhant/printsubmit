@@ -61,7 +61,7 @@ const Questions = ({accountInformation, deleteQuestion, displayArray, onChange, 
 
         const optionCards = questionObject.options.map((option, index)=>{
             return(
-                <span className="optionCardSpan">
+                <span key="index" className="optionCardSpan">
                     {option}
                     <RxCross2 className="deleteOption" onClick={()=>deleteOption(questionObject.questionID, index)}/>
                 </span>

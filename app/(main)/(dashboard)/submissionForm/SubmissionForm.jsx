@@ -33,8 +33,8 @@ const Questions = ({displayArray, handleInputDataChange, highlightQuestions, acc
         if(questionObject.display){
         
         
-        let allOptions = questionObject.options.map((option)=>{
-            return(<option value={option}>{option}</option>)
+        let allOptions = questionObject.options.map((option, index)=>{
+            return(<option key={index} value={option}>{option}</option>)
         })
         
         return(
@@ -61,6 +61,21 @@ const Questions = ({displayArray, handleInputDataChange, highlightQuestions, acc
         }
     })
 }
+async function uploadFile(url, data, contentType, contentLength) {
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-type': contentType,
+        'X-Upload-Content-Length': contentLength,
+      },
+      body: data,
+    });
+  
+    if (!response.ok) {
+      throw new Error(`Error uploading: ${response.statusText}`);
+    }
+  }
+  
 const SubmitButton = ({setUploadStatus, file, setFile, id, inputData, setSubmitted, setHighlightIDs, submissionFormData, setCancelID, imageURL, dimensions, setErrorUploading, recaptchaToken, accountInformation}) =>{
     const [submitButton, setSubmitButton]= useState("submit")
     const [fileID, setFileID] = useState()
@@ -81,10 +96,14 @@ const SubmitButton = ({setUploadStatus, file, setFile, id, inputData, setSubmitt
             if(fileData.transferred=="complete"){
                 setSubmitted(true)
                 setCancelID(fileData.cancelID)
+                setUploadStatus();
+
             }
             else if(fileData.transferred=="error"){
                 setErrorUploading(fileData.errorMessage)
                 setSubmitButton("submit")
+                setUploadStatus();
+
             }
         }
         });
@@ -192,7 +211,7 @@ const SubmitButton = ({setUploadStatus, file, setFile, id, inputData, setSubmitt
                     "recaptchaToken" : recaptchaToken
                 })
             }).then(response=>response.json().then(data => ({ status: response.status, data: data })))
-            .then((response)=>{
+            .then(async (response)=>{
                 if(response.status==200){
                     setFileID(response.data.fileID)
                     setUploadStatus("Uploading files")
@@ -200,66 +219,40 @@ const SubmitButton = ({setUploadStatus, file, setFile, id, inputData, setSubmitt
                     const uploadURL = response.data.uploadURL
                     const thumbnailURL = response.data.thumbnailURL
                     const inputDataURL = response.data.inputDataURL
-                    fetch(uploadURL, {
-                        method: 'PUT',
-                        headers: {
-                          'Content-type': "application/octet-stream",
-                          'X-Upload-Content-Length': file.size
-                        },
-                        body: file,  
-                    }).then(()=>{  
-                        console.log("uploaded file")                         
-                        fetch(thumbnailURL, { 
-                            method: 'PUT',
-                            headers: {
-                                'Content-type':  "image/png",
-                                'X-Upload-Content-Length': imageBuffer.length
-                            },
-                            body: imageBuffer,
-                        }).then(()=>{
-                            console.log("uploaded thumbnail")
-                            fetch(inputDataURL, { 
-                                method: 'PUT',
-                                headers: {
-                                'Content-type':  "application/json",
-                                'X-Upload-Content-Length':  inputDataFile.size
-                                },
-                                body: inputDataFile,
-                            }).then(()=>{
-                                console.log("uploaded inputData")
-                                setUploadStatus("Processing submission")
-
-                            }).catch((error)=>{
-                                console.log("error uploading inputData")
-                                setErrorUploading(true)
-                                setSubmitButton("submit")
-                            });
-                        }).catch(()=>{
-                            console.log("error uploading thumbnail")
-                            setErrorUploading()
-                            setSubmitButton("submit")
-                        });
+                    try {
+                        await uploadFile(uploadURL, file, 'application/octet-stream', file.size);
+                        console.log("uploaded file");
                         
-                    }).catch(()=>{
-                        console.log("error uploading file")
-                        setErrorUploading("Error uploading")
-                        setSubmitButton("submit")
-                    });
+                        await uploadFile(thumbnailURL, imageBuffer, 'image/png', imageBuffer.length);
+                        console.log("uploaded thumbnail");
+                        
+                        await uploadFile(inputDataURL, inputDataFile, 'application/json', inputDataFile.size);
+                        console.log("uploaded inputData");
+                        
+                        setUploadStatus("Processing submission");
+                      } catch (error) {
+                        console.log("error1: "+error);
+                        setUploadStatus();
+                        setErrorUploading("Error uploading");
+                      }
                 }
                 else if(response.status==403){
                     console.log("setting file too large")
                     setErrorUploading(response.data.message)
                     setSubmitButton("submit")
+                    setUploadStatus();
                 }
                 else {
                     setErrorUploading("Error uploading")
                     setSubmitButton("submit")
+                    setUploadStatus();
                 }    
             }).catch((error)=>{
                 console.log("error: ")
                 console.log(error)
                 setErrorUploading("Error uploading")
                 setSubmitButton("submit")
+                setUploadStatus();
             });
          
 
@@ -283,6 +276,7 @@ const SubmitButton = ({setUploadStatus, file, setFile, id, inputData, setSubmitt
 
 
 }
+
 const IncompleteForm = ({display})=>{
     if(display){
         return(
@@ -342,6 +336,7 @@ const SubmissionForm = ({id, submissionFormData, accountInformation}) => {
     if(accountInformation.accountType!="Premium"){
         submissionFormData.captchaEnabled=false;
     }
+    
     useEffect(()=>{
         if(uploadStatus){
             setTimeout(()=>{
@@ -354,7 +349,7 @@ const SubmissionForm = ({id, submissionFormData, accountInformation}) => {
             },500) 
         }
     },[dots, uploadStatus])
-
+    
     const tempInputData = {}
     submissionFormData.questions.map(question=>{
         if(question.type=="dropdown"&&question.display&&question.options.length>0){

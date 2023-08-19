@@ -40,7 +40,7 @@ export default function Page() {
                             Registration information: We store information you provide us on this site when creating an account or filling out a form. This information commonly includes name and email address.
                         </div>
                         <div className="text-xl  mt-2">
-                            Billing information: Our integrations with third party payment gateways are for processing only. We don't store or log any sensitive cardholder data provided by you or your form users. 
+                            Billing information: Our integrations with third party payment gateways are for processing only. We don&apos;t store or log any sensitive cardholder data provided by you or your form users. 
                         </div>
                         <div className="text-xl  mt-2">
                             Submission and Form data: When using the form editor, your changes are saved to a third party database provider. We currently use the Firebase Firestore database. Submissions are stored in a similar manner, but also include Google Cloud Storage for file storage.

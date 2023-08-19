@@ -121,7 +121,7 @@ export default function Page() {
                         </a>
                     </div>
 
-                    <div className="w-[400px] h-[730px] p-10 border-2 border-gray-300 rounded-xl shadow-[0_0px_30px_#ddd6fe]">
+                    <div className="w-[400px] h-[730px] p-10 border-2 border-[#ddd6fe] shadow-[0px_0px_5px_#ddd6fe] border-gray-300 rounded-xl ">
                         <p className="font-bold text-2xl">Premium</p>
                         <div className="flex flex-row items-baseline mt-1">
                             <span className="font-bold text-4xl ">$5</span>
@@ -206,7 +206,7 @@ export default function Page() {
                             
                         </div>
                         <div className="mx-2 mt-6 px-4 py-2 w-[290px] border-[1px] border-violet-700 bg-violet-700 rounded flex flex-row justify-between cursor-pointer hover:bg-white text-white hover:text-violet-700 ease-out duration-200 shadow-[0_0_10px_#6d28d9]">
-                            <p className="text-[15px] font-semibold">Buy now</p>
+                            <p className="text-[15px] font-semibold">Temporarily Unavailable</p>
                             <BsArrowRight className="h-full w-[22px]"/>
                         </div>
                     </div>

@@ -199,7 +199,11 @@ const Statistics = () =>{
     
     const bytesStored = niceBytes(storageUsed)
     const totalStorageBytes = niceBytes(totalStorage)
-    const percentUsed = (storageUsed/(totalStorage) * 100).toFixed(3)+"%"
+    
+    let percentUsed = (storageUsed/(totalStorage) * 100).toFixed(3)+"%"
+    if(totalStorage==0){
+        percentUsed = "100%"
+    }
     console.log(percentUsed)
     return(
         <div className="statisticsDiv">

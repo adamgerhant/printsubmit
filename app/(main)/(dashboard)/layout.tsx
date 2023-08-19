@@ -41,7 +41,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
             const emailCountRef = doc(db, "users",  user.uid, "data", "emailCount")
             
             if(!submissionData){
-                console.log("getting submission data")
+                //console.log("getting submission data")
 
                 getDoc(submissionDataRef).then((docSnap)=>{
                     if (docSnap.exists()) {
@@ -56,7 +56,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                 }).catch((err)=>{console.log("error getting doc" + err)})
             }
             if(!submissionFormData){
-                console.log("getting submission form data")
+                //console.log("getting submission form data")
                 getDoc(submissionFormRef).then((docSnap)=>{
                     if (docSnap.exists()) {
                     setSubmissionFormData(docSnap.data())
@@ -85,7 +85,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                 })
             }
             if(!cancelRequests){
-                console.log("getting cancel requests")
+                //console.log("getting cancel requests")
 
                 getDocs(cancelRequestsRef).then((querySnapshot) => {
                     let cancelRequestsObj : CancelRequests = {};
@@ -100,7 +100,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                 });
             }
             if(!settingsData){
-                console.log("getting settings data")
+                //console.log("getting settings data")
 
                 getDoc(settingsRef).then((docSnap)=>{
                     if (docSnap.exists()) {   
@@ -121,7 +121,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                 })
             }
             if(!emailData){
-                console.log("getting email data")
+                //console.log("getting email data")
                 getDoc(emailsRef).then((docSnap)=>{
                     if (docSnap.exists()) {   
                     setEmailData(docSnap.data())                
@@ -147,7 +147,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                 })
             }
             if(!IPData){
-                console.log("getting IP data")
+                //console.log("getting IP data")
                 getDoc(IPRef).then(docSnap=>{
                     if (docSnap.exists()) {   
                         setIPData(docSnap.data())                
@@ -159,12 +159,10 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                 })
             }
             if(!accountInformation){
-                console.log("getting account information")
+                //console.log("getting account information")
                 getDoc(accountInformationRef).then(docSnap=>{
                     if (docSnap.exists()) {   
                         setAccountInformation(docSnap.data())   
-                        console.log("exists")
-                        console.log(docSnap.data())  
                         setAccountType(docSnap.data().accountType)           
                     }   
                     else{
@@ -181,16 +179,30 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                                     body: JSON.stringify({
                                     "token": idToken,
                                     })
-                                }).then((response)=>{
-                                    console.log("response status: ")
-                                    console.log(response.status)
-                                    setAccountInformation({
-                                        storageUsed:0,
-                                        totalStorage:5,
-                                        dailyMax:20,
-                                        accountType:"Free"
-                                    })
-                                    setAccountType("Free")
+                                }).then(response=>response.json().then(data => ({ status: response.status, data: data })))
+                                .then(async (response)=>{
+                                    //console.log("response status: ")
+                                    //console.log(response.status)
+                                    //console.log("response data: ")
+                                    //console.log(response.data)
+                                    if(response.data.accountType=="Free"){
+                                        setAccountInformation({
+                                            storageUsed:0,
+                                            totalStorage:5,
+                                            dailyMax:20,
+                                            accountType:"Free"
+                                        })
+                                        setAccountType("Free")
+                                    }
+                                    else if(response.data.accountType=="Guest"){
+                                        setAccountInformation({
+                                            storageUsed:0,
+                                            totalStorage:5,
+                                            dailyMax:20,
+                                            accountType:"Guest"
+                                        })
+                                        setAccountType("Guest")
+                                    }
                                 }).catch((error)=>{
                                     console.log("error: ")
                                     console.log(error)
@@ -201,7 +213,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                 })
             }
             if(!emailCount){
-                console.log("getting email counts")
+                //console.log("getting email counts")
                 getDoc(emailCountRef).then(docSnap=>{
                     if (docSnap.exists()) {   
                         setEmailCount(docSnap.data())                
@@ -221,8 +233,8 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                                         "token": idToken,
                                     })
                                 }).then((response)=>{
-                                    console.log("response status: ")
-                                    console.log(response.status)
+                                    //console.log("response status: ")
+                                    //console.log(response.status)
                                     setEmailCount({
                                         dailyTotal:0,
                                         total:0,
@@ -258,11 +270,22 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
         setEmailCount(null)
         setCancelRequests(null)
     }
+    const resetAllData = () =>{
+        setSubmissionData
+        setSubmissionFormData
+        setCancelRequests
+        setSettingsData
+        setEmailData
+        setIPData
+        setAccountInformation
+        setAccountType
+        setEmailCount
+    }
     if(currentUser.email){
         console.log("rendering dashboard")
         if(!submissionData||!submissionFormData||!settingsData||!emailData||!IPData||!accountInformation||!emailCount){
             return(
-                <firebaseContext.Provider value = {{submissionData, submissionFormData, settingsData, emailData, cancelRequests, IPData, accountInformation, emailCount, setSubmissionData, setSubmissionFormData, setSettingsData, setEmailData, setCancelRequests, setIPData, resetData, resetStatisticsData}}>
+                <firebaseContext.Provider value = {{submissionData, submissionFormData, settingsData, emailData, cancelRequests, IPData, accountInformation, emailCount, setSubmissionData, setSubmissionFormData, setSettingsData, setEmailData, setCancelRequests, setIPData, resetData, resetStatisticsData, resetAllData}}>
                     <div className="dashboard"> 
                         <Header/>
                         <div className='workspace'>
@@ -276,7 +299,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
         }
         else{
             return(
-                <firebaseContext.Provider value = {{submissionData, submissionFormData, settingsData, emailData, cancelRequests, IPData, accountInformation, emailCount, setSubmissionData, setSubmissionFormData, setSettingsData, setEmailData, setCancelRequests, setIPData, resetData, resetStatisticsData}}>
+                <firebaseContext.Provider value = {{submissionData, submissionFormData, settingsData, emailData, cancelRequests, IPData, accountInformation, emailCount, setSubmissionData, setSubmissionFormData, setSettingsData, setEmailData, setCancelRequests, setIPData, resetData, resetStatisticsData, resetAllData}}>
                     <div className="dashboard"> 
                         <Header/> 
                         <div className='workspace'>
