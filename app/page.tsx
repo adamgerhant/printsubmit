@@ -38,6 +38,7 @@ export default function Page() {
 
           <div className="flex flex-row mt-32">
             <div className="flex flex-col w-[490px] mt-5">
+              preview deployment
               <h1 className="text-6xl font-semibold mb-8">3D print file submission and managment</h1>
               <p className="text-xl font-light"> Create a customizable submission form, manage responses, and send automated emails.</p>
               <a href="/submissions?continue=guest" className="w-[200px] font-semibold text-center py-3 mt-10 bg-blue-600 text-white text-xl rounded-md cursor-pointer">Go to Dashboard</a>
