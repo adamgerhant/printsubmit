@@ -40,7 +40,7 @@ const Register = () => {
       try {
         //Create user
         const res = await createUserWithEmailAndPassword(auth, email, password)
-        //router.push("/submissions")
+        router.push("/submissions")
       } 
       catch (err:any) {
         setErr(true);
