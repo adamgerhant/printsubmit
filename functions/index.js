@@ -14,8 +14,8 @@ const { Storage } = require('@google-cloud/storage');
 const { onObjectFinalized, onObjectDeleted } = require('firebase-functions/v2/storage');
 const { firebase } = require('googleapis/build/src/apis/firebase');
 
-//site key: 6LfYj58nAAAAAL3VRFce6SrIHCn2nxFxeEzA63zn
-  //secretkey: 6LfYj58nAAAAANOQsutWLUN7d_dXhUHgznMoLRJJ
+//site key: 6LdJ_r0nAAAAAKTDnNzHjdEe-QV4Cp05KPcGAQtC
+//secretkey: 6LdJ_r0nAAAAAFkTWsuuqcXoa1QPJ9KR0Fg-7yNg
 admin.initializeApp();
 const oauth2Client = new google.auth.OAuth2(
   "240473695577-nh51lv5t4tda6n8nvirfmhir1agijhl3.apps.googleusercontent.com",
@@ -416,7 +416,7 @@ app.post('/sendContactEmail', async (request, response)=>{
   if(!recaptchaToken){
     return response.status(400).send({message: "recaptcha required"})
   }
-  const secretKey = '6LfYj58nAAAAANOQsutWLUN7d_dXhUHgznMoLRJJ'; // Replace with your actual reCAPTCHA secret key
+  const secretKey = '6LdJ_r0nAAAAAFkTWsuuqcXoa1QPJ9KR0Fg-7yNg'; // Replace with your actual reCAPTCHA secret key
   const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
   const verificationResponse = await fetch(verificationUrl, {
     method: 'POST'
@@ -517,7 +517,7 @@ app.post('/uploadURL', async (request, response)=>{
       });
     }
     if(recaptchaToken&&accountInformation.accountType=="Premium"){
-      const secretKey = '6LfYj58nAAAAANOQsutWLUN7d_dXhUHgznMoLRJJ'; // Replace with your actual reCAPTCHA secret key
+      const secretKey = '6LdJ_r0nAAAAAFkTWsuuqcXoa1QPJ9KR0Fg-7yNg'; // Replace with your actual reCAPTCHA secret key
       const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
       const verificationResponse = await fetch(verificationUrl, {
         method: 'POST'

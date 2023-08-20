@@ -134,7 +134,7 @@ export default function Page() {
                         </div>
                         <div className="mt-5">
                             <ReCAPTCHA
-                            sitekey="6LfYj58nAAAAAL3VRFce6SrIHCn2nxFxeEzA63zn"
+                            sitekey="6LdJ_r0nAAAAAKTDnNzHjdEe-QV4Cp05KPcGAQtC"
                             onChange={(token : any)=>{setToken(token); setButtonStatus("Send message")}}
                             />
                         </div>
