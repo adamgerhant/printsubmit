@@ -623,7 +623,7 @@ const SubmissionForm = ({id, submissionFormData, accountInformation}) => {
                     <p className='successText'>Submission Complete</p>
                     <p className='confirmationText'>Your file and form information have been successfully submitted</p>
                     <p className='linkText'> Use the form at the following URL to cancel your submission </p>
-                    <Link className="link" href={"/public/"+id+"/"+cancelID}target="_blank" rel="noopener noreferrer">{"localhost:3000/public/"+id+"/"+cancelID}</Link>
+                    <Link className="link" href={"/public/"+id+"/"+cancelID}target="_blank" rel="noopener noreferrer">{"www.printsubmit.com/public/"+id+"/"+cancelID}</Link>
                 </div>
             </div>
         )

@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Print Submit',
-  description: 'Collect and manage 3D print submissions with a customizeable submission form and emails',
+  description: 'Collect and manage 3D print submissions with a customizeable submission form and automated emails',
 }
 
 export default function RootLayout({
