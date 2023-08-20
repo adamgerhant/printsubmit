@@ -22,7 +22,7 @@ const oauth2Client = new google.auth.OAuth2(
   "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",
   "https://us-central1-print-submit.cloudfunctions.net/api/oAuthCallback"
 );
-app.use(cors({origin: ["http://localhost:3000",'https://printsubmit-git-preview-adamgerhant.vercel.app']}));
+app.use(cors({origin: ["http://localhost:3000",'https://printsubmit-git-preview-adamgerhant.vercel.app', 'https://www.printsubmit.com']}));
 
 app.post('/initializeAccountFile',  (request, response)=>{
   console.log("initalizingAccountFile")
@@ -326,7 +326,7 @@ const sendEmail = (uid, status, recipient, name, errorMessage, cancelID) =>{
                   text = text.replace("[errorMessage]", errorMessage)
                 }
                 for(var i=0; i<50&&text.indexOf("[cancelLink]")>=0; i++){
-                  text = text.replace("[cancelLink]", "http://localhost:3000/public/"+uid+"/"+cancelID)
+                  text = text.replace("[cancelLink]", "http://www.printsubmit.com/public/"+uid+"/"+cancelID)
                 }
                 const mailOptions = {
                   from: email,

@@ -26,7 +26,7 @@ const SubmissionFormPage = () =>{
                     
                 <div className='linkDiv'>
                     <p className="linkText">Public submission form URL:</p>
-                <Link className="link"href={"/public/"+currentUser.uid} target="_blank" rel="noopener noreferrer" >{"future_domain_name/public/"+currentUser.uid}</Link>
+                    <Link className="link" href={"/public/"+currentUser.uid} target="_blank" rel="noopener noreferrer" >{"www.printsubmit.com/public/"+currentUser.uid}</Link>
                 </div>
             </div>
         
