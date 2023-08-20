@@ -345,7 +345,7 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
                         <div className="flex flex-row mt-0 relative">
                             <Tooltip id="tooltip" />
                             {accountInformation.accountType!="Premium"&&<>
-                                <BiSolidLock className="absolute left-[10px] top-[1px] text-red-600 h-[20px] w-[20px] " />
+                                <BiSolidLock className="absolute left-[7px] top-[2px] text-red-600 h-[20px] w-[20px] " />
                                 <div className="absolute left-[5px] top-[-3px] rounded bg-gray-500/[0.2] w-[465px] h-[33px] cursor-pointer" data-tooltip-id="tooltip" data-tooltip-content="Premium feature" place="top" effect="solid"></div>
                             </>}
                             <label className = "maxSizeText">Maximum dimensions</label>
@@ -382,7 +382,7 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
                         <div className="flex flex-row mt-2 relative" >
                             <Tooltip id="tooltip" />
                             {accountInformation.accountType!="Premium"&&<>
-                            <BiSolidLock className="absolute left-[28px] top-[1px] text-red-600 h-[20px] w-[20px] " />
+                            <BiSolidLock className="absolute left-[23px] top-[2px] text-red-600 h-[20px] w-[20px] " />
                             <div className="absolute left-[20px] rounded bg-gray-500/[0.2] w-[230px] h-[24px] cursor-pointer" data-tooltip-id="tooltip" data-tooltip-content="Premium feature" place="top" effect="solid"></div>
                             </>}
                             <label className = "maxSizeText">Enable reCAPTCHA</label>
