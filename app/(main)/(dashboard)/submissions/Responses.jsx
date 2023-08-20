@@ -730,7 +730,7 @@ const AllActions = ({url, allData, status, setData, rowIndex, index, headerWidth
     </div>
     }
     {displayDeleteFile&&
-    <div ref={expandDeleteRef} className="deleteFileDiv" style={{left:headerWidths[0]+headerWidths[1]+actionWidths[0]+actionWidths[1]+actionWidths[2]+actionWidths[3]-45}}>
+    <div ref={expandDeleteRef} className="deleteFileDiv" style={{left:headerWidths[0]+headerWidths[1]+actionWidths[0]+actionWidths[1]+actionWidths[2]+actionWidths[3]-50}}>
         <span className="deleteFileButton" onClick={()=>{deleteFile()}}>Delete file only</span>
     </div>
     }

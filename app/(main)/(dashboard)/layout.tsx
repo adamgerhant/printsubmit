@@ -107,9 +107,9 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                         setSettingsData(docSnap.data())                
                     } else {
                         const settingsData={
-                            headerWidths:[500, 700],
-                            informationWidths: [125, 70, 95, 125, 90, 70, 120, 5],
-                            actionWidths: [85, 80, 95,90, 70],     
+                            headerWidths:[500, 690],
+                            informationWidths: [125, 65, 95, 125, 90, 70, 115, 5],
+                            actionWidths: [95, 80, 95,90, 70],     
                             seperateResponses:false,
                             showDeleted:false                                                                                                                                                                                                                                                                                                                                                                    
                         }

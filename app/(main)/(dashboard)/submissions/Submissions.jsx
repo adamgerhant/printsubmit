@@ -701,16 +701,16 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
 
         });   
         setQuestionWidths(resetWidthData)
-        setHeaderWidths([500, 700])
-        setInformationWidths([125, 70, 95, 125, 90, 70, 120, 5])
-        setActionWidths([85, 80, 95,90, 70])
+        setHeaderWidths([500, 690])
+        setInformationWidths([125, 65, 95, 125, 90, 70, 115, 5])
+        setActionWidths([95, 80, 95,90, 70])
 
         console.log("updating doc")
 
         updateDoc(doc(db, "users", currentUser.uid, "data", "settings"), {
-            headerWidths:[500, 700],
-            informationWidths: [125, 70, 95, 125, 90, 70, 120, 5],
-            actionWidths: [85, 80, 95,90, 70]
+            headerWidths:[500, 690],
+            informationWidths: [125, 65, 95, 125, 90, 70, 115, 5],
+            actionWidths: [95, 80, 95,90, 70]
         });
         updateDoc(doc(db, "users", currentUser.uid, "data", "submissionForm"), {
             questions: resetQuestionData
