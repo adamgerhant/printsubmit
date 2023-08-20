@@ -86,16 +86,15 @@ const CancelSubmission = ({params} : {params: any}) => {
     }
     const onSubmit=()=>{
         const safeReason = reason?reason:""
-        if(Array.isArray(params.slug)){
-            const userID = params.slug[0];
-            const cancelID = params.slug[1];
-            updateDoc(doc(db, "users", userID, "data", "submissionData", "cancelRequests", cancelID), {
-                cancelled:true,
-                reason:safeReason
-            }).then(()=>{
-                setSubmitted(true)
-            })
-        }
+        const userID = params.userID;
+        const cancelID = params.cancelID;
+        updateDoc(doc(db, "users", userID, "data", "submissionData", "cancelRequests", cancelID), {
+            cancelled:true,
+            reason:safeReason
+        }).then(()=>{
+            setSubmitted(true)
+        })
+        
     }
     if(!cancelData){return(<></>)};
     if(!submitted&&!cancelData.cancelled){
