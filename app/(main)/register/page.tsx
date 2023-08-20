@@ -22,6 +22,7 @@ const Register = () => {
 
   const provider = new GoogleAuthProvider();
   const signInWithGoogle = () => {router.push("/submissions");signInWithRedirect(auth, provider)}
+ 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();

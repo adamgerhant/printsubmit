@@ -11,6 +11,7 @@ const CancelSubmission = ({params} : {params: {slug:string[]}}) => {
     const [reason, setReason] = useState("");
     const [submitted, setSubmitted] = useState(false);
     const myRef = useRef(true);
+    console.log("rendering cancel submisison")
     useEffect(()=>{
         if(Array.isArray(params.slug)){
             const userID = params.slug[0];

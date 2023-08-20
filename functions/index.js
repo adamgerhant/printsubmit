@@ -215,11 +215,11 @@ app.get('/oAuthCallback', async (req, response) => {
         const firestore = admin.firestore();
         await firestore.doc("users/"+userID+"/data/emailData").set({ email, refresh_token }, { merge: true });
         
-        var redirectUrl = new URL("http://localhost:3000/authorizeEmail?email="+email+"&success=true");
+        var redirectUrl = new URL("http://www.printsubmit.com/authorizeEmail?email="+email+"&success=true");
         response.redirect(redirectUrl);
       }
       else{
-        var redirectUrl = new URL("http://localhost:3000/authorizeEmail?email="+email+"&success=false");
+        var redirectUrl = new URL("http://www.printsubmit.com/authorizeEmail?email="+email+"&success=false");
         response.redirect(redirectUrl);
       }
       
