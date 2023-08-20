@@ -92,7 +92,7 @@ const Emails = ({emailData, setEmailData, googleoauth, revoke}) => {
             <div className="variableDiv">
               <div className="variableRow">
                 <div className="variableTextDiv">[name]</div>
-                <div className="variableInformationDiv">This variable will be replaced by the input field set to the name variable. If no variable is set to name, it will be blank.</div>
+                <div className="variableInformationDiv">This variable will be replaced by the response to the question set to the name variable</div>
               </div>
               <div className="variableRow">
                 <div className="variableTextDiv">[errorMessage]</div>
