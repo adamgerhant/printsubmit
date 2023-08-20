@@ -5,37 +5,35 @@ import { getStorage, ref, getDownloadURL  } from 'firebase/storage';
 import { StlViewer } from 'react-stl-viewer';
 import { db } from '@/app/firebase';
 
-const CancelSubmission = ({params} : {params: {slug:string[]}}) => {
+const CancelSubmission = ({params} : {params: any}) => {
     const [cancelData, setCancelData] = useState<DocumentData|null>(null);
     const [url, setUrl] = useState("");
     const [reason, setReason] = useState("");
     const [submitted, setSubmitted] = useState(false);
     const myRef = useRef(true);
     console.log("rendering cancel submisison")
+    console.log(params);
     useEffect(()=>{
-        if(Array.isArray(params.slug)){
-            const userID = params.slug[0];
-            const cancelID = params.slug[1];
-            const cancelDataRef = doc(db,"users",userID,"data","submissionData","cancelRequests",cancelID);
-            if(!cancelData){
-                console.log("getting cancel data")
-                getDoc(cancelDataRef).then((docSnap)=>{
-                    if(docSnap.exists()){
-                        setCancelData(docSnap.data());
-                        const storage = getStorage();
-                        const pathReference = ref(storage, "users/"+userID+"/"+docSnap.data().fileID+"/"+docSnap.data().fileName);
-                        console.log("getting download url")
-                        getDownloadURL(pathReference).then((fileUrl)=>{
-                            setUrl(fileUrl);
-                        })
-                    }
-                    else{
-                        console.log("doc not found")
-                    }
-                })
-            }
-            
-        }
+        const userID = params.userID;
+        const cancelID = params.cancelID;
+        const cancelDataRef = doc(db,"users",userID,"data","submissionData","cancelRequests",cancelID);
+        if(!cancelData){
+            console.log("getting cancel data")
+            getDoc(cancelDataRef).then((docSnap)=>{
+                if(docSnap.exists()){
+                    setCancelData(docSnap.data());
+                    const storage = getStorage();
+                    const pathReference = ref(storage, "users/"+userID+"/"+docSnap.data().fileID+"/"+docSnap.data().fileName);
+                    console.log("getting download url")
+                    getDownloadURL(pathReference).then((fileUrl)=>{
+                        setUrl(fileUrl);
+                    })
+                }
+                else{
+                    console.log("doc not found")
+                }
+            })
+        }      
     },[])
 
     const style = {
