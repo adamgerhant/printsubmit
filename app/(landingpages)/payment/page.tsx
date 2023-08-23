@@ -12,10 +12,8 @@ import Link from "next/link";
 import { createCheckoutSession } from "@/stripe/createCheckoutSession";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 
-export const AuthContext = createContext<UserContext|null>(null);
-export const useAuthContext = () => useContext(AuthContext);
 
-const payment = ()=>{
+const Payment = ()=>{
     const [currentUser, setCurrentUser] = useState<User>({uid:"", email:""});
 
     useEffect(() => {
@@ -239,4 +237,4 @@ const payment = ()=>{
     }
 }
 
-export default payment
+export default Payment
