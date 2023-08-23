@@ -1,13 +1,13 @@
 'use client'
 import React, { useContext, useState } from 'react'
-import {signOut} from "firebase/auth"
+import {getAuth, signOut} from "firebase/auth"
 import { useAuthContext } from '../layout';
 import { UserContext } from '@/@types/user';
 import { useRouter } from 'next/navigation';
 import auth from '@/app/firebase';
 
 
-const Profile = ({resetData,  accountInformation, setConfirmDeleteAccount}:any, ) => {
+const Profile = ({resetData,  accountInformation, setConfirmDeleteAccount, setConfirmCancelSubscription}:any, ) => {
   const {currentUser} = useAuthContext() as UserContext;
   const router = useRouter();
 
@@ -43,6 +43,12 @@ const Profile = ({resetData,  accountInformation, setConfirmDeleteAccount}:any, 
           <a href="pricing" target="_blank">
             <button className="upgradeButton">Upgrade to Premium</button>
           </a>
+        }
+        {accountInformation&&accountInformation.accountType=="Premium"&&
+          <div className="py-1 px-2 mb-4 text-md text-center border border-[#ee0000] text-[#ee0000] rounded cursor-pointer hover:bg-[#ee0000] hover:text-white transition" 
+          onClick={()=>setConfirmCancelSubscription(true)}>
+            Cancel subscription
+          </div>
         }
         <hr/>
         <div className='flex flex-row justify-between'>

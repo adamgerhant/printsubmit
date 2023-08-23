@@ -205,10 +205,10 @@ export default function Page() {
                             </div>
                             
                         </div>
-                        <div className="mx-2 mt-6 px-4 py-2 w-[290px] border-[1px] border-violet-700 bg-violet-700 rounded flex flex-row justify-between cursor-pointer hover:bg-white text-white hover:text-violet-700 ease-out duration-200 shadow-[0_0_10px_#6d28d9]">
-                            <p className="text-[15px] font-semibold">Temporarily Unavailable</p>
+                        <a  href="/payment" className="mx-2 mt-6 px-4 py-2 w-[290px] border-[1px] border-violet-700 bg-violet-700 rounded flex flex-row justify-between cursor-pointer hover:bg-white text-white hover:text-violet-700 ease-out duration-200 shadow-[0_0_10px_#6d28d9]">
+                            <p className="text-[15px] font-semibold">Buy now</p>
                             <BsArrowRight className="h-full w-[22px]"/>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>

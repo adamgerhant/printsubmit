@@ -27,7 +27,6 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
     const [emailCount, setEmailCount] = useState<DocumentData|null>(null);
     const router = useRouter();
     const user = currentUser;
-
     useEffect(()=>{
         
         if(user.email&&user.uid){
@@ -41,7 +40,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
             const emailCountRef = doc(db, "users",  user.uid, "data", "emailCount")
             
             if(!submissionData){
-                //console.log("getting submission data")
+                console.log("getting submission data")
 
                 getDoc(submissionDataRef).then((docSnap)=>{
                     if (docSnap.exists()) {
@@ -56,7 +55,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                 }).catch((err)=>{console.log("error getting doc" + err)})
             }
             if(!submissionFormData){
-                //console.log("getting submission form data")
+                console.log("getting submission form data")
                 getDoc(submissionFormRef).then((docSnap)=>{
                     if (docSnap.exists()) {
                     setSubmissionFormData(docSnap.data())

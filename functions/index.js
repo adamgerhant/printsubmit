@@ -12,8 +12,7 @@ const FieldValue = require('firebase-admin').firestore.FieldValue;
 const {onSchedule} = require("firebase-functions/v2/scheduler");
 const { Storage } = require('@google-cloud/storage');
 const { onObjectFinalized, onObjectDeleted } = require('firebase-functions/v2/storage');
-const { firebase } = require('googleapis/build/src/apis/firebase');
-
+const {onDocumentWritten} = require('firebase-functions/v2/firestore')
 //site key: 6LdJ_r0nAAAAAKTDnNzHjdEe-QV4Cp05KPcGAQtC
 //secretkey: 6LdJ_r0nAAAAAFkTWsuuqcXoa1QPJ9KR0Fg-7yNg
 admin.initializeApp();
@@ -56,7 +55,7 @@ app.post('/initializeAccountFile',  (request, response)=>{
             })
           }
 
-          transaction.set(db.doc("users/"+uid),{created:"true"})
+          transaction.set(db.doc("users/"+uid),{created:"true"}, {merge: true})
         }
         if(decodedToken.firebase.sign_in_provider!="anonymous"){
           response.status(200).send({accountType:"Free"})
@@ -489,7 +488,6 @@ app.post('/storageUsed', async(request,response)=>{
     response.status(200).send({})
   })
 })
-
 app.post('/uploadURL', async (request, response)=>{
     
   if(request.body.password){
@@ -584,7 +582,6 @@ app.post('/uploadURL', async (request, response)=>{
         projectId: "print-submit",
         keyFilename:"serviceAccountKey.json"
       });
-      console.log("test")
       const bucket = storage.bucket(bucketName);
       let storageUsed = accountInformation.storageUsed
       while(storageUsed + request.body.fileSize +
@@ -686,6 +683,28 @@ app.post('/uploadURL', async (request, response)=>{
     console.log(err)
     response.status(500).send()
   }
+})
+app.post('/cancelSubscription', async (request, response)=>{
+  token = request.body.token;
+  admin.auth().verifyIdToken(token).then(async (decodedToken) => {
+    const uid = decodedToken.uid;
+    db = admin.firestore()
+    const subscriptionsRef = db.collection("users/"+uid+"/subscriptions")
+    try{
+      const snap = await subscriptionsRef.get();
+      console.log("got subscriptions ref")
+      const stripe = require('stripe')("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")
+      snap.forEach(async doc => {
+        const subscriptionID = doc.id
+        await stripe.subscriptions.cancel(subscriptionID);    
+        console.log("cancelled "+ subscriptionID) 
+      })
+      return response.status(200).send()
+    } catch(err) {
+      console.log(err)
+      return response.status(400).send();
+    }
+  })
 })
 exports.api = functions.https.onRequest(app);
 
@@ -861,6 +880,52 @@ exports.formSubmit = onObjectFinalized({cpu: 2}, async (event) => {
     }
   }
 });
+
+exports.stripeWebhook = functions.https.onRequest((req, res)=>{
+  const payload = req.body;
+  console.log(payload);
+  res.status(200).send();
+})
+
+exports.premiumStatus = onDocumentWritten("users/{userID}/subscriptions/{subscriptionID}", event=>{
+  const snapshot = event.data;
+    if (!snapshot) {
+        console.log("No data associated with the event");
+        return;
+    }
+    const data = snapshot.after.data();
+    const status = data.status;
+    console.log("status: "+status)
+    const uid = event.params.userID;
+    const db = admin.firestore();
+    const accountInformationDocRef = db.doc("users/"+uid+"/data/accountInformation")
+    if(status=="active"){
+      console.log("geting account information")
+      accountInformationDocRef.get().then((docSnap)=>{
+        console.log("got account information")
+        if(docSnap.exists){
+          console.log("updating account information")
+          accountInformationDocRef.update({accountType:"Premium", totalStorage:10, dailyMax:25})
+        }
+        else{
+          console.log("setting account information")
+          accountInformationDocRef.set({accountType:"Premium", totalStorage:10, dailyMax:25, storageUsed:0})
+        }
+      })
+    }
+    else{
+      accountInformationDocRef.get().then((docSnap)=>{
+        if(docSnap.exists){
+          console.log("updating account information")
+          accountInformationDocRef.update({accountType:"Free", totalStorage:1, dailyMax:5})
+        }
+        else{
+          console.log("setting account information")
+          accountInformationDocRef.set({accountType:"Free", totalStorage:1, dailyMax:5, storageUsed:0})
+        }
+      })
+    }
+})
 /*
 exports.initializeFolder = functions.auth.user().onCreate((user) => {
   console.log(user.uid)
