@@ -37,7 +37,7 @@ export default function Page() {
 
                 <div className="border w-[850px] mt-14 px-10 py-4 self-center shadow">
                     <div className="flex flex-row mb-2 items-center">
-                        <img className="h-[75px] w-[75px] rounded-full" src={portrait.src}/>
+                        <img className="h-[60px] w-[60px] rounded-full" src={portrait.src}/>
                         <div className="flex flex-col ml-4 justify-end">
                             <p className="text-lg font-bold text-gray-700">Developer</p>
                             <p className="text-2xl">Adam Gerhant</p>
