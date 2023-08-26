@@ -9,7 +9,6 @@ const EmailPage = () =>{
     const [loading, setLoading] = useState(false);
     if(emailData&&submissionFormData){
       const auth = getAuth();
-
       const googleoauth = () => {
         if(auth.currentUser){
           auth.currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {

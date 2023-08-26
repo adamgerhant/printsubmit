@@ -3,16 +3,15 @@ import React, { useEffect, useState } from "react"
 import { useSearchParams } from 'next/navigation'
 import { User } from "@/@types/user";
 import { onAuthStateChanged } from "firebase/auth";
-import auth, { db } from "../firebase";
+import auth from "../firebase";
 import { useRouter } from "next/navigation";
-
 
 const AuthorizeEmail = () => {
     const [currentUser, setCurrentUser] = useState<User>({uid:"", email:""});
     const router = useRouter();
 
     useEffect(() => {
-       onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, (user) => {
             console.log("setting current user")
             const currentUserObj: User = {uid:"", email:""};
             if(user?.uid){
@@ -34,34 +33,33 @@ const AuthorizeEmail = () => {
     }, []);
     const googleoauth = () => {
         if(auth.currentUser){
-          auth.currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
-            fetch('http://localhost:5001/dprintsubmissionapp/us-central1/api/googleLogin', {
-              method: "POST",
-              headers: {
-                'Content-type': 'application/json'
-              },
-              body: JSON.stringify({"token": idToken})
-            })
-            .then((response) => response.json())
-            .then((result) => {
-              console.log(result)
-              window.open(result.url, "_self")
-            })
-          }).catch(function(error) {
-            console.log("couldnt get user token")
-          });
+            auth.currentUser.getIdToken(true).then(function(idToken) {
+                fetch('https://us-central1-oauth-test.cloudfunctions.net/api/googleLogin', {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({"token": idToken})
+                }).then((response) => response.json())
+                .then((result) => {
+                window.open(result.url, "_self")
+                }).catch(function(error) {
+                console.log("failed to fetch "+error)
+                });
+            }).catch(function(error) {
+                console.log("couldnt get user token "+error)
+            });
         }
-      }
+    }
 
     const searchParams = useSearchParams()
     const email = searchParams.get('email')
     const success = searchParams.get('success')
-    console.log(success)
     if(currentUser.email&&email){
         return(
             <div className="h-full flex flex-column justify-center">
                 <div className="rounded p-6 mt-10">
-                    <p className="text-3xl mb-4">Authorization {success?"complete":"failed"}</p>
+                    <p className="text-3xl mb-4">Authorization {success=="true"?"complete":"incomplete"}</p>
                     {success=="true"&&
                     <p className="text-lg">Your Print Submit account
                         <b> {currentUser.email} </b> 

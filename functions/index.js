@@ -186,6 +186,7 @@ app.get('/oAuthCallback', async (req, response) => {
     console.log("running oauthcallback")
   
     let q = url.parse(req.url, true).query;
+    console.log("oauth request URL: "+req.url);
     if (q.error) { // An error response e.g. error=access_denied
       console.log('Error:' + q.error);
     } else { // Get access and refresh tokens (if access_type is offline)
@@ -209,9 +210,10 @@ app.get('/oAuthCallback', async (req, response) => {
       console.log("token info: ")
       console.log(res.data);
       console.log(res.data.scope.includes("send"));
-      if(true){//if(res.data.scope.includes("send")){
+      if(res.data.scope.includes("https://mail.google.com")){//if(res.data.scope.includes("send")){ //https://mail.google.com/
         // Store the refresh token in the Firestore database.
         const firestore = admin.firestore();
+        
         await firestore.doc("users/"+userID+"/data/emailData").set({ email, refresh_token }, { merge: true });
         
         var redirectUrl = new URL("http://www.printsubmit.com/authorizeEmail?email="+email+"&success=true");
@@ -223,7 +225,7 @@ app.get('/oAuthCallback', async (req, response) => {
       }
       
     }
-  });
+});
 
 app.post('/revoke',async (request, response) => {
   console.log("running revoke function")

@@ -95,7 +95,7 @@ export default function Page() {
             </div>
             <div className="flex flex-col ml-8 w-[500px]">
               <p className="text-4xl font-semibold mb-4 mt-2">Customize emails</p>
-              <p className="text-xl text-gray-600 mb-6">Use the email editor to select triggers to automatically send emails, customize subjust and body, and use variables for information from the submission.</p>
+              <p className="text-xl text-gray-600 mb-6">Use the email editor to select triggers to automatically send emails, customize subject and body, and use variables for information from the submission.</p>
               <hr/>
               <span className="rounded py-1 bg-blue-100 mt-6 w-28 text-center">
                 <p className="text-blue-600 font-bold">Features</p>
