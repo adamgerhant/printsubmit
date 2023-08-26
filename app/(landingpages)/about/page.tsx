@@ -4,6 +4,8 @@ import serverSubmission from "@/public/mediumServerSide.png"//from "@/public/ser
 import oauthProccess from "@/public/OAuthProcess.png"
 import medium from "@/public/medium.png"
 import words from "@/public/words.png"
+import medium2 from "@/public/medium2.png"
+import words2 from "@/public/words2.png"
 import portrait from "@/public/portrait2.jpg"
 export default function Page() {
 
@@ -79,9 +81,9 @@ export default function Page() {
 
                     <p className="text-3xl mt-40 font-semibold">Secure storage for Gmail access credentials</p>
                     <hr className="w-[900px] self-center"/>
-                    <p className="text-gray-800 mt-2 text-lg"> Since the email account which is authorized to send emails isnt necessarily your account, the credentials must be kept seperately.
-                    In order to securly store the credentials, they are stored in a database document which cannot be written to, and can only be read by the authenticated user.
-                    However, this means that the only way to store them is to use a server side Cloud Function.
+                    <p className="text-gray-800 mt-2 text-lg"> Since the email account which is authorized to send emails i&apos;snt necessarily the account used to register with Print Submit, the credentials must be kept seperately.
+                    In order to store the credentials, they are stored in a secure database document which cannot be written to or read from by the client, which allows for maxium security.
+                    This means that the only way to store them is to use a server side Cloud Function.
                     </p>
 
                     <img className="w-[750px] self-center mt-8"src={oauthProccess.src}/>
@@ -93,11 +95,11 @@ export default function Page() {
                     <div className="self-center w-[630px] mt-8">
                         <p className="self-center text-left">Read the full article for a more detailed explanation</p>
                     </div>
-                    <a href="https://medium.com/@adamgerhant/server-side-upload-process-to-cloud-storage-and-firestore-with-cloud-functions-c748384eee91" 
+                    <a href="https://medium.com/@adamgerhant/generating-and-storing-oauth-2-0-access-tokens-with-firebase-7b8a2e285578" 
                         target="_blank"
                         className="p-4 border self-center hover:shadow-lg transition mt-2 relative">
-                        <img className="w-[600px] z-1 self-center cursor-pointer"src={medium.src}/>
-                        <img className="z-2 absolute bottom-[28px] left-[148px] w-[60px]"src={words.src}/>
+                        <img className="w-[600px] z-1 self-center cursor-pointer"src={medium2.src}/>
+                        <img className="z-2 absolute bottom-[23px] left-[135px] h-[17px]"src={words2.src}/>
                     </a>
                 </div>
                 
