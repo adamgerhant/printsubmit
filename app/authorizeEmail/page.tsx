@@ -34,7 +34,7 @@ const AuthorizeEmail = () => {
     const googleoauth = () => {
         if(auth.currentUser){
             auth.currentUser.getIdToken(true).then(function(idToken) {
-                fetch('https://us-central1-oauth-test.cloudfunctions.net/api/googleLogin', {
+                fetch('https://us-central1-print-submit.cloudfunctions.net/api/googleLogin', {
                 method: "POST",
                 headers: {
                     'Content-type': 'application/json'
