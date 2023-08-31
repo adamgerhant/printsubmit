@@ -80,19 +80,15 @@ const SubmitButton = ({setUploadStatus, file, setFile, id, inputData, setSubmitt
     const [submitButton, setSubmitButton]= useState("submit")
     const [fileID, setFileID] = useState()
     
-    console.log("fileID: "+fileID)
     useEffect(() => {
     // Reference to the Firestore document you want to listen to
-    console.log("onsnapshot file id: "+fileID)
     if(fileID){
         const docRef = doc(db, "users", id, "data", "submissionData", "submittedFileIDs", fileID)
         // Subscribe to real-time updates for the document
         const unsubscribe = onSnapshot(docRef,  snapshot => {
         // The callback function triggered when the document is updated
-        console.log("running onsnapshot")
         if (snapshot.exists()) {
             const fileData = snapshot.data();
-            console.log(fileData)
             if(fileData.transferred=="complete"){
                 setSubmitted(true)
                 setCancelID(fileData.cancelID)
@@ -186,7 +182,6 @@ const SubmitButton = ({setUploadStatus, file, setFile, id, inputData, setSubmitt
 
 
             let imageData = imageURL.split(',')[1];
-            console.log(imageData)
             inputData.imageUpload = true;
             if(!imageData){
                 imageData="0"
@@ -292,9 +287,7 @@ const IncompleteForm = ({display})=>{
     }
 }
 const StlDiv = memo(function StlDiv({file, setConvertedDimensions, setStlError}){
-    console.log("rendered")
     let fileURL = ""
-    console.log(file)
     if(file!="none"){
         fileURL = window.URL.createObjectURL(file);
     }
@@ -318,8 +311,7 @@ const StlDiv = memo(function StlDiv({file, setConvertedDimensions, setStlError})
 })
 
 const SubmissionForm = ({id, submissionFormData, accountInformation}) => {
-    console.log("submisison form data: ")
-    console.log(submissionFormData)
+
     const[submitted,setSubmitted] = useState(false);
     const[highlightIDs, setHighlightIDs] = useState([]);
     const[file, setFile] = useState("");

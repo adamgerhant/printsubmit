@@ -6,7 +6,7 @@ import emails from "../public/emails.png"
 import analytics from "../public/analytics.png"
 import logo from "../public/Logo.svg"
 import IPManager from "../public/IPManager2.png"
-
+import domain from "../public/domain.png"
 export default function Page() {
 
   return (
@@ -84,8 +84,9 @@ export default function Page() {
                 </ul>
               </div>
             </div>
-            <div>            
+            <div className="relative">            
               <img src={submissionForm.src} className="shadow-xl self-end ml-[40px] w-[900px]"/>
+              <img src={domain.src} className="absolute left-[92px] bottom-[15px] w-[270px]"/>
             </div>
           </div>
           
