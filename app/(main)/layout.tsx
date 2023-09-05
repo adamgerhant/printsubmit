@@ -30,9 +30,9 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
             const currentUserObj: User = {uid:"", email:""};
             if(user?.uid){
                 console.log("logged in")
-                if(!redirect){
-                    router.push("/submissions")
-                }
+               
+                router.push("/submissions")
+                
                 currentUserObj.uid = user.uid;
                 if(user.email){
                     currentUserObj.email = user.email;
