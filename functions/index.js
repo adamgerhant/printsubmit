@@ -28,6 +28,14 @@ app.post('/initializeAccountFile',  (request, response)=>{
   admin.auth().verifyIdToken(request.body.token)
   .then(async (decodedToken) => {
     const uid = decodedToken.uid;
+    let email = "Guest"
+    if(decodedToken.hasOwnProperty("email")){
+      email = decodedToken.email
+    }
+    
+    console.log(email)
+
+    const date = new Date();
     const db = admin.firestore();
     console.log("provider: "+decodedToken.firebase.sign_in_provider)
     const accountInformationDocRef = db.doc("users/"+uid+"/data/accountInformation")
@@ -55,7 +63,7 @@ app.post('/initializeAccountFile',  (request, response)=>{
             })
           }
 
-          transaction.set(db.doc("users/"+uid),{created:"true"}, {merge: true})
+          transaction.set(db.doc("users/"+uid),{created:"true", email:email, date:date.toISOString()}, {merge: true})
         }
         if(decodedToken.firebase.sign_in_provider!="anonymous"){
           response.status(200).send({accountType:"Free"})
