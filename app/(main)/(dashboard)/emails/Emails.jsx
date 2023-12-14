@@ -18,6 +18,7 @@ const Emails = ({emailData, setEmailData, googleoauth, revoke}) => {
     setDoc(doc(db, "users", currentUser.uid, "data", "emailData"), emailData);
   }
   
+
   const handleEmailChange=(e, emailDataName)=>{
     if(e.target.tagName=="TEXTAREA"){
       let newEmailData = {...emailData}

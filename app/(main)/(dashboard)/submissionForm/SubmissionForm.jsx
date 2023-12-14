@@ -125,8 +125,7 @@ const SubmitButton = ({setUploadStatus, file, setFile, id, inputData, setSubmitt
 
             if(questionObject.required&&questionObject.display){
                 Object.keys(inputData).forEach(function(key,index) {
-                    // key: the name of the object key
-                    // index: the ordinal position of the key within the object
+                    
                     if(key==questionObject.questionID && inputData[key] !== ""){         
                         hasRequiredField=true
                     }
@@ -314,6 +313,7 @@ const SubmissionForm = ({id, submissionFormData, accountInformation}) => {
 
     const[submitted,setSubmitted] = useState(false);
     const[highlightIDs, setHighlightIDs] = useState([]);
+    console.log(highlightIDs)
     const[file, setFile] = useState("");
     const[progressWidth, setProgressWidth] = useState(0);
     const[cancelID, setCancelID] = useState();

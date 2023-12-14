@@ -23,99 +23,66 @@ const oauth2Client = new google.auth.OAuth2(
 );
 app.use(cors({origin: ["http://localhost:3000",'https://printsubmit-git-preview-adamgerhant.vercel.app', 'https://www.printsubmit.com']}));
 
-app.post('/initializeAccountFile',  (request, response)=>{
-  console.log("initalizingAccountFile")
-  admin.auth().verifyIdToken(request.body.token)
-  .then(async (decodedToken) => {
-    const uid = decodedToken.uid;
-    let email = "Guest"
-    if(decodedToken.hasOwnProperty("email")){
-      email = decodedToken.email
-    }
-    
-    console.log(email)
 
-    const date = new Date();
+exports.initializeAccountInformation = functions.auth.user().onCreate(async (user) => {
+  console.log("on create user")
+  console.log(user)
+
+  try {
     const db = admin.firestore();
-    console.log("provider: "+decodedToken.firebase.sign_in_provider)
-    const accountInformationDocRef = db.doc("users/"+uid+"/data/accountInformation")
-    try {
-      await db.runTransaction(async (transaction) => {
-        
-        const accountInformationDocSnap = await transaction.get(accountInformationDocRef);
-        if (!accountInformationDocSnap.exists) {
-          
-          console.log("setting data")
-          if(decodedToken.firebase.sign_in_provider!="anonymous"){
-            await transaction.set(accountInformationDocRef, {
-              storageUsed:0,
-              totalStorage:1,
-              dailyMax:5,
-              accountType:"Free"
-            })
-          }
-          else{
-            await transaction.set(accountInformationDocRef, {
-              storageUsed:0,
-              totalStorage:0,
-              dailyMax:0,
-              accountType:"Guest"
-            })
-          }
+    await db.runTransaction(async (transaction) => {
+      const isGuestAccount = !user.email //if user does not have email then it is a guest account
+      const email = user.email||"Guest"
+      const uid = user.uid
+      const date = new Date();
+      const accountInformationDocRef = db.doc("users/"+uid+"/data/accountInformation")
+      const accountInformationDocSnap = await transaction.get(accountInformationDocRef);
+      const emailCountDocRef = db.doc("users/"+uid+"/data/emailCount")
+      const emailCountDocSnap = await transaction.get(emailCountDocRef);
 
-          transaction.set(db.doc("users/"+uid),{created:"true", email:email, date:date.toISOString()}, {merge: true})
-        }
-        if(decodedToken.firebase.sign_in_provider!="anonymous"){
-          response.status(200).send({accountType:"Free"})
+      if (!accountInformationDocSnap.exists) {
+        if(isGuestAccount){
+          await transaction.set(accountInformationDocRef, {
+            storageUsed:0,
+            totalStorage:0,
+            dailyMax:0,
+            accountType:"Guest"
+          })
         }
         else{
-          response.status(200).send({accountType:"Guest"})
+          await transaction.set(accountInformationDocRef, {
+            storageUsed:0,
+            totalStorage:1,
+            dailyMax:5,
+            accountType:"Free"
+          })
         }
-      })
-    } catch (err) {
-      console.log("first error")
-      console.log(err)
-      response.status(400).send();
-    }
-  }).catch(()=>{
-    console.log("second error")
-    response.status(400).send()
-  })
-})
 
-app.post('/initializeEmailCounts', (request, response)=>{
-  admin.auth().verifyIdToken(request.body.token)
-  .then(async (decodedToken) => {
-    const uid = decodedToken.uid;
-    const db = admin.firestore();
-
-    const emailCountDocRef = db.doc("users/"+uid+"/data/emailCount")
-    try {
-      await db.runTransaction(async (transaction) => {
-        const emailCountDocSnap = await transaction.get(emailCountDocRef);
-        if (!emailCountDocSnap.exists) {
-          const countData ={
-            dailyTotal:0,
-            total:0,
-            submitted:0,
-            printing:0,
-            finished:0,
-            error:0,
-          }
-          await transaction.set(emailCountDocRef, countData)         
+        transaction.set(db.doc("users/"+uid),{created:"true", email:email, date:date.toISOString()}, {merge: true})
+      }
+      
+      if (!emailCountDocSnap.exists) {
+        const countData ={
+          dailyTotal:0,
+          total:0,
+          submitted:0,
+          printing:0,
+          finished:0,
+          error:0,
         }
-        response.status(200).send()
-      })
-    } catch(err) {
-      console.log(err)
-      response.status(400).send();
-    }
-  }).catch((err)=>{
+        await transaction.set(emailCountDocRef, countData)         
+      }
+
+      response.status(200).send()
+
+    })
+  } catch (err) {
+    console.log("transaction error")
     console.log(err)
-    response.status(400).send()
-  })
+    response.status(400).send();
+  }
+});
 
-})
 
 app.post('/googleLogin', (request, response) => {
   console.log("running google login")
@@ -695,6 +662,7 @@ app.post('/uploadURL', async (request, response)=>{
   }
 })
 app.post('/cancelSubscription', async (request, response)=>{
+  console.log("cancelling subscription")
   token = request.body.token;
   admin.auth().verifyIdToken(token).then(async (decodedToken) => {
     const uid = decodedToken.uid;
@@ -716,6 +684,7 @@ app.post('/cancelSubscription', async (request, response)=>{
     }
   })
 })
+
 exports.api = functions.https.onRequest(app);
 
 exports.emailCountReset = onSchedule("every day 8:00", async (event) => {
@@ -730,6 +699,7 @@ exports.emailCountReset = onSchedule("every day 8:00", async (event) => {
 });
 
 exports.formSubmit = onObjectFinalized({cpu: 2}, async (event) => {
+ 
   const filePath = event.data.name
   const pathSegment = filePath.split('/');
   if (pathSegment.length >= 3) {
@@ -936,25 +906,24 @@ exports.premiumStatus = onDocumentWritten("users/{userID}/subscriptions/{subscri
       })
     }
 })
-/*
-exports.initializeFolder = functions.auth.user().onCreate((user) => {
-  console.log(user.uid)
-  db = admin.firestore()
-  db.doc("users/"+user.uid).set({created:"true"})
-});
-*/
+
+
+
 /*
 exports.fileDeleted = onObjectDeleted({cpu: 2}, async (event) => {
+  console.log("file deleted: ")
+  console.log(event)
+
+  const fileSize = Number(event.data.size)
   const filePath = event.data.name
+
   const pathSegment = filePath.split('/');
-  console.log(pathSegment)
-  if (pathSegment.length >= 3) {
-    const folderRef = admin.firestore().doc(`users/${pathSegment[1]}/folderCounts/${pathSegment[2]}`);
-    console.log("decrementing fileCount")
-    await folderRef.update({
-      fileCount: admin.firestore.FieldValue.increment(-1)
-    });
-  }
+  const userID = pathSegment[1];
+
+  const db = admin.firestore()
+  db.doc("users/"+userID+"/data/accountInformation").update({
+      storageUsed: admin.firestore.FieldValue.increment(-fileSize)
+  });
 })
 */
 

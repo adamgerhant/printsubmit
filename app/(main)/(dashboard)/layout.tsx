@@ -41,7 +41,6 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
             
             if(!submissionData){
                 console.log("getting submission data")
-
                 getDoc(submissionDataRef).then((docSnap)=>{
                     if (docSnap.exists()) {
                         setSubmissionData(docSnap.data())
@@ -167,46 +166,23 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                     else{
                         const auth = getAuth();
                         if(auth.currentUser){
-                            auth.currentUser.getIdToken( true).then(function(idToken) {
-                                //http://localhost:5001/dprintsubmissionapp/us-central1/api
-                                //https://us-central1-dprintsubmissionapp.cloudfunctions.net/api
-                                fetch('https://us-central1-print-submit.cloudfunctions.net/api/initializeAccountFile', {
-                                    method: "POST",
-                                    headers: {
-                                    'Content-type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                    "token": idToken,
-                                    })
-                                }).then(response=>response.json().then(data => ({ status: response.status, data: data })))
-                                .then(async (response)=>{
-                                    //console.log("response status: ")
-                                    //console.log(response.status)
-                                    //console.log("response data: ")
-                                    //console.log(response.data)
-                                    if(response.data.accountType=="Free"){
-                                        setAccountInformation({
-                                            storageUsed:0,
-                                            totalStorage:5,
-                                            dailyMax:20,
-                                            accountType:"Free"
-                                        })
-                                        setAccountType("Free")
-                                    }
-                                    else if(response.data.accountType=="Guest"){
-                                        setAccountInformation({
-                                            storageUsed:0,
-                                            totalStorage:5,
-                                            dailyMax:20,
-                                            accountType:"Guest"
-                                        })
-                                        setAccountType("Guest")
-                                    }
-                                }).catch((error)=>{
-                                    console.log("error: ")
-                                    console.log(error)
-                                });
-                            })
+                            if (auth.currentUser.isAnonymous) {
+                                setAccountInformation({
+                                    storageUsed:0,
+                                    totalStorage:5,
+                                    dailyMax:20,
+                                    accountType:"Guest"
+                                })
+                                setAccountType("Guest")
+                              } else {
+                                setAccountInformation({
+                                    storageUsed:0,
+                                    totalStorage:5,
+                                    dailyMax:20,
+                                    accountType:"Free"
+                                })
+                                setAccountType("Free")
+                              }
                         }
                     }
                 })
@@ -220,32 +196,14 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
                     else{
                         const auth = getAuth();
                         if(auth.currentUser){
-                            auth.currentUser.getIdToken(true).then(function(idToken) {
-                                //http://localhost:5001/dprintsubmissionapp/us-central1/api
-                                //https://us-central1-dprintsubmissionapp.cloudfunctions.net/api
-                                fetch('https://us-central1-print-submit.cloudfunctions.net/api/initializeEmailCounts', {
-                                    method: "POST",
-                                    headers: {
-                                        'Content-type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                        "token": idToken,
-                                    })
-                                }).then((response)=>{
-                                    //console.log("response status: ")
-                                    //console.log(response.status)
-                                    setEmailCount({
-                                        dailyTotal:0,
-                                        total:0,
-                                        submitted:0,
-                                        printing:0,
-                                        finished:0,
-                                        error:0,
-                                    })
-                                }).catch((error)=>{
-                                    console.log("error: ")
-                                    console.log(error)
-                              });
+                         
+                            setEmailCount({
+                                dailyTotal:0,
+                                total:0,
+                                submitted:0,
+                                printing:0,
+                                finished:0,
+                                error:0,
                             })
                         }
                     }
@@ -281,7 +239,7 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
         setEmailCount
     }
     if(currentUser.email){
-        console.log("rendering dashboard")
+
         if(!submissionData||!submissionFormData||!settingsData||!emailData||!IPData||!accountInformation||!emailCount){
             return(
                 <firebaseContext.Provider value = {{submissionData, submissionFormData, settingsData, emailData, cancelRequests, IPData, accountInformation, emailCount, setSubmissionData, setSubmissionFormData, setSettingsData, setEmailData, setCancelRequests, setIPData, resetData, resetStatisticsData, resetAllData}}>
