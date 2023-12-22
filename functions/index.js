@@ -359,7 +359,6 @@ app.post('/sendContactEmail', async (request, response)=>{
     method: 'POST'
   });
   const verificationData = await verificationResponse.json();
-  console.log(verificationData)
   if(!verificationData.success){
     console.log("recaptcha verifation failed")
     return response.status(400).send({
