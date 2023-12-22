@@ -5,7 +5,6 @@ import { db, storage } from '@/app/firebase';
 import Link from 'next/link';
 import { StlViewer } from 'react-stl-viewer';
 import ReCAPTCHA from 'react-google-recaptcha';
-import keys from '@/keys';
 
 const Questions = ({displayArray, handleInputDataChange, highlightQuestions, accountInformation})=>{
    
@@ -539,7 +538,7 @@ const SubmissionForm = ({id, submissionFormData, accountInformation}) => {
                     {submissionFormData.captchaEnabled&&
                     <div className="mt-5">
                          <ReCAPTCHA
-                        sitekey={keys.CAPTCHA_site_key}
+                        sitekey="6LevDjkpAAAAAJDos_7OHAEKwwG8wZj3w6lvJWlF"
                         onChange={(token)=>setRecaptchaToken(token)}
                         />
                     </div>
