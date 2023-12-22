@@ -7,6 +7,7 @@ import { getAuth } from "firebase/auth";
 const EmailPage = () =>{
     const {emailData, setEmailData, submissionFormData, accountInformation} = useFirebaseContext() as FirebaseContext;
     const [loading, setLoading] = useState(false);
+    const [errorSigningOut, setErrorSigningOut] = useState(false)
     if(emailData&&submissionFormData){
       const auth = getAuth();
       const googleoauth = () => {
@@ -40,12 +41,16 @@ const EmailPage = () =>{
               },
               body: JSON.stringify({"token": idToken})
             })
-            .then(() =>{
-              console.log("revoked")
-              let emailCopy = {...emailData}
-              emailCopy.email = ""
-              emailCopy.refresh_token = ""
-              setEmailData(emailCopy);
+            .then((response) =>{
+              if(response.status==200){
+                let emailCopy = {...emailData}
+                emailCopy.email = ""
+                emailCopy.refresh_token = ""
+                setEmailData(emailCopy);
+              }
+              else{
+                setErrorSigningOut(true)
+              }
             })
           }).catch(function(error) {
             console.log("couldnt get user token")
@@ -63,7 +68,7 @@ const EmailPage = () =>{
       if(hasEmail&&emailData.email){
         return(
           <div className='emails'>
-            <Emails emailData={emailData} setEmailData={setEmailData} googleoauth={googleoauth} revoke={revoke}/>
+            <Emails emailData={emailData} setEmailData={setEmailData} googleoauth={googleoauth} revoke={revoke} errorSigningOut={errorSigningOut}/>
           </div>
         )
       }
@@ -95,7 +100,7 @@ const EmailPage = () =>{
             
           </div>
           <div className="darkenDiv"/>
-          <Emails emailData={emailData} setEmailData={setEmailData} googleoauth={googleoauth} revoke={revoke}/>
+          <Emails emailData={emailData} setEmailData={setEmailData} googleoauth={googleoauth} revoke={revoke} errorSigningOut={errorSigningOut}/>
         </div>
         ) 
       }

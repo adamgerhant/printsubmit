@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const { google } = require('googleapis');
-const http = require('http');
+const axios = require('axios');
 const https = require('https');
 const url = require('url');
 const express = require('express');
@@ -13,25 +13,17 @@ const {onSchedule} = require("firebase-functions/v2/scheduler");
 const { Storage } = require('@google-cloud/storage');
 const { onObjectFinalized, onObjectDeleted } = require('firebase-functions/v2/storage');
 const {onDocumentWritten} = require('firebase-functions/v2/firestore')
-//site key: 6LdJ_r0nAAAAAKTDnNzHjdEe-QV4Cp05KPcGAQtC
-//secretkey: 6LdJ_r0nAAAAAFkTWsuuqcXoa1QPJ9KR0Fg-7yNg
-admin.initializeApp();
-const oauth2Client = new google.auth.OAuth2(
-  "240473695577-nh51lv5t4tda6n8nvirfmhir1agijhl3.apps.googleusercontent.com",
-  "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",
-  "https://us-central1-print-submit.cloudfunctions.net/api/oAuthCallback"
-);
-app.use(cors({origin: ["http://localhost:3000",'https://printsubmit-git-preview-adamgerhant.vercel.app', 'https://www.printsubmit.com']}));
+const keys = require('./keys.js');
 
+admin.initializeApp();
+const oauth2Client = new google.auth.OAuth2(keys.clientId, keys.clientSecret, keys.callback);
+app.use(cors({origin: ["http://localhost:3000", 'https://www.printsubmit.com']}));
+const db = admin.firestore()
 
 exports.initializeAccountInformation = functions.auth.user().onCreate(async (user) => {
-  console.log("on create user")
-  console.log(user)
 
   try {
-    const db = admin.firestore();
     await db.runTransaction(async (transaction) => {
-      const isGuestAccount = !user.email //if user does not have email then it is a guest account
       const email = user.email||"Guest"
       const uid = user.uid
       const date = new Date();
@@ -41,7 +33,8 @@ exports.initializeAccountInformation = functions.auth.user().onCreate(async (use
       const emailCountDocSnap = await transaction.get(emailCountDocRef);
 
       if (!accountInformationDocSnap.exists) {
-        if(isGuestAccount){
+
+        if(email=="Guest"){
           await transaction.set(accountInformationDocRef, {
             storageUsed:0,
             totalStorage:0,
@@ -57,8 +50,6 @@ exports.initializeAccountInformation = functions.auth.user().onCreate(async (use
             accountType:"Free"
           })
         }
-
-        transaction.set(db.doc("users/"+uid),{created:"true", email:email, date:date.toISOString()}, {merge: true})
       }
       
       if (!emailCountDocSnap.exists) {
@@ -73,102 +64,56 @@ exports.initializeAccountInformation = functions.auth.user().onCreate(async (use
         await transaction.set(emailCountDocRef, countData)         
       }
 
-      response.status(200).send()
+      transaction.set(db.doc("users/"+uid),{created:"true", email:email, date:date.toISOString()}, {merge: true})
 
     })
   } catch (err) {
-    console.log("transaction error")
-    console.log(err)
-    response.status(400).send();
+    console.error(err)
+    response.status(500).send();
   }
 });
 
 
-app.post('/googleLogin', (request, response) => {
-  console.log("running google login")
+
+app.post('/googleLogin', async (request, response) => {
   const scopes = [
-    'https://www.googleapis.com/auth/userinfo.email',
-    //'https://www.googleapis.com/auth/gmail.send',
-    //'https://www.googleapis.com/auth/gmail.compose',
-    'https://mail.google.com/'
+    'https://www.googleapis.com/auth/userinfo.email', //used to get email address in callback function
+    //'https://www.googleapis.com/auth/gmail.send', bugged: for more information read comments under https://stackoverflow.com/a/26888046/20730253
+    //'https://www.googleapis.com/auth/gmail.compose', bugged: for more information read comments under https://stackoverflow.com/a/26888046/20730253
+    'https://mail.google.com/' //used to send emails
   ];
+  try{
+    const decodedToken = await admin.auth().verifyIdToken(request.body.token)
+    const uid = decodedToken.uid;
 
-  admin.auth().verifyIdToken(request.body.token)
-    .then((decodedToken) => {
-      const uid = decodedToken.uid;
-      console.log("uid: "+uid)
-      var db = admin.firestore();
+    //first try revoking current token
+    await revokeToken(uid)
 
-      //db.doc("users/"+uid).set({"testData":"testData"})
+    console.log("getting gmail API tokens from user: "+uid)
+    const authorizationUrl = oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: scopes,
+      include_granted_scopes: true,
+      prompt: "consent",
+      state: uid
+    });
 
-      db.doc("users/"+uid+"/data/emailData").get().then(async docSnap =>{
-        let emailData = docSnap.data()
-        const refreshToken = emailData.refresh_token;
-        console.log("refresh token: "+refreshToken)
-        if(refreshToken){
-          let postData = "token=" + refreshToken;
-          // Options for POST request to Google's OAuth 2.0 server to revoke a token
-          let postOptions = {
-            host: 'oauth2.googleapis.com',
-            port: '443',
-            path: '/revoke',
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Content-Length': Buffer.byteLength(postData)
-            }
-          };
-          emailData.email = ""
-          emailData.refresh_token = ""
-          const firestore = admin.firestore();
-          await firestore.doc("users/"+uid+"/data/emailData").set(emailData);
-          
-          const postReq = https.request(postOptions, function (res) {
-            res.setEncoding('utf8');
-            res.on('data', d => {
-              console.log('Response: ' + d);
-            });
-          });
-    
-          postReq.on('error', error => {
-            console.log(error)
-          });
-    
-          // Post the request with data
-          postReq.write(postData);
-          postReq.end();
-        }
-
-      const authorizationUrl = oauth2Client.generateAuthUrl({
-        access_type: 'offline',
-        scope: scopes,
-        include_granted_scopes: true,
-        prompt: "consent",
-        state: uid
-      });
-
-      response.set('Cache-Control', 'private, max-age=0, s-maxage=0');
-      response.send({"url": authorizationUrl});
-      })
-    })
-  .catch((error) => {
-    // Handle error
-  });
-  
+    response.set('Cache-Control', 'private, max-age=0, s-maxage=0');
+    response.send({"url": authorizationUrl});
+  }catch(error){
+    console.error(error)
+    response.status(500).send()
+  };
 });
 
 app.get('/oAuthCallback', async (req, response) => {
-    console.log("running oauthcallback")
   
     let q = url.parse(req.url, true).query;
-    console.log("oauth request URL: "+req.url);
     if (q.error) { // An error response e.g. error=access_denied
       console.log('Error:' + q.error);
     } else { // Get access and refresh tokens (if access_type is offline)
       
       let { tokens } = await oauth2Client.getToken(q.code);
-      console.log("tokens: ")
-      console.log(tokens)
       oauth2Client.setCredentials(tokens);
       const oauth2 = google.oauth2({
         auth: oauth2Client,
@@ -182,9 +127,7 @@ app.get('/oAuthCallback', async (req, response) => {
         access_token: access_token,
         id_token: id_token,
       });
-      console.log("token info: ")
-      console.log(res.data);
-      console.log(res.data.scope.includes("send"));
+
       if(res.data.scope.includes("https://mail.google.com")){//if(res.data.scope.includes("send")){ //https://mail.google.com/
         // Store the refresh token in the Firestore database.
         const firestore = admin.firestore();
@@ -202,50 +145,68 @@ app.get('/oAuthCallback', async (req, response) => {
     }
 });
 
+//returns true if the token is revoked, 
+//returns false if 1. the token does not exist  2. is invalid 3. there is an error revoking
+const revokeToken = async (uid)=>{
+  try {
+    const docSnap = await db.doc(`users/${uid}/data/emailData`).get();
+    const emailData = docSnap.data();
+    const refreshToken = emailData.refresh_token;
+    //refresh token does not exist
+    if(!refreshToken){
+      return false
+    }
+
+    //if access token cannot be created, refresh token is invalid
+    oauth2Client.setCredentials({refresh_token: refreshToken});
+    const accessToken = await oauth2Client.getAccessToken()
+    if(!accessToken){
+      return false
+    }
+
+    const response = await axios.post('https://oauth2.googleapis.com/revoke', `token=${refreshToken}`, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+
+    if (response.status === 200) {
+      console.log('Successfully revoked token');
+      // Reset refresh token and email in Firestore
+      emailData.email = '';
+      emailData.refresh_token = '';
+      await db.doc(`users/${uid}/data/emailData`).set(emailData);
+      return true;
+    }
+    
+    //error revoking (status is not 200)
+    return false
+
+  } catch (error) {
+    console.error('Error revoking token:', error);
+    //error revoking
+    return false
+  }
+
+}
+
 app.post('/revoke',async (request, response) => {
   console.log("running revoke function")
-  admin.auth().verifyIdToken(request.body.token)
-    .then((decodedToken) => {
+  try{
+    const decodedToken = await admin.auth().verifyIdToken(request.body.token)
     const uid = decodedToken.uid;
-    var db = admin.firestore();
-    db.doc("users/"+uid+"/data/emailData").get().then(async docSnap =>{
-      let emailData = docSnap.data()
-      const refreshToken = emailData.refresh_token;
-      console.log("refresh token: "+refreshToken)
-      let postData = "token=" + refreshToken;
-      // Options for POST request to Google's OAuth 2.0 server to revoke a token
-      let postOptions = {
-        host: 'oauth2.googleapis.com',
-        port: '443',
-        path: '/revoke',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': Buffer.byteLength(postData)
-        }
-      };
-      emailData.email = ""
-      emailData.refresh_token = ""
-      const firestore = admin.firestore();
-      await firestore.doc("users/"+uid+"/data/emailData").set(emailData);
-      
-      const postReq = https.request(postOptions, function (res) {
-        res.setEncoding('utf8');
-        res.on('data', d => {
-          console.log('Response: ' + d);
-        });
-      });
-
-      postReq.on('error', error => {
-        console.log(error)
-      });
-
-      // Post the request with data
-      postReq.write(postData);
-      postReq.end();
-    })
-  })
-  response.end()
+    const tokenRevoked = await revokeToken(uid)
+    if(tokenRevoked){
+      response.status(200).send("Revoked token");
+    }
+    else{
+      response.status(500).send("Internal Server Error");
+    }
+  }
+  catch (error) {
+    console.error("error verifying Id Token", error)
+    response.status(500).send("Internal Server Error");
+  }
 });
 
 const sendEmail = (uid, status, recipient, name, errorMessage, cancelID) =>{
@@ -260,7 +221,7 @@ const sendEmail = (uid, status, recipient, name, errorMessage, cancelID) =>{
       return resolve({responseStatus:400, "message": 'incorrect status'});
     }
     
-    var db = admin.firestore();
+
     db.doc("users/"+uid+"/data/emailData").get().then(docSnap =>{
       let emailData = docSnap.data()
       if(emailData.toSend[status]){
@@ -288,8 +249,8 @@ const sendEmail = (uid, status, recipient, name, errorMessage, cancelID) =>{
                   auth: {
                     type: "OAuth2",
                     user: email,          
-                    clientId: "240473695577-nh51lv5t4tda6n8nvirfmhir1agijhl3.apps.googleusercontent.com",
-                    clientSecret: "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",
+                    clientId: keys.clientId,
+                    clientSecret: keys.clientSecret,
                     refreshToken: refreshToken,
                     accessToken: accessToken.token
                   },
@@ -392,7 +353,7 @@ app.post('/sendContactEmail', async (request, response)=>{
   if(!recaptchaToken){
     return response.status(400).send({message: "recaptcha required"})
   }
-  const secretKey = '6LdJ_r0nAAAAAFkTWsuuqcXoa1QPJ9KR0Fg-7yNg'; // Replace with your actual reCAPTCHA secret key
+  const secretKey = keys.CAPTCHA_secret_key; // Replace with your actual reCAPTCHA secret key
   const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
   const verificationResponse = await fetch(verificationUrl, {
     method: 'POST'
@@ -406,7 +367,7 @@ app.post('/sendContactEmail', async (request, response)=>{
   }
 
   oauth2Client.setCredentials({
-    refresh_token: "1//04p5PeAfXGKSmCgYIARAAGAQSNwF-L9Ir_v_wxhcHIPIqm0Z_vZB5285J5zaHjUUjgupO70tu5QyJQc3yK94JokpwxLou47tIRRI"
+    refresh_token: keys.personalRefreshToken
   });
   oauth2Client.getAccessToken().then((accessToken)=>{
     const emailTransporter = nodemailer.createTransport({
@@ -416,9 +377,9 @@ app.post('/sendContactEmail', async (request, response)=>{
       auth: {
         type: "OAuth2",
         user: "adamgerhant@gmail.com",          
-        clientId: "240473695577-nh51lv5t4tda6n8nvirfmhir1agijhl3.apps.googleusercontent.com",
-        clientSecret: "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",
-        refreshToken: "1//04p5PeAfXGKSmCgYIARAAGAQSNwF-L9Ir_v_wxhcHIPIqm0Z_vZB5285J5zaHjUUjgupO70tu5QyJQc3yK94JokpwxLou47tIRRI",
+        clientId: keys.clientId,
+        clientSecret: keys.clientSecret,
+        refreshToken: keys.personalRefreshToken,
         accessToken: accessToken.token
       },
     });     
@@ -457,7 +418,6 @@ app.post('/storageUsed', async(request,response)=>{
       totalSize+= parseInt(metadata.size, 10);
     }
     console.log("setting storage used to: "+totalSize)
-    db = admin.firestore()
     const accountInformationDocRef = db.doc("users/"+uid+"/data/accountInformation")
     accountInformationDocRef.update({
       storageUsed:totalSize
@@ -471,7 +431,6 @@ app.post('/uploadURL', async (request, response)=>{
     return response.status(200).send(); 
   }
   const clientIP = request.headers['x-forwarded-for'] || request.socket.remoteAddress || request.headers['fastly-client-ip'] || "none";
-  const db = admin.firestore() 
   const IPDocRef = db.doc("users/"+request.body.id+"/data/submissionData/ipData/ipData")
   const submissionFormDocRef = db.doc("users/"+request.body.id+"/data/submissionForm")
   const accountInformationDocRef = db.doc("users/"+request.body.id+"/data/accountInformation")
@@ -492,7 +451,7 @@ app.post('/uploadURL', async (request, response)=>{
       });
     }
     if(recaptchaToken&&accountInformation.accountType=="Premium"){
-      const secretKey = '6LdJ_r0nAAAAAFkTWsuuqcXoa1QPJ9KR0Fg-7yNg'; // Replace with your actual reCAPTCHA secret key
+      const secretKey = keys.CAPTCHA_secret_key; // Replace with your actual reCAPTCHA secret key
       const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
       const verificationResponse = await fetch(verificationUrl, {
         method: 'POST'
@@ -646,7 +605,6 @@ app.post('/uploadURL', async (request, response)=>{
         .file(inputDataFileName)
         .getSignedUrl(inputDataOptions);
 
-      console.log("retunring urls")
       response.status(200).send({
         message: 'url generated successfully',
         fileID: fileID,
@@ -666,12 +624,11 @@ app.post('/cancelSubscription', async (request, response)=>{
   token = request.body.token;
   admin.auth().verifyIdToken(token).then(async (decodedToken) => {
     const uid = decodedToken.uid;
-    db = admin.firestore()
     const subscriptionsRef = db.collection("users/"+uid+"/subscriptions")
     try{
       const snap = await subscriptionsRef.get();
       console.log("got subscriptions ref")
-      const stripe = require('stripe')("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")
+      const stripe = require('stripe')(keys.stripeKey)
       snap.forEach(async doc => {
         const subscriptionID = doc.id
         await stripe.subscriptions.cancel(subscriptionID);    
@@ -689,7 +646,6 @@ exports.api = functions.https.onRequest(app);
 
 exports.emailCountReset = onSchedule("every day 8:00", async (event) => {
   console.log("resetting email counts")
-  db = admin.firestore();
   db.collection('users').get().then((snapshot) => {
     snapshot.docs.map((doc) => {
       doc.ref.collection("data").doc("emailCount").update({'dailyTotal': 0});
@@ -705,7 +661,6 @@ exports.formSubmit = onObjectFinalized({cpu: 2}, async (event) => {
   if (pathSegment.length >= 3) {
     const fileID = pathSegment[2];
     const userID = pathSegment[1];
-    db = admin.firestore()
     const fileIDRef = db.doc("users/"+userID+"/data/submissionData/submittedFileIDs/"+fileID)
     try {
       const filesInFolder = await db.runTransaction(async (transaction) => {
@@ -775,7 +730,6 @@ exports.formSubmit = onObjectFinalized({cpu: 2}, async (event) => {
         inputData.date = newDate.toUTCString()
         inputData.ip = ipData.ip
 
-        db = admin.firestore();
 
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let cancelID = '';
@@ -877,7 +831,6 @@ exports.premiumStatus = onDocumentWritten("users/{userID}/subscriptions/{subscri
     const status = data.status;
     console.log("status: "+status)
     const uid = event.params.userID;
-    const db = admin.firestore();
     const accountInformationDocRef = db.doc("users/"+uid+"/data/accountInformation")
     if(status=="active"){
       console.log("geting account information")
@@ -920,7 +873,6 @@ exports.fileDeleted = onObjectDeleted({cpu: 2}, async (event) => {
   const pathSegment = filePath.split('/');
   const userID = pathSegment[1];
 
-  const db = admin.firestore()
   db.doc("users/"+userID+"/data/accountInformation").update({
       storageUsed: admin.firestore.FieldValue.increment(-fileSize)
   });

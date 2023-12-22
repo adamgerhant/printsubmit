@@ -1,4 +1,5 @@
 'use client'
+import keys from "@/keys";
 import logo from "@/public/Logo.svg"
 import { useEffect, useState } from "react"
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -134,7 +135,7 @@ export default function Page() {
                         </div>
                         <div className="mt-5">
                             <ReCAPTCHA
-                            sitekey="6LdJ_r0nAAAAAKTDnNzHjdEe-QV4Cp05KPcGAQtC"
+                            sitekey={keys.CAPTCHA_site_key}
                             onChange={(token : any)=>{setToken(token); setButtonStatus("Send message")}}
                             />
                         </div>

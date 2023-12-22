@@ -8,7 +8,7 @@ import { addDoc } from 'firebase/firestore';
 import { collection } from 'firebase/firestore';
 import { getAuth, linkWithPopup, linkwithRedirect, GoogleAuthProvider } from 'firebase/auth';
 
-const Emails = ({emailData, setEmailData, googleoauth, revoke}) => {
+const Emails = ({emailData, setEmailData, googleoauth, revoke, errorSigningOut}) => {
   const {currentUser} = useAuthContext();
   const[currentEmail, setCurrentEmail] = useState("Submission");
   const[saved, setSaved] = useState(false);
@@ -78,8 +78,11 @@ const Emails = ({emailData, setEmailData, googleoauth, revoke}) => {
             From: <span className="currentEmail">{emailData.email==""?"No account":emailData.email}</span>
             <button onClick={()=>{setLoading(true);googleoauth()}} className="accountButtons">Change account</button>
             <button onClick={()=>{setLoading(true);revoke()}} className="accountButtons">Sign out</button>
-            {loading&&
+            {loading&&!errorSigningOut&&
               <div className='loader'/>
+            }
+            {errorSigningOut&&
+              <div className='errorSigningOutText'>Error signing out.</div>
             }
           </div>
           <div className="emailTextDiv">
