@@ -207,7 +207,7 @@ const Statistics = () =>{
     console.log(percentUsed)
     return(
         <div className="statisticsDiv">
-            <div className="titleDiv" style={{left:225}}>Statistics</div>
+            <div className="titleDiv">Statistics</div>
             <div className="statisticsBoxDiv">
                 <div className='optionsText'>
                     Statistics

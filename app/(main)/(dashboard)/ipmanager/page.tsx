@@ -79,7 +79,7 @@ const IPManager = () =>{
   if(accountInformation.accountType=="Premium"){
     return(
       <div className="ipManagerDiv">
-        <div className="titleDiv" style={{left:225}}>IP Manager
+        <div className="titleDiv">IP Manager
         </div>
         
         <div className="ipBoxDiv">

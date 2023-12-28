@@ -19,25 +19,25 @@ const SubmissionFormPage = () =>{
         
             <div className="contentDiv">
                 <div className='preview'>
-                <p className='previewText'>Preview</p>
-                <div className="submissionFormContainerDisplay">
-                    <SubmissionForm submissionFormData={submissionFormData} id={currentUser.uid} accountInformation={accountInformation}/>
+                    <p className='previewText'>Preview</p>
+                    <div className="submissionFormContainerDisplay">
+                        <SubmissionForm submissionFormData={submissionFormData} id={currentUser.uid} accountInformation={accountInformation}/>
+                    </div>
+                        
+                    <div className='linkDiv'>
+                        <p className="linkText">Public submission form URL:</p>
+                        <Link className="link" href={"/public/"+currentUser.uid} target="_blank" rel="noopener noreferrer" >{"www.printsubmit.com/public/"+currentUser.uid}</Link>
+                    </div>
                 </div>
-                    
-                <div className='linkDiv'>
-                    <p className="linkText">Public submission form URL:</p>
-                    <Link className="link" href={"/public/"+currentUser.uid} target="_blank" rel="noopener noreferrer" >{"www.printsubmit.com/public/"+currentUser.uid}</Link>
+                <div className='edit'>
+                    <p className='editText'>Edit Submission Form</p>
+                    <EditForm 
+                    setSubmissionFormData={setSubmissionFormData}
+                    submissionFormData={submissionFormData}
+                    headerWidth={settingsData.headerWidths[0]}
+                    accountInformation={accountInformation}/>    
                 </div>
-            </div>
-        
-            <div className='edit'>
-                <p className='editText'>Edit Submission Form</p>
-                <EditForm 
-                setSubmissionFormData={setSubmissionFormData}
-                submissionFormData={submissionFormData}
-                headerWidth={settingsData.headerWidths[0]}
-                accountInformation={accountInformation}/>    
-                </div>
+                
             </div>             
         </div>
     )

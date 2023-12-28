@@ -228,47 +228,38 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
         setCancelRequests(null)
     }
     const resetAllData = () =>{
-        setSubmissionData
-        setSubmissionFormData
-        setCancelRequests
-        setSettingsData
-        setEmailData
-        setIPData
-        setAccountInformation
-        setAccountType
-        setEmailCount
+        setSubmissionData(null)
+        setSubmissionFormData(null)
+        setCancelRequests(null)
+        setSettingsData(null)
+        setEmailData(null)
+        setIPData(null)
+        setAccountInformation(null)
+        setAccountType(null)
+        setEmailCount(null)
     }
     if(currentUser.email){
-
-        if(!submissionData||!submissionFormData||!settingsData||!emailData||!IPData||!accountInformation||!emailCount){
-            return(
-                <firebaseContext.Provider value = {{submissionData, submissionFormData, settingsData, emailData, cancelRequests, IPData, accountInformation, emailCount, setSubmissionData, setSubmissionFormData, setSettingsData, setEmailData, setCancelRequests, setIPData, resetData, resetStatisticsData, resetAllData}}>
-                    <div className="dashboard"> 
-                        <Header/>
-                        <div className='workspace'>
-                            <Sidebar accountType={accountType}/> 
-                            <div className="loadingDiv"><div className="loader"/>Loading</div>
-                        </div>
+        const isLoading = !submissionData||!submissionFormData||!settingsData||!emailData||!IPData||!accountInformation||!emailCount
+        return(
+            <firebaseContext.Provider value = {{submissionData, submissionFormData, settingsData, emailData, cancelRequests, IPData, accountInformation, emailCount, setSubmissionData, setSubmissionFormData, setSettingsData, setEmailData, setCancelRequests, setIPData, resetData, resetStatisticsData, resetAllData}}>
+                <div className="dashboard"> 
+                    <Header/>
+                    <div className='workspace'>
+                        <Sidebar accountType={accountType}/> 
+                        {isLoading&&
+                            <div className="loadingDiv">
+                                <div className="loader"/>
+                                Loading
+                            </div>
+                        }
+                        {!isLoading&&
+                            <>{children}</> 
+                        }
                     </div>
-                </firebaseContext.Provider> 
+                </div>  
+            </firebaseContext.Provider> 
 
-            )
-        }
-        else{
-            return(
-                <firebaseContext.Provider value = {{submissionData, submissionFormData, settingsData, emailData, cancelRequests, IPData, accountInformation, emailCount, setSubmissionData, setSubmissionFormData, setSettingsData, setEmailData, setCancelRequests, setIPData, resetData, resetStatisticsData, resetAllData}}>
-                    <div className="dashboard"> 
-                        <Header/> 
-                        <div className='workspace'>
-                            <Sidebar accountType={accountType}/> 
-                            {children} 
-                        </div>
-                    </div>
-                </firebaseContext.Provider> 
-            )
-        }
-        
-        
+        )
     }
     else{
         console.log("no user")
@@ -277,9 +268,6 @@ const AppLayout = ({children}: {children: React.ReactNode})=>{
         )
     }
     
-    
-    
-   
     
 }
 export default AppLayout;

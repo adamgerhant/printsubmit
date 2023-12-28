@@ -777,7 +777,7 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
         }
     })
     return (
-    <>
+    <div className='submissionsContainer'>
         <div className='titleDiv'>
             Submissions
             <div className='optionsMenuDiv'>
@@ -811,194 +811,195 @@ const Submissions = ({data, setData, questionData, setQuestionData, widthData, c
             } 
         </div>
         </div> 
+        <div className='submissions'>
 
-        <div className='submissionBox'>
-            <div className="headers" style={(seperateResponses&&firstData.length==0&&indexedData.length>0)?{}:{borderBottom: "1px solid black"}}>
-                <div className="formQuestionsDiv" style={{width:headerWidths[0]}}>
-                    <p className="formInformationText">Form Responses</p>
+            <div className='submissionBox'>
+                <div className="headers" style={(seperateResponses&&firstData.length==0&&indexedData.length>0)?{}:{borderBottom: "1px solid black"}}>
+                    <div className="formQuestionsDiv" style={{width:headerWidths[0]}}>
+                        <p className="formInformationText">Form Responses</p>
 
-                    <div className="questionsRow">
-                        <div className="topLeftBorder"/>
-                        <QuestionHeader 
-                        maxWidth={headerWidths[0]}
-                        showDeleted={showDeleted} 
-                        questionData={questionData} 
-                        setQuestionData={setQuestionData} 
-                        questionWidths={questionWidths} 
-                        setQuestionWidths={setQuestionWidths}
-                        height={totalHeight-49}/>
-                    </div>
-                    
-                </div>
-                
-                <LargeResizer
-                questionWidths={displayedQuestionWidths}
-                questionData={questionData} 
-                setQuestionData={setQuestionData}
-                headerWidths={headerWidths} 
-                setHeaderWidths={setHeaderWidths}
-                headerID={0} 
-                handleStop={headerHandleStop}
-                informationWidths={informationWidths}
-                setInformationWidths={setInformationWidths}
-                actionWidths={actionWidths}
-                setActionWidths={setActionWidths}
-                totalHeight={totalHeight}
-                setQuestionWidths={setQuestionWidths}
-                /> 
-                
-                <div className="informationHeaderDiv"style={{width:headerWidths[1]}}>
-                    <p className="formInformationText">Information</p>
-                    <div className="informationRow">
-                        <InformationHeader 
-                        informationWidths={informationWidths} 
-                        setInformationWidths={setInformationWidths}
-                        headerWidths={headerWidths}
-                        setHeaderWidths={setHeaderWidths}
-                        totalHeight={totalHeight-49}
-                        accountInformation={accountInformation}
-                        />
+                        <div className="questionsRow">
+                            <div className="topLeftBorder"/>
+                            <QuestionHeader 
+                            maxWidth={headerWidths[0]}
+                            showDeleted={showDeleted} 
+                            questionData={questionData} 
+                            setQuestionData={setQuestionData} 
+                            questionWidths={questionWidths} 
+                            setQuestionWidths={setQuestionWidths}
+                            height={totalHeight-49}/>
+                        </div>
                         
                     </div>
                     
-                </div>
-
-                <LargeResizer
-                questionWidths={questionWidths}
-                headerWidths={headerWidths} 
-                setHeaderWidths={setHeaderWidths}
-                headerID={1} 
-                handleStop={headerHandleStop}
-                informationWidths={informationWidths}
-                setInformationWidths={setInformationWidths}
-                actionWidths={actionWidths}
-                setActionWidths={setActionWidths}
-                totalHeight={totalHeight}
-                setQuestionWidths={setQuestionWidths}
-
-                /> 
-                
-                <div className="informationHeaderDiv" style={{width: 1630-headerWidths[0]-headerWidths[1]-5}}>
-                    <p className="formInformationText">Actions</p>
-                    <ActionHeader
+                    <LargeResizer
+                    questionWidths={displayedQuestionWidths}
+                    questionData={questionData} 
+                    setQuestionData={setQuestionData}
+                    headerWidths={headerWidths} 
+                    setHeaderWidths={setHeaderWidths}
+                    headerID={0} 
+                    handleStop={headerHandleStop}
+                    informationWidths={informationWidths}
+                    setInformationWidths={setInformationWidths}
                     actionWidths={actionWidths}
                     setActionWidths={setActionWidths}
-                    headerWidths={headerWidths}
-                    totalHeight={totalHeight-49}
-                    accountInformation={accountInformation}
-                    />
-                </div>
-                {indexedData.length>0&&gaps}
-            </div>
-            {(!seperateResponses||(seperateResponses&&firstData.length>0)||indexedData.length==0)&&
-            <Responses
-            allData={data.data}
-            data={seperateResponses?firstData:indexedData}
-            setData={setData}
-            questionData={questionData}
-            headerWidths={headerWidths}
-            informationWidths={informationWidths}
-            actionWidths={actionWidths}
-            showDeleted={showDeleted}
-            cancelRequests={cancelRequests}
-            seperateResponses={seperateResponses}
-            firstSubmissionDiv={true}
-            IPData={IPData}
-            setIPData={setIPData}
-            accountInformation={accountInformation}
-            setSentPopup={setSentPopup}
-            setDeleteLock={setDeleteLock}
-            deleteLock={deleteLock}
-            />
-            }
-        </div>
-        {printingArr.length!=0&&seperateResponses&&
-        <div className='submissionBox'>
-            <Responses
-            allData={data.data}
-            data={printingArr}
-            setData={setData}
-            questionData={questionData}
-            headerWidths={headerWidths}
-            informationWidths={informationWidths}
-            actionWidths={actionWidths}
-            showDeleted={showDeleted}
-            cancelRequests={cancelRequests}
-            seperateResponses={seperateResponses}
-            firstSubmissionDiv={false}
-            IPData={IPData}
-            setIPData={setIPData}
-            accountInformation={accountInformation}
-            setSentPopup={setSentPopup}
-            deleteLock={deleteLock}
-            setDeleteLock={setDeleteLock}
-            />
-        </div>
-        }
-        {finishedArr.length!=0&&seperateResponses&&
-        <div className='submissionBox'>
-            <Responses
-            allData={data.data}
-            data={finishedArr}
-            setData={setData}
-            questionData={questionData}
-            headerWidths={headerWidths}
-            informationWidths={informationWidths}
-            actionWidths={actionWidths}
-            showDeleted={showDeleted}
-            cancelRequests={cancelRequests}
-            seperateResponses={seperateResponses}
-            firstSubmissionDiv={false}
-            IPData={IPData}
-            setIPData={setIPData}
-            accountInformation={accountInformation}
-            setSentPopup={setSentPopup}
-            deleteLock={deleteLock}
-            setDeleteLock={setDeleteLock}
-            />
-        </div>
-        }
-        {errorArr.length!=0&&seperateResponses&&
-        <div className='submissionBox'>
-            <Responses
-            allData={data.data}
-            data={errorArr}
-            setData={setData}
-            questionData={questionData}
-            headerWidths={headerWidths}
-            informationWidths={informationWidths}
-            actionWidths={actionWidths}
-            showDeleted={showDeleted}
-            cancelRequests={cancelRequests}
-            seperateResponses={seperateResponses}
-            firstSubmissionDiv={false}
-            IPData={IPData}
-            setIPData={setIPData}
-            accountInformation={accountInformation}
-            setSentPopup={setSentPopup}
-            deleteLock={deleteLock}
-            setDeleteLock={setDeleteLock}
-            />
-        </div>
-        }
-        
+                    totalHeight={totalHeight}
+                    setQuestionWidths={setQuestionWidths}
+                    /> 
+                    
+                    <div className="informationHeaderDiv"style={{width:headerWidths[1]}}>
+                        <p className="formInformationText">Information</p>
+                        <div className="informationRow">
+                            <InformationHeader 
+                            informationWidths={informationWidths} 
+                            setInformationWidths={setInformationWidths}
+                            headerWidths={headerWidths}
+                            setHeaderWidths={setHeaderWidths}
+                            totalHeight={totalHeight-49}
+                            accountInformation={accountInformation}
+                            />
+                            
+                        </div>
+                        
+                    </div>
 
-        <div className="emailSentPopupDiv">
-            <span className={`printingEmailPopup${sentPopup.type==="printing" ? 'scaled' : ''}`}>
-                {sentPopup.message}
-            </span>
-            <span className={`finishedEmailPopup${sentPopup.type==="finished" ? 'scaled' : ''}`}>
-                {sentPopup.message}
-            </span>
-            <span className={`errorEmailPopup${sentPopup.type==="error" ? 'scaled' : ''}`}>
-                {sentPopup.message}
-            </span>
-            <span className={`errorSendingEmailPopup${sentPopup.type==="errorSending" ? 'scaled' : ''}`}>
-                {sentPopup.message}
-            </span>
+                    <LargeResizer
+                    questionWidths={questionWidths}
+                    headerWidths={headerWidths} 
+                    setHeaderWidths={setHeaderWidths}
+                    headerID={1} 
+                    handleStop={headerHandleStop}
+                    informationWidths={informationWidths}
+                    setInformationWidths={setInformationWidths}
+                    actionWidths={actionWidths}
+                    setActionWidths={setActionWidths}
+                    totalHeight={totalHeight}
+                    setQuestionWidths={setQuestionWidths}
+
+                    /> 
+                    
+                    <div className="informationHeaderDiv" style={{width: 1630-headerWidths[0]-headerWidths[1]-5}}>
+                        <p className="formInformationText">Actions</p>
+                        <ActionHeader
+                        actionWidths={actionWidths}
+                        setActionWidths={setActionWidths}
+                        headerWidths={headerWidths}
+                        totalHeight={totalHeight-49}
+                        accountInformation={accountInformation}
+                        />
+                    </div>
+                    {indexedData.length>0&&gaps}
+                </div>
+                {(!seperateResponses||(seperateResponses&&firstData.length>0)||indexedData.length==0)&&
+                <Responses
+                allData={data.data}
+                data={seperateResponses?firstData:indexedData}
+                setData={setData}
+                questionData={questionData}
+                headerWidths={headerWidths}
+                informationWidths={informationWidths}
+                actionWidths={actionWidths}
+                showDeleted={showDeleted}
+                cancelRequests={cancelRequests}
+                seperateResponses={seperateResponses}
+                firstSubmissionDiv={true}
+                IPData={IPData}
+                setIPData={setIPData}
+                accountInformation={accountInformation}
+                setSentPopup={setSentPopup}
+                setDeleteLock={setDeleteLock}
+                deleteLock={deleteLock}
+                />
+                }
+            </div>
+            {printingArr.length!=0&&seperateResponses&&
+            <div className='submissionBox'>
+                <Responses
+                allData={data.data}
+                data={printingArr}
+                setData={setData}
+                questionData={questionData}
+                headerWidths={headerWidths}
+                informationWidths={informationWidths}
+                actionWidths={actionWidths}
+                showDeleted={showDeleted}
+                cancelRequests={cancelRequests}
+                seperateResponses={seperateResponses}
+                firstSubmissionDiv={false}
+                IPData={IPData}
+                setIPData={setIPData}
+                accountInformation={accountInformation}
+                setSentPopup={setSentPopup}
+                deleteLock={deleteLock}
+                setDeleteLock={setDeleteLock}
+                />
+            </div>
+            }
+            {finishedArr.length!=0&&seperateResponses&&
+            <div className='submissionBox'>
+                <Responses
+                allData={data.data}
+                data={finishedArr}
+                setData={setData}
+                questionData={questionData}
+                headerWidths={headerWidths}
+                informationWidths={informationWidths}
+                actionWidths={actionWidths}
+                showDeleted={showDeleted}
+                cancelRequests={cancelRequests}
+                seperateResponses={seperateResponses}
+                firstSubmissionDiv={false}
+                IPData={IPData}
+                setIPData={setIPData}
+                accountInformation={accountInformation}
+                setSentPopup={setSentPopup}
+                deleteLock={deleteLock}
+                setDeleteLock={setDeleteLock}
+                />
+            </div>
+            }
+            {errorArr.length!=0&&seperateResponses&&
+            <div className='submissionBox'>
+                <Responses
+                allData={data.data}
+                data={errorArr}
+                setData={setData}
+                questionData={questionData}
+                headerWidths={headerWidths}
+                informationWidths={informationWidths}
+                actionWidths={actionWidths}
+                showDeleted={showDeleted}
+                cancelRequests={cancelRequests}
+                seperateResponses={seperateResponses}
+                firstSubmissionDiv={false}
+                IPData={IPData}
+                setIPData={setIPData}
+                accountInformation={accountInformation}
+                setSentPopup={setSentPopup}
+                deleteLock={deleteLock}
+                setDeleteLock={setDeleteLock}
+                />
+            </div>
+            }
+            
+
+            <div className="emailSentPopupDiv">
+                <span className={`printingEmailPopup${sentPopup.type==="printing" ? 'scaled' : ''}`}>
+                    {sentPopup.message}
+                </span>
+                <span className={`finishedEmailPopup${sentPopup.type==="finished" ? 'scaled' : ''}`}>
+                    {sentPopup.message}
+                </span>
+                <span className={`errorEmailPopup${sentPopup.type==="error" ? 'scaled' : ''}`}>
+                    {sentPopup.message}
+                </span>
+                <span className={`errorSendingEmailPopup${sentPopup.type==="errorSending" ? 'scaled' : ''}`}>
+                    {sentPopup.message}
+                </span>
+            </div>
         </div>
-    </>
-       
+    </div>
     
     )
   }

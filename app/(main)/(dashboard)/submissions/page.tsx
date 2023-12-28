@@ -45,7 +45,7 @@ const SubmissionsPage = () =>{
   */
  
   return (
-    <div className='submissions'>
+    <>
         <Submissions 
         data={submissionData}
         setData={setSubmissionData} 
@@ -61,7 +61,7 @@ const SubmissionsPage = () =>{
         submissionFormData={submissionFormData}
         setSubmissionFormData={setSubmissionFormData}
         />
-    </div>          
+    </>          
   )
 }
   

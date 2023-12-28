@@ -20,8 +20,8 @@ const oauth2Client = new google.auth.OAuth2(keys.clientId, keys.clientSecret, ke
 app.use(cors({origin: ["http://localhost:3000", 'https://www.printsubmit.com']}));
 const db = admin.firestore()
 
+//initialize account information and email counts when user creates account
 exports.initializeAccountInformation = functions.auth.user().onCreate(async (user) => {
-
   try {
     await db.runTransaction(async (transaction) => {
       const email = user.email||"Guest"
@@ -74,7 +74,6 @@ exports.initializeAccountInformation = functions.auth.user().onCreate(async (use
 });
 
 
-
 app.post('/googleLogin', async (request, response) => {
   const scopes = [
     'https://www.googleapis.com/auth/userinfo.email', //used to get email address in callback function
@@ -89,16 +88,17 @@ app.post('/googleLogin', async (request, response) => {
     //first try revoking current token
     await revokeToken(uid)
 
-    console.log("getting gmail API tokens from user: "+uid)
     const authorizationUrl = oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: scopes,
       include_granted_scopes: true,
       prompt: "consent",
+      //put uid in url so callback can save tokens to the users email data document
       state: uid
     });
 
     response.set('Cache-Control', 'private, max-age=0, s-maxage=0');
+    //redirect user to authorization page
     response.send({"url": authorizationUrl});
   }catch(error){
     console.error(error)
@@ -106,13 +106,13 @@ app.post('/googleLogin', async (request, response) => {
   };
 });
 
+//
 app.get('/oAuthCallback', async (req, response) => {
-  
+    //q contains tokens and uid
     let q = url.parse(req.url, true).query;
     if (q.error) { // An error response e.g. error=access_denied
       console.log('Error:' + q.error);
-    } else { // Get access and refresh tokens (if access_type is offline)
-      
+    } else { 
       let { tokens } = await oauth2Client.getToken(q.code);
       oauth2Client.setCredentials(tokens);
       const oauth2 = google.oauth2({
@@ -127,13 +127,10 @@ app.get('/oAuthCallback', async (req, response) => {
         access_token: access_token,
         id_token: id_token,
       });
-
+      //check if user granted access to gmail API
       if(res.data.scope.includes("https://mail.google.com")){//if(res.data.scope.includes("send")){ //https://mail.google.com/
-        // Store the refresh token in the Firestore database.
-        const firestore = admin.firestore();
-        
-        await firestore.doc("users/"+userID+"/data/emailData").set({ email, refresh_token }, { merge: true });
-        
+        // Store the refresh token in the Firestore database using uid passed through url state
+        await db.doc("users/"+userID+"/data/emailData").set({ email, refresh_token }, { merge: true });
         var redirectUrl = new URL("http://www.printsubmit.com/authorizeEmail?email="+email+"&success=true");
         response.redirect(redirectUrl);
       }
@@ -145,8 +142,8 @@ app.get('/oAuthCallback', async (req, response) => {
     }
 });
 
-//returns true if the token is revoked, 
-//returns false if 1. the token does not exist  2. is invalid 3. there is an error revoking
+//returns true if the refresh token is revoked
+//returns false if the refresh token does not exist, is invalid, or there is an error revoking
 const revokeToken = async (uid)=>{
   try {
     const docSnap = await db.doc(`users/${uid}/data/emailData`).get();
@@ -171,7 +168,6 @@ const revokeToken = async (uid)=>{
     });
 
     if (response.status === 200) {
-      console.log('Successfully revoked token');
       // Reset refresh token and email in Firestore
       emailData.email = '';
       emailData.refresh_token = '';
@@ -191,7 +187,6 @@ const revokeToken = async (uid)=>{
 }
 
 app.post('/revoke',async (request, response) => {
-  console.log("running revoke function")
   try{
     const decodedToken = await admin.auth().verifyIdToken(request.body.token)
     const uid = decodedToken.uid;
@@ -204,7 +199,7 @@ app.post('/revoke',async (request, response) => {
     }
   }
   catch (error) {
-    console.error("error verifying Id Token", error)
+    console.error("error verifying id token", error)
     response.status(500).send("Internal Server Error");
   }
 });
@@ -626,7 +621,6 @@ app.post('/cancelSubscription', async (request, response)=>{
     const subscriptionsRef = db.collection("users/"+uid+"/subscriptions")
     try{
       const snap = await subscriptionsRef.get();
-      console.log("got subscriptions ref")
       const stripe = require('stripe')(keys.stripeKey)
       snap.forEach(async doc => {
         const subscriptionID = doc.id
@@ -644,11 +638,9 @@ app.post('/cancelSubscription', async (request, response)=>{
 exports.api = functions.https.onRequest(app);
 
 exports.emailCountReset = onSchedule("every day 8:00", async (event) => {
-  console.log("resetting email counts")
   db.collection('users').get().then((snapshot) => {
     snapshot.docs.map((doc) => {
       doc.ref.collection("data").doc("emailCount").update({'dailyTotal': 0});
-      console.log("reset daily total")
     });
   });
 });
@@ -666,14 +658,11 @@ exports.formSubmit = onObjectFinalized({cpu: 2}, async (event) => {
         const fileIDDocSnap = await transaction.get(fileIDRef)
         if(fileIDDocSnap.exists){
           const currentFiles = fileIDDocSnap.data().filesInFolder
-          console.log("transaction value: "+currentFiles)
-
           transaction.update(fileIDRef, {
             filesInFolder: currentFiles+1
           })
           return currentFiles+1;
         }else{
-          console.log("setting files in folder")
           transaction.set(fileIDRef, {
             filesInFolder: 1
           })
@@ -681,7 +670,6 @@ exports.formSubmit = onObjectFinalized({cpu: 2}, async (event) => {
         }
       })
 
-      console.log("files in folder: "+filesInFolder);
       if(filesInFolder==4){
         
         const fileIDPath = pathSegment.slice(0, 3).join('/');
@@ -700,7 +688,6 @@ exports.formSubmit = onObjectFinalized({cpu: 2}, async (event) => {
 
         const ipFileFileContent = await ipFile.download();
         const inputDataFileContent = await inputDataFile.download();
-        console.log("file content:"+ipFileFileContent)
         const ipData = JSON.parse(ipFileFileContent.toString());
         let inputData = JSON.parse(inputDataFileContent.toString());
 
