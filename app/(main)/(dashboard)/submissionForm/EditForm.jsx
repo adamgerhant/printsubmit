@@ -4,7 +4,7 @@ import { db} from '@/app/firebase';
 import { useEffect, useState, useRef} from 'react';
 import { useAuthContext } from '../../layout';
 import {RxCross2} from 'react-icons/rx'
-import { BiCaretRight, BiChevronDown, BiChevronRight, BiRightArrow, BiSolidLock } from 'react-icons/bi';
+import { BiSolidLock } from 'react-icons/bi';
 import Slider from '@mui/material/Slider';
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
@@ -104,23 +104,23 @@ const Questions = ({accountInformation, deleteQuestion, displayArray, onChange, 
                 
                 {questionObject.type=="dropdown"&&
                 <div className="relative">
-                {accountInformation.accountType!="Premium"&&
-                <>
-                    <Tooltip id="dropdownTooltip" />
-                    <div className='left-[0px] top-[-5px] w-[768px] h-[110px] bg-gray-500/[0.2] rounded-lg absolute cursor-pointer' data-tooltip-id="dropdownTooltip" data-tooltip-content="Premium feature" place="top" effect="solid"/>
-                </>
-                    
-                }
-                <div className = "formRow" style={{marginTop:"5px", alignItems:"start"}}>
-                    <label className = "editInputText" style={{width:"100px"}}>Current options</label>
-                    <div className="allOptionCardsDiv">{optionCards}</div>
+                    {accountInformation.accountType!="Premium"&&
+                    <>
+                        <Tooltip id="dropdownTooltip" />
+                        <div className='left-[0px] top-[-5px] w-[768px] h-[110px] bg-gray-500/[0.2] rounded-lg absolute cursor-pointer' data-tooltip-id="dropdownTooltip" data-tooltip-content="Premium feature" place="top" effect="solid"/>
+                    </>
+                        
+                    }
+                    <div className = "formRow" style={{marginTop:"5px", alignItems:"start"}}>
+                        <label className = "editInputText" style={{width:"230px"}}>Current dropdown options:</label>
+                        <div className="allOptionCardsDiv">{optionCards}</div>
+                    </div>
+                    <div className = "formRow">
+                        <label className = "editInputText" style={{width:"148px"}}>Add new option:</label>
+                        <input type="text" className="optionInput" onKeyDown={(e)=>handleKeyPress(e, questionObject.questionID)}value={optionInput} onChange={(e)=>setOptionInput(e.target.value)} ></input>
+                        <button className="addOptionButton" onClick={()=>{addOption(questionObject.questionID)}}>Add option</button>
+                    </div>
                 </div>
-                <div className = "formRow">
-                    <label className = "editInputText" style={{width:"148px"}}>Add new option:</label>
-                    <input type="text" className="optionInput" onKeyDown={(e)=>handleKeyPress(e, questionObject.questionID)}value={optionInput} onChange={(e)=>setOptionInput(e.target.value)} ></input>
-                    <button className="addOptionButton" onClick={()=>{addOption(questionObject.questionID)}}>Add option</button>
-                </div>
-            </div>
                 }
               
                 <div className="requiredInputDiv">
@@ -160,9 +160,6 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
     const [tempSubmissionFormData, setTempSubmissionFormData] = useState(submissionFormData)
     const [highlighting, setHighlighting]=  useState(false);
     const {currentUser} = useAuthContext ();
-    const [headerEditOpen, setHeaderEditOpen] = useState(true)
-    const [questionEditOpen, setQuestionEditOpen] = useState(true)
-    const [settingsEditOpen, setSettingsEditOpen] = useState(true)
 
     const addQuestion = () => {
         const newObj = {...tempSubmissionFormData}
@@ -292,59 +289,34 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
     return (
 
         <div className={`editFormContainer${highlighting ? " highlight" : ""}`}>
+            <div className = "editForm">
             {!tempSubmissionFormData.closed && 
             <> 
-
                 <div className="editHeader">
-                    <div className='expandTitle' onClick={()=>setHeaderEditOpen(!headerEditOpen)}>
-                        {!headerEditOpen&&<BiChevronRight className="arrow"/>}   
-                        {headerEditOpen&&<BiChevronDown className="arrow"/>}   
-                        Header Information
-                    </div>
-                    {headerEditOpen&&
-                    <>
-                        <div className = "firstFormRow">
+                    <div className = "firstFormRow">
                         <label className = "editInputText">Title</label>
                         <input onChange={(e)=>handleTitleChange(e)} defaultValue={tempSubmissionFormData.title}type="text" id="title" className="input"/>
-                        </div>          
-                        <div className = "formRowUnaligned">
-                            <label  className = "editInputText">Information</label>
-                            <textarea onChange={(e)=>handleHeaderDescriptionChange(e)}  defaultValue={tempSubmissionFormData.description} type="text"  rows="5" id="information" className="input"/>
-                        </div>
-                    </>
-                    }
-                    
+                    </div>          
+                    <div className = "formRowUnaligned">
+                        <label  className = "editInputText">Information</label>
+                        <textarea onChange={(e)=>handleHeaderDescriptionChange(e)}  defaultValue={tempSubmissionFormData.description} type="text"  rows="3" id="information" className="input"/>
+                    </div>
                 </div>
                     
                 
-                <div className='editQuestions'>
-                    <div className='expandTitle' onClick={()=>setQuestionEditOpen(!questionEditOpen)}>
-                        {!questionEditOpen&&<BiChevronRight className="arrow"/>}   
-                        {questionEditOpen&&<BiChevronDown className="arrow"/>}   
-                        Questions
+                <div className = "questionTextDiv">
+                        <p className = "questionsText"></p>
                     </div>
-                    {questionEditOpen&&
-                    <>
+                <div className="questionsDiv">
                     <Questions accountInformation={accountInformation} typeChange={typeChange} variableChange={variableChange} onChange={handleInputChange} deleteQuestion={deleteQuestion} displayArray={tempSubmissionFormData.questions} tempSubmissionFormData={tempSubmissionFormData} setTempSubmissionFormData={setTempSubmissionFormData}/>
                     <div className="addNewButtonDiv">
                         <button onClick={()=>addQuestion()} className='addNewButton'>+ Add new question</button>
                     </div>
-                    
-                    </>
-                    }
-                    
                 </div>
+                <div className="lastFormRowDiv">
                     
-                
-                <div className="editSettings">
-                    <div className='expandTitle' onClick={()=>setSettingsEditOpen(!settingsEditOpen)}>
-                        {!settingsEditOpen&&<BiChevronRight className="arrow"/>}   
-                        {settingsEditOpen&&<BiChevronDown className="arrow"/>}   
-                        File Upload Settings
-                    </div>
-                    {settingsEditOpen&&
-                    <>
-                        <div className="flex flex-row mt-4 w-full">
+                    <div className = "lastFormRow">
+                        <div className="flex flex-row mt-2">
                             <label className = "editInputText">Upload Information</label>
                             <input onChange={(e)=>handleUploadInformationChange(e)} defaultValue={tempSubmissionFormData.uploadInformation}type="text" id="title" className="uploadInformationInput"/>
                         </div>
@@ -355,7 +327,7 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
                                 
                             <Slider
                             onChange={(e)=>handleMaxUploadSize(e)}
-                            sx={{ left:10, width: 415, bottom:5 }} 
+                            sx={{ left:10, width: 530, bottom:5 }} 
                             defaultValue={tempSubmissionFormData.maxUploadSize}
                             valueLabelDisplay="auto"
                             step={5}
@@ -364,13 +336,13 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
                             marks={[
                                 { value: 5, label: '5 MB' },
                         
-                                { value: 250, label: <p className=''>250 MB</p> },
+                                { value: 250, label: '250 MB' },
                             ]}
                             valueLabelFormat={(value) => `${value} MB`}
                             /> 
                             
                         </div>
-                        <div className="flex flex-row mt-2 relative">
+                        <div className="flex flex-row mt-0 relative">
                             <Tooltip id="tooltip" />
                             {accountInformation.accountType!="Premium"&&<>
                                 <BiSolidLock className="absolute left-[7px] top-[2px] text-red-600 h-[20px] w-[20px] " />
@@ -381,12 +353,12 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
                             {tempSubmissionFormData.maxSizeEnabled&&
                             <>
                                 <span className="w-[250px] flex flex-row">
-                                    <input className="maxSizeInput" onClick={(event) => event.target.select()} value={tempSubmissionFormData.maxSize[0]} onChange={(e)=>handleDimensionSize(e, 0)}/>
-                                    <div className="mt-[5px] text-sm ml-[2px] w-[20px]">{tempSubmissionFormData.units}</div><span className="text-lg ml-1">x</span>
-                                    <input className="maxSizeInput" onClick={(event) => event.target.select()} value={tempSubmissionFormData.maxSize[1]} onChange={(e)=>handleDimensionSize(e, 1)} style={{width:"30px", marginRight:"0px", marginLeft:"10px", height:"22px"}}/>
-                                    <div className="mt-[5px] text-sm ml-[2px] w-[20px]">{tempSubmissionFormData.units}</div><span className="text-lg ml-1">x</span>
-                                    <input className="maxSizeInput" onClick={(event) => event.target.select()} value={tempSubmissionFormData.maxSize[2]} onChange={(e)=>handleDimensionSize(e, 2)} style={{width:"30px", marginRight:"0px", marginLeft:"10px", height:"22px"}}/>
-                                    <div className="mt-[5px] text-sm ml-[2px] w-[20px]">{tempSubmissionFormData.units}</div>
+                                    <input className="input" onClick={(event) => event.target.select()} value={tempSubmissionFormData.maxSize[0]} onChange={(e)=>handleDimensionSize(e, 0)} style={{width:"30px", marginRight:"0px", marginLeft:"26px", height:"22px"}}/>
+                                    <div className="mt-[5px] text-sm ml-[2px] w-[24px]">{tempSubmissionFormData.units}</div><span className="text-lg ml-1">x</span>
+                                    <input className="input" onClick={(event) => event.target.select()} value={tempSubmissionFormData.maxSize[1]} onChange={(e)=>handleDimensionSize(e, 1)} style={{width:"30px", marginRight:"0px", marginLeft:"10px", height:"22px"}}/>
+                                    <div className="mt-[5px] text-sm ml-[2px] w-[24px]">{tempSubmissionFormData.units}</div><span className="text-lg ml-1">x</span>
+                                    <input className="input" onClick={(event) => event.target.select()} value={tempSubmissionFormData.maxSize[2]} onChange={(e)=>handleDimensionSize(e, 2)} style={{width:"30px", marginRight:"0px", marginLeft:"10px", height:"22px"}}/>
+                                    <div className="mt-[5px] text-sm ml-[2px] w-[24px]">{tempSubmissionFormData.units}</div>
                                 </span>     
                             </>
                             }
@@ -407,7 +379,7 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
                         </div>
                         }
                         
-                        <div className="flex flex-row mt-4 mb-4 relative" >
+                        <div className="flex flex-row mt-2 relative" >
                             <Tooltip id="tooltip" />
                             {accountInformation.accountType!="Premium"&&<>
                             <BiSolidLock className="absolute left-[23px] top-[2px] text-red-600 h-[20px] w-[20px] " />
@@ -416,13 +388,12 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
                             <label className = "maxSizeText">Enable reCAPTCHA</label>
                             <input className="cursor-pointer" type="checkbox" checked={tempSubmissionFormData.captchaEnabled} onChange={(e)=>enableCaptcha(e)}></input>
                         </div>
-                    </>
-                    }
+                    </div>
                 </div>
 
             </>}
             {tempSubmissionFormData.closed &&
-            <div className="editHeader">
+            <div className="closedDiv">
                     <div className = "firstFormRow">
                         <label className = "editInputText">Title</label>
                         <input onChange={(e)=>handleClosedTitleChange(e)} value={tempSubmissionFormData.closedTitle}type="text" id="title" className="input"/>
@@ -433,6 +404,7 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
                     </div>
             </div>
             }
+            </div>
             <div className="bottomDiv">
 
                 <div className='openCloseDiv'>

@@ -1356,23 +1356,20 @@ html, body, #root,.wrapper {
     .submissionFormPage{
       display:flex;
       flex-direction: column;
+      margin-top:0px;
       flex:1;
-      overflow-x:hidden;
       .contentDiv{
         display:flex;
         flex-direction: row;
         margin-top:5px;
-        overflow-x:auto;
         .preview{
-          margin-top:0px;
+          margin-top:10px;
+          height: 90vh;
           width:47%;
-          min-width: 640px;
           //border-right: 1px solid rgb(146, 146, 146); 
           display: flex;
           flex-direction: column;
           align-items: center;
-          flex-shrink: 0;
-          
           .previewText{
             text-align: center;
             margin:0px 0px 10px 0px;
@@ -1382,8 +1379,9 @@ html, body, #root,.wrapper {
           }
           
           .linkDiv{
-            margin-top: 20px;
+          
             padding:5px 15px 15px 15px;
+            margin:40px 0 0 0;
             display:flex;
             flex-direction: column;
             justify-content: center;
@@ -1391,6 +1389,7 @@ html, body, #root,.wrapper {
             background-color: white;
             border-radius: 10px;
             box-shadow: 0px 0px 5px 0px rgb(211, 211, 211);
+
 
             .linkText{
               margin:5px 0 10px 0;
@@ -1438,18 +1437,12 @@ html, body, #root,.wrapper {
         }
 
         .edit{
-          margin-top:0px;
-          flex-grow:1;
-          overflow-x:auto;
-          overflow-y: hidden;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          min-width: 710px;
-
+          width:53%;
+          margin-top:10px;
+          flex:1;
           .editText{
             text-align: center;
-            margin:0px 0px 0px 0px;
+            margin:0px 0px 5px 0px;
             padding:0;
             font-size: 24px;
             font-weight: 600;
@@ -1467,315 +1460,308 @@ html, body, #root,.wrapper {
           }
           .editFormContainer{
             display:flex;
+            align-items: left;
             flex-direction: column;
-            align-items: center;
-            width: 90%;
+            margin:0px 20px 0px 0px;
+            padding:0 40px 15px 20px;
             //background-color: white;
             border-radius: 10px;
-            min-width: 710px;
-            $textInputColor: rgb(34, 34, 34);
-            $questionBackground: #ffffff;  
-            overflow-y: scroll;
-            height: 100%;
-            padding: 5px 10px;
-            margin-bottom: 100px;
-            .expandTitle{
-              display: flex;
-              align-items: center;
-              background-color: rgb(100, 100, 100);
-              color: rgb(255, 255, 255);
-              padding: 7px 10px 5px;
-              font-size: 22px;
-              font-weight: 500;
-              width: 670px;
-              border-radius: 2px;
-              cursor: pointer;
-              .arrow{
-                color: white;
-                width: 40px;
-                height: 30px;
-              }
-            }
-           
-            .editHeader{
-              display:flex;
-              flex-direction: column;
-              background-color: $questionBackground;
-              box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
-              margin:10px 0;
-              border-radius: 3px;
-              overflow:hidden;
-              flex-shrink: 0;
-            }
-            
-            .requiredInputDiv{
-              
-              font-size:16px;
-              margin:5px 5px 0 20px;
-              padding-bottom: 15px;
-              display: flex;
-              flex-direction: row;
-              
-              .deleteButton{
-                background:white;
-                color:red;
-                border-radius: 5px;
-                font-size:18px;
-                padding:0 5px;
-                cursor: pointer;
-                margin-left:auto;
-              }
-              .deleteButton:hover{
-                background:rgb(235, 235, 235);
-                transition: 0.2s;
-              }
-              .checkboxInput{
-                margin:0px 10px 0px 5px;
-              }
-              .selectVariable{
-                margin-left:5px;
-                margin-right:10px;
-                width:105px; 
-                border:1px solid rgb(133, 133, 133);
-                border-radius: 2px;
-                .variable{
-                  color:black;
-                  position: relative;
-                }
-              }
-              .none{
-                color:#696969;
-              }
-            }
-            
-            .formRowUnaligned{
-              margin-bottom:10px;
-              padding: 0px 0 10px;
-              display:flex;
-              align-items: top;
-              background-color: $questionBackground;
-              border-radius: 0 0 10px 10px;
-              .editInputText{
-                font-size: 18px;
-                width:100px;
-                color:$textInputColor;
-                text-align: right;
-                margin-right:10px;
-                
-              }
-              .input{
-                resize: none;
-                font-size:16px;
-                margin: 0px 10px 0px 5px;
-                padding: 5px 0px 0px;  
-                flex:1;  
-                border:1px solid gray;      
-                border-radius: 2px;
-              }
-
-            }
-            .formRow{
-              margin:0px 0 0 0;
-              padding: 0px 0 10px;
-              display:flex;
-              align-items: center;
-              .editInputText{
-                margin-right:10px;
-                font-size: 18px;
-                width:100px;
-                color:$textInputColor;
-                text-align: right;
-              }
-              .input{
-                font-size:16px;
-                margin: 2px 10px 0px 5px;
-                padding: 0px 0px 0px;  
-                flex:1; 
-                border:1px solid gray;   
-                border-radius: 2px;
-              }
-              .optionInput{
-                border:1px solid gray;   
-                border-radius: 2px;
-                width:100px;
-              }
-              .addOptionButton{
-                margin-left:10px;
-                border:1px solid rgb(23, 180, 57);
-                border-radius: 5px;
-                color:rgb(23, 180, 57);
-                padding: 0 5px;
-              }
-              
-              .allOptionCardsDiv{
-                overflow-x:scroll;
-                overflow-y: hidden;
-                width:500px;
-                height:50px;
-                margin: 2px 0 5px 5px;
-                padding:3px 0;
-                position: relative;
-                white-space: nowrap;
-
-                .optionCardSpan{
-                  border-radius: 5px;
-                  background-color: rgb(223, 223, 223);
-                  padding:3px 25px 3px 10px;
-                  font-size:16px;
-                  margin:8px 10px 8px 0px;
-                  position: relative;
-                  max-height:30px;
-                  white-space: nowrap;
-
-                .deleteOption{
-                  height:22px;
-                  width: 20px;
-                  color:rgb(61, 61, 61);
-                  border-radius: 5px;
-                  padding-right: 2px;
-                  position: absolute;
-                  top:2px;
-                  right:0px;
-                  cursor: pointer;
-                }
-                .deleteOption:hover{
-                  background-color: rgb(201, 201, 201)
-                }
-              }
-              }
-              
-              
-
-            }
-            .firstFormRow{
-              @extend .formRow;
-              margin-top:5px;
-              padding-top:10px;
-            }
-     
-            .questionTextDiv{
-              display:flex;
-              justify-content: left;
-              .questionsText{
-                padding:0;
-                margin: 5px 0 0 25px;
-                font-size:26px;
-                color:#3d3d3d;
-              }
-            }          
-            .editQuestions{
-              display:flex;
-              flex-direction: column;
-              align-items: center;
-              background-color: $questionBackground;
-              box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
-              border-radius: 3px;
-              .questionDiv{
-                margin: 35px 0 0px;
-                background-color: $questionBackground;
-                border-radius: 10px;
-                //box-shadow: 0px 0px 10p0x 0px rgb(179, 179, 179);
-                .deleteButtonDiv{
-                  display:flex;
-                  flex-direction: column;
-                  justify-content: center;
-                  align-items: center;
-                  .deleteButton{
-                    font-size:15px;
-                    height:35px;
-                    background:none;
-                    margin: 0px 0 10px 0;
-                  }
-                  .deleteButton:hover{
-                    color:white;
-                    background: rgb(255, 75, 75)
-                  }
-                }
-              }  
-              .addNewButtonDiv{
-                display: flex;
-                align-items: center;
+            .editForm{
+              padding-left:10px;
+              $textInputColor: rgb(34, 34, 34);
+              $questionBackground: #ffffff;  
+              .editHeader{
+                display:flex;
                 flex-direction: column;
-                justify-content: center;
-                margin:30px 0;
-                .addNewButton{
-                  color:rgb(23, 180, 57);
-                  padding:5px 10px;
+                margin:5px 0 5px 0;
+                padding-left: 5px;
+                background-color: $questionBackground;
+                box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
+                border-radius: 10px;
+              }
+              .closedDiv{
+                display:flex;
+                flex-direction: column;
+                margin:5px 0 5px 0;
+                padding-left: 5px;
+                background-color: $questionBackground;
+                box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
+                border-radius: 10px;
+              }
+              .requiredInputDiv{
+                
+                font-size:16px;
+                margin:15px 5px 0 20px;
+                padding-bottom: 15px;
+                display: flex;
+                flex-direction: row;
+                
+                .deleteButton{
+                  background:white;
+                  color:red;
+                  border-radius: 5px;
+                  font-size:18px;
+                  padding:0 5px;
+                  cursor: pointer;
+                  margin-left:auto;
+                }
+                .deleteButton:hover{
+                  background:rgb(235, 235, 235);
+                  transition: 0.2s;
+                }
+                .checkboxInput{
+                  margin:0px 10px 0px 5px;
+                }
+                .selectVariable{
+                  margin-left:5px;
+                  margin-right:10px;
+                  width:105px; 
+                  border:1px solid rgb(133, 133, 133);
+                  border-radius: 2px;
+                  .variable{
+                    color:black;
+                    position: relative;
+                  }
+                }
+                .none{
+                  color:#696969;
+                }
+              }
+              
+              .formRowUnaligned{
+                margin-bottom:10px;
+                padding: 0px 0 10px;
+                display:flex;
+                align-items: top;
+                background-color: $questionBackground;
+                border-radius: 0 0 10px 10px;
+                .editInputText{
+                  font-size: 18px;
+                  width:100px;
+                  color:$textInputColor;
+                  text-align: right;
+                  margin-right:10px;
+                  
+                }
+                .input{
+                  resize: none;
+                  font-size:16px;
+                  margin: 0px 10px 0px 5px;
+                  padding: 5px 0px 0px;  
+                  flex:1;  
+                  border:1px solid gray;      
+                  border-radius: 2px;
+                }
+
+              }
+              .formRow{
+                margin:0px 0 0 0;
+                padding: 0px 0 10px;
+                display:flex;
+                align-items: center;
+                .editInputText{
+                  margin-right:10px;
+                  font-size: 18px;
+                  width:100px;
+                  color:$textInputColor;
+                  text-align: right;
+                }
+                .input{
+                  font-size:16px;
+                  margin: 2px 10px 0px 5px;
+                  padding: 0px 0px 0px;  
+                  flex:1; 
+                  border:1px solid gray;   
+                  border-radius: 2px;
+                }
+                .optionInput{
+                  border:1px solid gray;   
+                  border-radius: 2px;
+                  width:100px;
+                }
+                .addOptionButton{
+                  margin-left:10px;
                   border:1px solid rgb(23, 180, 57);
                   border-radius: 5px;
-                  font-size:16px;
-                  margin: 0px 0px 0 0;
-                  cursor: pointer;
-                  transition:0.2s;
+                  color:rgb(23, 180, 57);
+                  padding: 0 5px;
+                }
+                
+                .allOptionCardsDiv{
+                  overflow-x:scroll;
+                  overflow-y: hidden;
+                  width:500px;
+                  height:50px;
+                  margin: 2px 0 5px 0;
+                  padding:3px 0;
+                  position: relative;
+                  white-space: nowrap;
+
+                  .optionCardSpan{
+                    border-radius: 5px;
+                    background-color: rgb(223, 223, 223);
+                    padding:3px 25px 3px 10px;
+                    font-size:16px;
+                    margin:8px 10px 8px 0px;
+                    position: relative;
+                    max-height:30px;
+                    white-space: nowrap;
+
+                  .deleteOption{
+                    height:22px;
+                    width: 20px;
+                    color:rgb(61, 61, 61);
+                    border-radius: 5px;
+                    padding-right: 2px;
+                    position: absolute;
+                    top:2px;
+                    right:0px;
+                    cursor: pointer;
+                  }
+                  .deleteOption:hover{
+                    background-color: rgb(201, 201, 201)
+                  }
+                }
+                }
+                
+                
+
+              }
+              .firstFormRow{
+                @extend .formRow;
+                margin-top:5px;
+                padding-top:10px;
+              }
+              .lastFormRowDiv{
+                height: 170px;
+                overflow-y: scroll;  
+                width:830px;
+                background-color: $backgroundColor;
+                margin: 10px 0 0 -10px;
+                padding:0px 10px 10px 10px;
+
+                .lastFormRow{
+                  
+                  @extend .formRow;
+                  padding-bottom: 8px;
+                  position: relative;
+                  display:flex;
+                  flex-direction: column;
+                  align-items: start;
+                  padding-top:10px;
+                  margin-top:20px;
+                  border-radius: 10px;
                   background-color: white;
+                  border-radius: 10px;
+                  box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
+                  .uploadInformationInput{
+                    border:1px solid gray;
+                    padding: 1px;
+                    width:555px;
+                  }
+                  .editInputText{
+                    width:200px;
+                    text-align: right;
+                    margin-left:10px;
+                  }
+                  .input{
+                    @extend .input;
+                    width:595px;
+                  }
+                  .maxSizeText{
+                    @extend .editInputText;
+                  }
+                  .lock{
+                    color:rgb(219, 21, 37);
+                    height:20px;
+                    width: 20px;
+                    position: absolute;
+                    top:1px;
+                    left:28px;
+                    cursor:pointer
+                  }
+                  
                 }
-                .addNewButton:hover{
-                  color:rgb(255, 255, 255);
-                  border:1px solid rgb(99, 201, 121);
-                  background:rgb(99, 201, 121);
+              }
+              
+              .questionTextDiv{
+                display:flex;
+                justify-content: left;
+                .questionsText{
+                  padding:0;
+                  margin: 5px 0 0 25px;
+                  font-size:26px;
+                  color:#3d3d3d;
                 }
-              }
+              }          
+              .questionsDiv{  
+                margin: 0px 0 0 -10px;
+                border-radius: 5px;
+                height: 375px;
+                overflow-y: scroll; 
+                overflow-x: hidden; 
+                width:830px;
+                //border:1px solid rgb(172, 172, 172);
+                border-radius: 5px;
+                background-color: $backgroundColor;
+                padding:10px 0 10px 10px;
+
+                .questionDiv{
+                  padding:10px 0 0 10px;
+                  background-color: $questionBackground;
+                  margin:0 15px 25px 0;
+                  border-radius: 10px;
+                  box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
+                  .deleteButtonDiv{
+                    display:flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    .deleteButton{
+                      font-size:15px;
+                      height:35px;
+                      background:none;
+                      margin: 0px 0 10px 0;
+                    }
+                    .deleteButton:hover{
+                      color:white;
+                      background: rgb(255, 75, 75)
+                    }
+                  }
+                }  
+                .addNewButtonDiv{
+                  display: flex;
+                  align-items: center;
+                  flex-direction: column;
+                  justify-content: center;
+                  margin-top:-8px;
+                  .addNewButton{
+                    color:rgb(23, 180, 57);
+                    padding:5px 10px;
+                    border:1px solid rgb(23, 180, 57);
+                    border-radius: 5px;
+                    font-size:16px;
+                    margin: 0px 0px 0 0;
+                    cursor: pointer;
+                    transition:0.2s;
+                    background-color: white;
+                  }
+                  .addNewButton:hover{
+                    color:rgb(255, 255, 255);
+                    border:1px solid rgb(99, 201, 121);
+                    background:rgb(99, 201, 121);
+                  }
+                }
+              }     
             }
-            
-            
-            .editSettings{
-              display:flex;
-              flex-direction: column;
-              background-color: $questionBackground;
-              box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
-              margin:10px 0;
-              border-radius: 3px;
-              flex-shrink: 0;
-              .uploadInformationInput{
-                border-radius: 2px;
-                border:1px solid gray;
-                padding: 2px;
-                width:100%;
-                margin-right: 30px;
-              }
-              .editInputText{
-                margin-right:10px;
-                font-size: 18px;
-                width:200px;
-                color:$textInputColor;
-                text-align: right;
-                flex-shrink:0;
-              }
-              .input{
-                @extend .input;
-                  width:100%;
-              }
-              .maxSizeText{
-                @extend .editInputText;
-              }
-              .maxSizeInput{
-                width:30px;
-                margin-left: 26px;
-                height:22px;
-                border:1px solid black;
-                border-radius:2px
-              }
-              .lock{
-                color:rgb(219, 21, 37);
-                height:20px;
-                width: 20px;
-                position: absolute;
-                top:1px;
-                left:28px;
-                cursor:pointer
-              }
-            }
-            
             .bottomDiv{
               position: absolute;
               margin-left:10px;
-              margin-bottom: 10px;
-              width:680px;
-              bottom:0px;
+              width:780px;
+              top:815px;
               display:flex;
               flex-direction: column;
               align-items: center;
-              background-color: $backgroundColor;
               .saveDiv{
                 display: flex;
                 justify-content: center;
