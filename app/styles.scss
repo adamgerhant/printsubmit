@@ -1507,7 +1507,17 @@ html, body, #root,.wrapper {
               overflow:hidden;
               flex-shrink: 0;
             }
-            
+            .editClosedInformation{
+              display:flex;
+              flex-direction: column;
+              background-color: $questionBackground;
+              box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
+              margin:10px 0;
+              border-radius: 3px;
+              overflow:hidden;
+              flex-shrink: 0;
+              width: 100%;
+            }
             .requiredInputDiv{
               
               font-size:16px;
@@ -1667,14 +1677,14 @@ html, body, #root,.wrapper {
               display:flex;
               flex-direction: column;
               align-items: center;
-              background-color: $questionBackground;
-              box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
+              background-color: $backgroundColor;
               border-radius: 3px;
               .questionDiv{
-                margin: 35px 0 0px;
+                margin: 25px 0 0px;
+                padding: 10px;
                 background-color: $questionBackground;
                 border-radius: 10px;
-                //box-shadow: 0px 0px 10p0x 0px rgb(179, 179, 179);
+                box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
                 .deleteButtonDiv{
                   display:flex;
                   flex-direction: column;

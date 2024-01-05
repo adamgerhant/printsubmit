@@ -422,15 +422,15 @@ const EditForm = ({submissionFormData, setSubmissionFormData, headerWidth, accou
 
             </>}
             {tempSubmissionFormData.closed &&
-            <div className="editHeader">
-                    <div className = "firstFormRow">
-                        <label className = "editInputText">Title</label>
-                        <input onChange={(e)=>handleClosedTitleChange(e)} value={tempSubmissionFormData.closedTitle}type="text" id="title" className="input"/>
-                    </div>          
-                    <div className = "formRowUnaligned">
-                        <label  className = "editInputText">Information</label>
-                        <textarea onChange={(e)=>handleClosedInformationChange(e)}  value={tempSubmissionFormData.closedInformation} type="text"  rows="5" id="information" className="input"/>
-                    </div>
+            <div className="editClosedInformation">
+                <div className = "firstFormRow">
+                    <label className = "editInputText">Title</label>
+                    <input onChange={(e)=>handleClosedTitleChange(e)} value={tempSubmissionFormData.closedTitle}type="text" id="title" className="input"/>
+                </div>          
+                <div className = "formRowUnaligned">
+                    <label  className = "editInputText">Information</label>
+                    <textarea onChange={(e)=>handleClosedInformationChange(e)}  value={tempSubmissionFormData.closedInformation} type="text"  rows="5" id="information" className="input"/>
+                </div>
             </div>
             }
             <div className="bottomDiv">
