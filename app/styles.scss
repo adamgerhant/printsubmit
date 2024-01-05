@@ -247,6 +247,7 @@ html, body, #root,.wrapper {
   //font-family: roboto;
   height: 100%;
   width: 100%;
+  overflow-x: hidden;
   .header{
     background-color: #313131;
     display: flex;
@@ -307,7 +308,7 @@ html, body, #root,.wrapper {
         border: solid;
         border-color:#aaaaaa;
         border-width: 1px;
-        padding:10px 15px;
+        padding:8px;
         .accountTypeDiv{
           margin: 10px 0 10px 0;
           display: flex;
@@ -405,28 +406,25 @@ html, body, #root,.wrapper {
     overflow-y: hidden;
     position:relative;
     z-index: 1;
-    width: 100%;
-    overflow-x: hidden;
     .sidebar{
-      width: 200px;
+      width: 225px;
       padding-bottom: 20px;
       background-color:rgb(255, 255, 255);
       display: flex;
       flex-direction: column;
       padding-top:20px;
       box-shadow: 5px 0 20px rgb(226, 226, 226);
-      flex-shrink: 0;
       .navButton{
         position:relative;
         display: flex;
         flex-direction: row;
         font-size: 18px;
         color:#000000;
-        margin:  10px;
+        margin: 15px 30px 10px 20px;
         padding: 5px 5px 5px 10px;
         background: none;
         cursor: pointer;
-        border-radius: 3px;
+        border-radius: 5px;
         text-decoration: none;
       }
       .navButtonSelected{
@@ -445,29 +443,24 @@ html, body, #root,.wrapper {
      
 
     }
-    .submissionsContainer{
-      flex-grow: 1;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
     .submissions{
+      margin:30px 0;
       padding-bottom: 60px;
-      padding-right: 50px;
+      height: 100%;
       overflow-y: auto;
       display:flex;
       flex-direction: column;
-      overflow-x:scroll;
-      flex-grow: 1;
+      overflow-y: auto;
+      
+      
       .submissionBox{
         width:1630px;
-        margin:20px 0 0px 18px;
+        margin:20px 0 0px 38px;
         border:1px solid grey;
         border-radius: 8px;
         background-color:white;
         position: relative;
         overflow: visible;
-        
         .headers{
           display:flex;
           flex-direction: row;
@@ -507,7 +500,7 @@ html, body, #root,.wrapper {
                   margin-right:-2px;
                   white-space: nowrap;  
                   background-color: rgb(255, 255, 255);
-      
+     
                 }
                 .questionNameHidden{
                   color:#555555;
@@ -712,7 +705,7 @@ html, body, #root,.wrapper {
           min-height: 20px;
           
           .responseNumberDiv{
-            
+           
             border-right: 1px solid rgb(39, 39, 39);
             width:25px;
             padding: 3px 0 -3px 0;
@@ -783,7 +776,7 @@ html, body, #root,.wrapper {
                   padding:7px 0 2px 1px;
                   height:30px;
                   user-select: none;
-                  overflow: hidden;
+                 overflow: hidden;
                 }
                 
                 .absoluteResponseCell{
@@ -922,7 +915,7 @@ html, body, #root,.wrapper {
                 background-color: white;
                 height:30px;
                 z-index: 5;
-                
+               
                 .responseCellSTL{
                   
                   position:absolute;
@@ -1352,11 +1345,10 @@ html, body, #root,.wrapper {
 
       }
     }
-
     .submissionFormPage{
       display:flex;
       flex-direction: column;
-      margin-top:0px;
+      margin-top:25px;
       flex:1;
       .contentDiv{
         display:flex;
@@ -1479,15 +1471,7 @@ html, body, #root,.wrapper {
                 box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
                 border-radius: 10px;
               }
-              .closedDiv{
-                display:flex;
-                flex-direction: column;
-                margin:5px 0 5px 0;
-                padding-left: 5px;
-                background-color: $questionBackground;
-                box-shadow: 0px 0px 10px 0px rgb(179, 179, 179);
-                border-radius: 10px;
-              }
+              
               .requiredInputDiv{
                 
                 font-size:16px;
@@ -1832,7 +1816,7 @@ html, body, #root,.wrapper {
 
     }
     .emails{
-      flex-grow: 1;
+      width:1695px;
       position: relative;
       .emailTitleDiv{
         background-color:#BACCD6;
@@ -1840,6 +1824,7 @@ html, body, #root,.wrapper {
         padding: 5px 0 5px 5px;
       }
       .emailProcessDiv{
+        margin-top:20px;
         height:200px;
         display: flex;
         flex-direction: row;
@@ -2230,15 +2215,16 @@ html, body, #root,.wrapper {
       }
     }
     .titleDiv{
-      background-color:#a3c8e6;
-      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+      width: 1695px;
+      background-color:#BACCD6;
       margin:0;
       padding:1px 5px;
       font-size: 20px;
+      position: absolute;
+      top:0px;
+      z-index:5;
       display: flex;
       flex-direction: row;
-      position: relative;
-      width:100%;
       .optionsMenuDiv{
         position: absolute;
         z-index: 4;
@@ -2331,7 +2317,8 @@ html, body, #root,.wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
-      flex-grow: 1;
+      width:1500px;
+      padding-top:25px;
       .returnDiv{
         align-items: start;
         margin-left:15px;
@@ -2393,7 +2380,8 @@ html, body, #root,.wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
-      flex-grow: 1;
+      width:1500px;
+      padding-top:25px;
       .statisticsBoxDiv{
         margin:30px 0 0 50px;
         min-width:800px;
